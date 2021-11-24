@@ -38,5 +38,3 @@ loss :  4.3297473894199356e-05
 
 * hyperparameter tuning
 '''
-
-

@@ -3,7 +3,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 import numpy as np
 
-#1. 데이터 깃헙 테스트
+#1. 데이터
 x = np.array([1,2,3])
 y = np.array([1,2,3])
 # 위 데이터를 훈련해서 최소의 loss 값을 찾아내자
