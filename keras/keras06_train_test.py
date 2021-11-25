@@ -23,3 +23,5 @@ print('loss : ',loss)
 result_= model.predict([11])
 print('11의 예측값 : ',result_)
 
+
+
