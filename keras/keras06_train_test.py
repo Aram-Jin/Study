@@ -18,7 +18,7 @@ model.compile(loss='mse', optimizer='adam')
 model.fit(x_train, y_train, epochs=100, batch_size=1)   # batch_size는 x,y 배치하는 갯수, epochs는 반복횟수
 
 #4. 평가, 예측
-loss = model.evaluate(x_test, y_test)
+loss = model.evaluate(x_test, y_test)    
 print('loss : ',loss)
 result_= model.predict([11])
 print('11의 예측값 : ',result_)
