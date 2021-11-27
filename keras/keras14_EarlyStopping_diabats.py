@@ -80,6 +80,7 @@ stop_epoch = 111
 patience = 50
 
 print(min(hist))
+print(hist.index(min(hist))+1)
 
 
 '''
