@@ -46,6 +46,3 @@ print('loss :',loss)
 
 y_predict = model.predict([17])
 print("17의 예측값 : ", y_predict)
-
-
-

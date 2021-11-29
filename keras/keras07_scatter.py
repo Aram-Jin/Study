@@ -33,4 +33,3 @@ y_predict = model.predict(x)
 plt.scatter(x,y)   # 점 찍기
 plt.plot(x, y_predict, color='red')   # 선 긋기
 plt.show()
-

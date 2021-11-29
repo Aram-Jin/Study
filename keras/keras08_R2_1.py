@@ -6,7 +6,6 @@ R² = 예측값 Variance / 실제값 Variance
 
 R2(R Squared)
 R2 지표도 회귀식의 성능을 평가하는 지표로 많이 사용하는 결정계수값으로 예측한 모델이 얼마나 실제 데이터를 설명하는지를 나타낸다.
-
 '''
 
 from tensorflow.keras.models import Sequential
@@ -54,6 +53,3 @@ r2스코어 :  0.17535595480318056
 # plt.scatter(x,y)   # 점 찍기
 # plt.plot(x, y_predict, color='red')   # 선 긋기
 # plt.show()
-
-
-

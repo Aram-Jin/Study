@@ -41,8 +41,6 @@ result_= model.predict([101])
 print('101의 예측값 : ',result_)
 
 
-
-
 '''
 from numpy import random
 x_train = random.randint(low=100, size=70) 

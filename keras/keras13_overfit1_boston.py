@@ -70,5 +70,3 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(loc='upper right')
 plt.show()
-
-
