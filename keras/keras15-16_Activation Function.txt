@@ -33,7 +33,8 @@ ONE-HOT-ENCODING은 softmax사용시 가장 높은 확률의 값을 1로 설정�
 
 [참고]
 https://wikidocs.net/35476
-
+https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=rian4u&logNo=221398406858
+https://devuna.tistory.com/67  -> [pandas] pd.get_dummies() : 데이터전처리/가변수 만들기
 
 ## [metrics] - 평가지표
 

@@ -11,20 +11,41 @@ y = datasets.target
 
 print(x.shape, y.shape)  # (581012, 54) (581012,)
 print(y)
-print(np.unique(y))  # [1 2 3 4 5 6 7]
+print(np.unique(y))  # [1 2 3 4 5 6 7] -> unique : 특성이 있는 값만 나타내줌(결측치 제외)
 
+# output 컬럼의 갯수는 8개인데 unique를 뽑아보니 7개가 나옴. 특성이 없는 dummy(결측치)가 1개 있다는 의미
+# ONE-HOT-ENCODING을 통해서 output 갯수 조정 (아래 ONE-HOT-ENCODING 방법)
+
+'''
+1) tensorflow를 이용하여 ONE-HOT-ENCODING -> output 갯수에 맞추어 결측치 제거없이 하는 방법, 결과값 y.shape이 8개 나옴
 from tensorflow.keras.utils import to_categorical  # ONE-HOT-ENCODING
 y = to_categorical(y)
 print(y)
 print(y.shape)  # (581012, 8)
 
+2) sklearn을 이용하여 ONE-HOT-ENCODING
+from sklearn.preprocessing import OneHotEncoder
+ohe = OneHotEncoder(sparse=False)
+y = ohe.fit_transform(y.reshape(-1,1)) #해당 data 를 사용하여 tuple 의 형태 구축(사실 sparse matrix 로 나옴)>> 1:(1,0,0), 2:(0,1,0) 3:(0,0,1) 로 매핑될 수 있게 fitting 해두는 것
+'''
+
+#3) pandas를 이용하여 ONE-HOT-ENCODING
+import pandas as pd
+y = pd.get_dummies(y)  # pd.get_dummies 처리 : 결측값을 제외하고 0과 1로 구성된 더미값이 만들어진다. 
+# 결측값 처리(dummy_na = True 옵션) : Nan을 생성하여 결측값도 인코딩하여 처리해준다.
+# y = pd.get_dummies(y, drop_first=True) : N-1개의 열을 생성
+print(y.shape)
+
+# 이진분류도 다중분류로 처리가능.
+
+
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
 
-print(x_train.shape, y_train.shape)  # (464809, 54) (464809, 8)
-print(x_test.shape, y_test.shape)  # (116203, 54) (116203, 8) 
-
+print(x_train.shape, y_train.shape)  # (464809, 54) (464809, 7)
+print(x_test.shape, y_test.shape)  # (116203, 54) (116203, 7) 
+'''
 #2. 모델구성
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -52,7 +73,7 @@ print('accuracy : ', loss[1])
 resulte = model.predict(x_test[:7])
 print(y_test[:7])
 print(resulte)
-
+'''
 
 '''
 Epoch 60/100
