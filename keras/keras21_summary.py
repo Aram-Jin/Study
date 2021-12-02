@@ -1,8 +1,7 @@
 '''
 활성화 함수(Activation) : layer 에서 다음 layer로 전달할때 값을 한정하는 역할
+
 https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=handuelly&logNo=221824080339
-
-
 '''
 # import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -42,14 +41,9 @@ Total params: 57                         => 결론적으로 Total params의 갯�
 Trainable params: 57
 Non-trainable params: 0
 _________________________________________________________________
-
-
 * hyperparameter tuning 시 summary 구조 이해가 중요!!!
 '''
 
-
-
-'''
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 
@@ -60,12 +54,11 @@ loss = model.evaluate(x, y)
 print('loss : ', loss)
 result = model.predict([4])
 print('4의 예측값 : ', result)
-'''
+
 '''
 loss :  4.3297473894199356e-05
 4의 예측값 :  [[3.9863973]]
 '''
-
 
 ### [ NOTE ]
 '''

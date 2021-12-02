@@ -34,13 +34,9 @@ from sklearn.metrics import r2_score
 r2 = r2_score(y, y_predict)
 print('r2스코어 : ', r2)
 
-
-
 # plt.scatter(x,y)   # 점 찍기
 # plt.plot(x, y_predict, color='red')   # 선 긋기
 # plt.show()
-
-
 
 '''
 loss : 0.3800012469291687

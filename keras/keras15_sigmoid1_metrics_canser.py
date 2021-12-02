@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 from sklearn.datasets import load_breast_cancer
 
@@ -117,7 +116,7 @@ resulte = model.predict(x_test[:31])
 print(y_test[:31])
 print(resulte)
 
-
+'''
 '''
 364/364 [==============================] - 0s 635us/step - loss: 0.2439 - accuracy: 0.9093 - val_loss: 0.3178 - val_accuracy: 0.9121
 Restoring model weights from the end of the best epoch.
@@ -136,5 +135,4 @@ evaluate 했을때 출력되는 list의 첫번째 값은 'loss'값, 두번째 �
 loss: 손실함수. 훈련셋과 연관. 훈련에 사용 -> 중요한 값 
 metric: 평가지표. 검증셋과 연관. 훈련 과정을 모니터링하는데 사용
 
->>>>>>> 73d234a7d949bc694f909a16b5ad8b6eb925c0d3
 '''

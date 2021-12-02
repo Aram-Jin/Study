@@ -50,24 +50,31 @@ print(x_train.shape, y_train.shape)  # (464809, 54) (464809, 7)
 print(x_test.shape, y_test.shape)  # (116203, 54) (116203, 7) 
 
 #scaler = MinMaxScaler()
-#scaler = StandardScaler()
+scaler = StandardScaler()
 #scaler = RobustScaler()
-scaler = MaxAbsScaler()
+#scaler = MaxAbsScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 
 
 #2. 모델구성
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Input
 
+input1 = Input(shape=(54,))
+dense1 = Dense(50, activation='relu')(input1)
+dense2 = Dense(20)(dense1)
+dense3 = Dense(10)(dense2)
+output1 = Dense(7, activation='softmax')(dense3)
+model = Model(inputs=input1, outputs=output1)
+'''
 model = Sequential()
 model.add(Dense(50, activation='relu', input_dim=54))
 model.add(Dense(20))
 model.add(Dense(10))
 model.add(Dense(7, activation='softmax'))
-
+'''
 model.summary()
 '''
 _________________________________________________________________
@@ -103,7 +110,6 @@ print('accuracy : ', loss[1])
 resulte = model.predict(x_test[:7])
 print(y_test[:7])
 print(resulte)
-
 
 ''' 
 =========================================== Scaler만 적용 후 결과 비교 =============================================================
@@ -149,41 +155,12 @@ loss :  0.44970643520355225
 accuracy :  0.8105986714363098
 ==> 결론 : "fetch_covtype"데이터는 StandardScaler, RobustScaler 돌렸을때 가장 효과가 좋았으며, activation='relu' 적용했을때 loss값이 크게 개선됨. 효과가 있음!!! 
 
+=============================================== input_shape 모델로 튜닝 후 TEST =======================================================
+
+< StandardScaler & dense_1에 activation='relu' 적용 >
+
+loss :  0.3952699601650238
+accuracy :  0.8364758491516113
+
+==> 차이없음
 '''
-
-
-
-
-
-'''
-Epoch 60/100
-7437/7437 [==============================] - 5s 625us/step - loss: 0.6565 - accuracy: 0.7148 - val_loss: 0.6453 - val_accuracy: 0.7211
-Restoring model weights from the end of the best epoch.
-Epoch 00060: early stopping
-3632/3632 [==============================] - 2s 427us/step - loss: 0.6448 - accuracy: 0.7214
-loss :  0.6448085904121399
-accuracy :  0.7213669419288635
-[[0. 1. 0. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 1. 0. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]]
-[[6.5158003e-13 6.9950908e-01 2.7308086e-01 5.5235351e-08 3.0022514e-12
-  6.4606185e-04 1.4948830e-07 2.6763827e-02]
- [5.3100907e-10 7.0410617e-02 9.2861837e-01 6.0712275e-05 1.0949736e-05
-  5.9415243e-04 2.5507639e-04 5.0149836e-05]
- [7.5671343e-13 7.6936799e-01 2.1677803e-01 4.0062818e-07 2.0808801e-10
-  1.0680374e-03 2.3477378e-05 1.2762069e-02]
- [1.1070732e-09 6.8759859e-02 9.2618126e-01 1.0889668e-04 9.3934097e-05
-  4.1897101e-03 5.1530253e-04 1.5103200e-04]
- [9.9579433e-12 4.2843568e-01 5.5917305e-01 1.8488308e-05 1.5769602e-10
-  3.0524875e-03 3.5193960e-05 9.2851333e-03]
- [6.7367622e-12 2.7079758e-01 7.0719385e-01 1.5364105e-05 4.1406794e-09
-  2.1669621e-02 2.4355085e-04 8.0088947e-05]
- [1.5816311e-10 1.5733100e-01 8.4114534e-01 1.4786504e-05 8.7535724e-08
-  5.4727792e-04 3.8302613e-05 9.2318724e-04]]
-'''
-
-# batch_size의 디폴트 값은 32입니다.(batch_size=1로 돌렸을때의 1epoch당 돌아가야하는 값과 디폴트로 놓았을때의 값 비교 계산)

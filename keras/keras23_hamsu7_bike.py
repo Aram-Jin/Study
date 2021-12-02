@@ -1,10 +1,8 @@
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score, mean_squared_error
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-import matplotlib.pyplot as plt
 
 def RMSE(y_test, y_pred):
     return np.sqrt(mean_squared_error(y_test, y_pred))
@@ -91,27 +89,72 @@ y = np.log1p(y)  # log1p : y값을 log변환하기 전에 1을 더해주는 함�
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
 
+#scaler = MinMaxScaler()
+#scaler = StandardScaler()
+scaler = RobustScaler()
+#scaler = MaxAbsScaler()
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+test_file = scaler.transform(test_file)
+
 #2. 모델구성
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Input
+
+input1 = Input(shape=(8,))
+dense1 = Dense(100)(input1)
+dense2 = Dense(100, activation='relu')(dense1)
+dense3 = Dense(50)(dense2)
+dense4 = Dense(20)(dense3)
+dense5 = Dense(10)(dense4)
+output1 = Dense(1)(dense5)
+model = Model(inputs=input1, outputs=output1)
+'''
 model = Sequential()
 model.add(Dense(100, input_dim=8)) 
-model.add(Dense(100, activation='linear')) 
+model.add(Dense(100, activation='relu')) 
 model.add(Dense(50)) 
 model.add(Dense(20)) 
 model.add(Dense(10)) 
 model.add(Dense(1)) 
+'''
+model.summary()
+'''
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+dense (Dense)                (None, 100)               900
+_________________________________________________________________
+dense_1 (Dense)              (None, 100)               10100
+_________________________________________________________________
+dense_2 (Dense)              (None, 50)                5050
+_________________________________________________________________
+dense_3 (Dense)              (None, 20)                1020
+_________________________________________________________________
+dense_4 (Dense)              (None, 10)                210
+_________________________________________________________________
+dense_5 (Dense)              (None, 1)                 11
+=================================================================
+Total params: 17,291
+Trainable params: 17,291
+Non-trainable params: 0
+'''
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
+
 from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=10000000, batch_size=1, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.2, callbacks=[es])
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
 print('loss :',loss)
 
 y_pred = model.predict(x_test)
+
 
 r2 = r2_score(y_test, y_pred)
 print('r2스코어 : ', r2)
@@ -142,7 +185,78 @@ submit_file.to_csv(path + "final.csv", index=False)
 
 # 루트와 로그 (RMSE-MSE에 루트, RMSLE-로그)
 
+''' 
+=========================================== Scaler만 적용 후 결과 비교 =============================================================
+☆ 1. No Scaler
+Epoch 00103: early stopping
+69/69 [==============================] - 0s 454us/step - loss: 1.4565
+loss : 1.4565303325653076
+r2스코어 :  0.2567032316185637
+RMSE:  1.2068680498650537
 
-# [과제] 중위값과 평균값의 차이를 찾아라 (비교,분석)
-# 중앙값(median)은 자료 값의 크기 순서대로 나열한 후 가장 중앙에 위치하는 값.
-# 평균(mean)은 자료의 값를 모두 더한 후에 그 전체자료 갯수로 나눈 값.
+2. MinMaxScaler
+Epoch 00146: early stopping
+69/69 [==============================] - 0s 581us/step - loss: 1.4592
+loss : 1.459200143814087
+r2스코어 :  0.2553409183700813
+RMSE:  1.2079735165858405
+
+3. StandardScaler -> ok
+Epoch 00075: early stopping
+69/69 [==============================] - 0s 417us/step - loss: 1.4671
+loss : 1.4671430587768555
+r2스코어 :  0.25128750583955806
+RMSE:  1.2112567437717865
+
+4. RobustScaler 
+Epoch 00100: early stopping
+69/69 [==============================] - 0s 439us/step - loss: 1.4522
+loss : 1.452214002609253
+r2스코어 :  0.2589059885044358
+RMSE:  1.2050784487858819
+
+5. MaxAbsScaler 
+Epoch 00082: early stopping
+69/69 [==============================] - 0s 451us/step - loss: 1.4793
+loss : 1.4793002605438232
+r2스코어 :  0.2450832141790641
+RMSE:  1.216264998535263
+
+================================================ Activation = 'relu' 추가 적용 후 TEST================================================= 
+1. No Scaler (dense_1에 activation='relu' 적용) 
+loss : 1.4468480348587036
+r2스코어 :  0.2616443579562322
+RMSE:  1.2028499838652074
+
+2. MinMaxScaler (dense_1에 activation='relu' 적용) 
+loss : 1.3774502277374268
+r2스코어 :  0.2970593232371558
+RMSE:  1.173648384691601
+
+3. StandardScaler (dense_1에 activation='relu' 적용) 
+loss : 1.348940134048462
+r2스코어 :  0.3116088876324071
+RMSE:  1.1614387057611433
+
+☆ 4. RobustScaler (dense_1에 activation='relu' 적용) 
+loss : 1.3312121629714966
+r2스코어 :  0.32065570050842007
+RMSE:  1.153781671207808
+
+5. MaxAbsScaler (dense에 activation='relu' 적용) 
+loss : 1.3571594953536987
+r2스코어 :  0.3074141264293144
+RMSE:  1.1649719868821968
+
+==> 결론 : "bike"데이터는 Scaler 적용없이 돌렸을때 가장 효과가 좋았으며, activation='relu' 적용했을때 RobustScaler가장 효과가 좋았으며 loss값이 조금 개선됨. 
+
+=============================================== input_shape 모델로 튜닝 후 TEST =======================================================
+
+<  RobustScaler & dense_1에 activation='relu' 적용  >
+loss : 1.3490608930587769
+r2스코어 :  0.3115471470676652
+RMSE:  1.1614907882710368
+
+=> 차이없음
+
+'''

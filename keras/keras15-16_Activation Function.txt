@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## [Activation Function] : linear / sigmoid / softmax  
 
 1. Sigmoid function   - loss : 'binary_crossentropy'
@@ -98,5 +97,4 @@ loss: 손실함수. 훈련셋과 연관. 훈련에 사용 -> 중요한 값
 metric: 평가지표. 검증셋과 연관. 훈련 과정을 모니터링하는데 사용
 
 [참고]
->>>>>>> 73d234a7d949bc694f909a16b5ad8b6eb925c0d3
 https://needjarvis.tistory.com/568
