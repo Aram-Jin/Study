@@ -10,11 +10,6 @@ from sklearn.datasets import load_boston
 datasets = load_boston()
 x = datasets.data
 y = datasets.target
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 73d234a7d949bc694f909a16b5ad8b6eb925c0d3
 '''
 print(x)  
 print(y)
@@ -37,9 +32,13 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-start = time.time()
-hist = model.fit(x_train, y_train, epochs=10, batch_size=1, validation_split=0.2)
 
+from tensorflow.keras.callbacks import EarlyStopping
+es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
+
+start = time.time()
+hist = model.fit(x_train, y_train, epochs=100, batch_size=1, 
+                 validation_split=0.2, callbacks=[es])
 end = time.time() - start
 
 print("걸린시간: ", round(end, 3),'초')
@@ -54,16 +53,6 @@ y_predict = model.predict(x_test)
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print('r2스코어 : ', r2)
-
-print("======================================")
-print(hist)
-print("======================================")
-print(hist.history)
-print("======================================")
-print(hist.history['loss'])
-print("======================================")
-print(hist.history['val_loss'])
-
 
 import matplotlib.pyplot as plt
 plt.figure(figsize=(9,5))

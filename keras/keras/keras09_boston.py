@@ -4,7 +4,7 @@ datasets = load_boston()
 x = datasets.data
 y = datasets.target
 
-print(x)  
+print(x)  # 단위 구분 ex) 6.3200e-03 -> 'e-03' 은 소숫점 3자리(0.000x) 'e+03' 은 반대로 
 print(y)
 print(x.shape)  # (506, 13)
 print(y.shape)  # (506,)
@@ -21,7 +21,6 @@ from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.7, shuffle=True, random_state=66)
-
 
 model = Sequential()
 model.add(Dense(6, input_dim=13)) 
@@ -41,7 +40,7 @@ model.add(Dense(1))
 #2. 모델구성
 model.compile(loss='mse', optimizer='adam')
 
-model.fit(x_train, y_train, epochs=500, batch_size=13, validation_split=0.2)
+model.fit(x_train, y_train, epochs=500, batch_size=13)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -53,10 +52,18 @@ from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print('r2스코어 : ', r2)
 
-<<<<<<< HEAD
-##################################################  [ N O T E ]  #################################################################
-=======
->>>>>>> 73d234a7d949bc694f909a16b5ad8b6eb925c0d3
+
 '''
-과적합지표 loss 와 val_loss 값 비교 
+loss : 19.184654235839844
+r2스코어 :  0.7677883338121207
+'''
+
+'''
+loss : 17.076885223388672
+r2스코어 :  0.7933008109604748
+'''
+
+'''
+loss : 19.80939292907715
+r2스코어 :  0.7602264967945693
 '''

@@ -3,12 +3,23 @@ from tensorflow.keras.layers import Dense
 import numpy as np
 
 #1. 데이터
+x = np.array(range(17))
+y = np.array(range(17))
+x_train = x[:14]
+x_val = x[10:14]
+x_test =  x[14:16]
+y_train = y[:14]
+y_val = y[10:14]
+y_test = y[14:16]
+
+'''
 x_train = np.array(range(11))
 y_train = np.array(range(11))
 x_test = np.array([11,12,13])
 y_test = np.array([11,12,13])
 x_val = np.array([14,15,16])
 y_val = np.array([14,15,16])
+'''
 
 #2. 모델구성
 model = Sequential()
@@ -29,19 +40,3 @@ print('loss :',loss)
 
 y_predict = model.predict([17])
 print("17의 예측값 : ", y_predict)
-
-
-<<<<<<< HEAD
-##################################################  [ N O T E ]  #################################################################
-=======
-
-### NOTE
->>>>>>> 73d234a7d949bc694f909a16b5ad8b6eb925c0d3
-'''
-데이터를 받으면 3등분 하기!!
-train test validation
-
-[머신] train -> fit ; 일부 발췌하여 validation
-[사람] test -> evaluate
-
-'''
