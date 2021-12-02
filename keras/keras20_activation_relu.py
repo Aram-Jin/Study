@@ -1,3 +1,9 @@
+'''
+활성화 함수(Activation) : layer 에서 다음 layer로 전달할때 값을 한정하는 역할
+https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=handuelly&logNo=221824080339
+
+
+'''
 # import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -11,8 +17,9 @@ y = np.array([1,2,3])
 #2. 모델구성 -> 'hidden layer'
 model = Sequential()
 model.add(Dense(9, input_dim=1))
-model.add(Dense(6))
-model.add(Dense(3))
+model.add(Dense(6, activation='relu'))
+model.add(Dense(3, activation='sigmoid'))
+model.add(Dense(6, activation='relu'))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
@@ -31,7 +38,8 @@ loss :  4.3297473894199356e-05
 4의 예측값 :  [[3.9863973]]
 '''
 
-##################################################  [ N O T E ]  #################################################################
+
+### [ NOTE ]
 '''
 #1. 데이터 -> input layer
 #2. 모델구성 -> hidden layer
