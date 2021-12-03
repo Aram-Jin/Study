@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-path = "./_data/titanic/"
+path = "../_data/kaggle/titanic/"
 train = pd.read_csv(path + "train.csv", index_col=0, header=0)  # header는 컬럼명, 없을 경우 header=None(디폴트값은 index_col=None, header=None)
 print(train[:5])
 print(train.shape)  # (891, 11)
