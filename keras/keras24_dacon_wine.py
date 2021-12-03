@@ -119,9 +119,9 @@ model = Model(inputs=input1, outputs=output1)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss', patience=10, mode='auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=50, mode='auto', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=100, batch_size=1, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs=500, batch_size=1, validation_split=0.2, callbacks=[es])
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -133,7 +133,6 @@ print(y_test[:7])
 print(resulte)
 
 
-
 ############ 제출용 제작 ##############
 results = model.predict(test_file)
 results_int = np.argmax(results, axis=1).reshape(-1,1) + 4
@@ -142,30 +141,20 @@ submit_file['quality'] = results_int
 
 print(submit_file[:10])
 
-
 submit_file.to_csv(path + "final.csv", index=False)
 
 
-
 '''
-loss :  1.198427677154541
-accuracy :  0.44667696952819824
-'''
-
-
-'''
-loss :  1.0135687589645386
-accuracy :  0.5641421675682068
+loss :  1.0118428468704224
+accuracy :  0.5672333836555481
 '''
 
 '''
-loss :  1.0240126848220825
+loss :  0.9949572086334229
 accuracy :  0.5610510110855103
 '''
 
-
-
-'''
-loss :  0.9934438467025757
-accuracy :  0.5656877756118774
+''' -> 아직 제출 못함
+loss :  0.9843844175338745
+accuracy :  0.5765069723129272
 '''
