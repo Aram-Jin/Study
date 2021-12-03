@@ -134,13 +134,14 @@ print(resulte)
 
 
 
-
 ############ 제출용 제작 ##############
 results = model.predict(test_file)
+results_int = np.argmax(results, axis=1).reshape(-1,1) + 4
 
-submit_file['quality'] = results
+submit_file['quality'] = results_int
 
 print(submit_file[:10])
+
 
 submit_file.to_csv(path + "final.csv", index=False)
 

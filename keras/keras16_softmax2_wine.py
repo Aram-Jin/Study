@@ -53,8 +53,6 @@ resulte = model.predict(x_test[:7])
 print(y_test[:7])
 print(resulte)
 
-result_recover = np.argmax(result, asix=1).reshape(-1,1)
-print
 
 
 '''
