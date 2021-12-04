@@ -109,8 +109,8 @@ x_test = scaler.transform(x_test)
 
 #2. 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(30)(input1)
-dense2 = Dense(20, activation='relu')(dense1)
+dense1 = Dense(50)(input1)
+dense2 = Dense(30, activation='relu')(dense1)
 dense3 = Dense(10)(dense2)
 output1 = Dense(5, activation='softmax')(dense3)
 model = Model(inputs=input1, outputs=output1)
@@ -119,9 +119,11 @@ model = Model(inputs=input1, outputs=output1)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss', patience=50, mode='auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=150, mode='auto', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=500, batch_size=1, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs=5000, batch_size=1, validation_split=0.2, callbacks=[es])
+
+model.save("./_save/keras24_3_save_model.h5") 
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -157,4 +159,24 @@ accuracy :  0.5610510110855103
 ''' -> 아직 제출 못함
 loss :  0.9843844175338745
 accuracy :  0.5765069723129272
+'''
+
+'''
+loss :  0.9932538866996765
+accuracy :  0.5749613642692566
+'''
+
+'''
+loss :  0.9939306378364563
+accuracy :  0.5548686385154724
+'''
+
+'''
+loss :  0.9878906011581421
+accuracy :  0.5826893448829651
+'''
+
+'''
+loss :  0.9864095449447632
+accuracy :  0.5811437368392944
 '''
