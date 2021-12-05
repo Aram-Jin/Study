@@ -62,7 +62,7 @@ max    3231.000000      15.900000          1.040000     1.660000       65.800000
 #       'quality'],
 #      dtype='object')
 
-x = train.drop(['id', 'quality'], axis=1) # 컬럼을 삭제할때는 axis=1, 디폴트값은 axis=0
+x = train.drop(['id', 'quality'], axis=1)   # axis값을 1을 주면 열(세로) 값을 0을주면 행(가로) 삭제함. default값은 0
 test_file = test_file.drop(['id'], axis=1)
 y = train['quality']
 
@@ -70,49 +70,41 @@ from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 
 le = LabelEncoder()
-le.fit(x['type'])
-x['type'] = le.transform(x['type'])
+label = x['type']
+le.fit(label)
+x['type'] = le.transform(label)
 
-print("Label mapping: ")
-for i, item in enumerate(le.classes_):
-    print(item, '-->', i)
 
-'''
-Label mapping: 
-red --> 0
-white --> 1
-'''   
+label2 = test_file['type']
+le.fit(label2) 
+test_file['type'] = le.transform(label2)
 
-le.fit(test_file['type']) 
-test_file['type'] = le.transform(test_file['type'])
-
-print(test_file['type'])  
+#print(test_file['type'])       # testfile의 type열의 값이 0,1로 바뀌어있는지 확인해봄.
 
 print(np.unique(y))  # [4 5 6 7 8]
 
 y = pd.get_dummies(y)  # pd.get_dummies 처리 : 결측값을 제외하고 0과 1로 구성된 더미값이 만들어진다. 
 # 결측값 처리(dummy_na = True 옵션) : Nan을 생성하여 결측값도 인코딩하여 처리해준다.
 # y = pd.get_dummies(y, drop_first=True) : N-1개의 열을 생성
-print(y.shape)
-
+#print(y.shape)   # (3231, 5) -> y가 5개의 열로 바뀜(quality가 원핫인코딩으로 0,1,2,3,4 다섯개의 열이 됨)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=49)
 
-#scaler = MinMaxScaler()
+scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-scaler = MaxAbsScaler()
+#scaler = MaxAbsScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
+test_file = scaler.transform(test_file)
 
 #2. 모델구성
 input1 = Input(shape=(12,))
 dense1 = Dense(50, activation='relu')(input1)
-dense2 = Dense(80, activation='relu')(dense1)
-dense3 = Dense(100)(dense2)
-dense3 = Dense(50)(dense2)
+dense2 = Dense(30, activation='relu')(dense1)
+dense3 = Dense(20)(dense2)
 dense4 = Dense(10)(dense3)
 output1 = Dense(5, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)
@@ -121,9 +113,11 @@ model = Model(inputs=input1, outputs=output1)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
+
+#es = EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=10000, batch_size=5, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs=10000, batch_size=1, validation_split=0.2, callbacks=[es])
 
 #model.save("./_save/keras24_3_save_model.h5") 
 
@@ -132,25 +126,24 @@ loss = model.evaluate(x_test, y_test)
 print('loss : ',loss[0])
 print('accuracy : ', loss[1])
 
-resulte = model.predict(x_test[:7])
-print(y_test[:7])
-print(resulte)
-
 
 ########################### 제출용 제작 ################################
 results = model.predict(test_file)
+
+#print(results)
+
 results_int = np.argmax(results, axis=1).reshape(-1,1) + 4
+
+#print(results_int)
 
 submit_file['quality'] = results_int
 
-print(submit_file[:10])
-
+#submit_file.to_csv(path+'subfile.csv', index=False)
       
 acc = str(round(loss[1],4)).replace(".","_")
-#submit_file.to_csv(path +f"result/accuracy_{acc}.csv", index=False)
-#submit_file.to_csv(path + "final.csv", index=False)
+submit_file.to_csv(path +f"result/accuracy_{acc}.csv", index=False)
 
-submit_file.to_csv(path+f"result/accuracy_{acc}.csv", index = False)
+
 
 '''
 loss :  1.0118428468704224
