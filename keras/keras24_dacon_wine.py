@@ -101,29 +101,30 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
-#scaler = RobustScaler()
-scaler = MaxAbsScaler()
+scaler = RobustScaler()
+#scaler = MaxAbsScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 
 #2. 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(50)(input1)
-dense2 = Dense(30, activation='relu')(dense1)
-dense3 = Dense(10)(dense2)
-output1 = Dense(5, activation='softmax')(dense3)
+dense1 = Dense(30, activation='relu')(input1)
+dense2 = Dense(40, activation='relu')(dense1)
+dense3 = Dense(20)(dense2)
+dense4 = Dense(10)(dense3)
+output1 = Dense(5, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)
 
 #3. 컴파일, 훈련
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss', patience=150, mode='auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=5000, batch_size=1, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs=1000, batch_size=1, validation_split=0.2, callbacks=[es])
 
-model.save("./_save/keras24_3_save_model.h5") 
+#model.save("./_save/keras24_3_save_model.h5") 
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -135,7 +136,7 @@ print(y_test[:7])
 print(resulte)
 
 
-############ 제출용 제작 ##############
+###################### 제출용 제작 ###########################
 results = model.predict(test_file)
 results_int = np.argmax(results, axis=1).reshape(-1,1) + 4
 
@@ -143,8 +144,12 @@ submit_file['quality'] = results_int
 
 print(submit_file[:10])
 
-submit_file.to_csv(path + "final.csv", index=False)
+      
+acc = str(round(loss[1],4)).replace(".","_")
+#submit_file.to_csv(path +f"result/accuracy_{acc}.csv", index=False)
+#submit_file.to_csv(path + "final.csv", index=False)
 
+submit_file.to_csv(path+f"result/accuracy_{acc}.csv", index = False)
 
 '''
 loss :  1.0118428468704224
@@ -179,4 +184,14 @@ accuracy :  0.5826893448829651
 '''
 loss :  0.9864095449447632
 accuracy :  0.5811437368392944
+'''
+
+'''
+loss :  0.9857694506645203
+accuracy :  0.5718701481819153
+'''
+
+'''
+loss :  0.9899508953094482
+accuracy :  0.5842349529266357
 '''
