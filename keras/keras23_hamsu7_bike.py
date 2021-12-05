@@ -8,7 +8,7 @@ def RMSE(y_test, y_pred):
     return np.sqrt(mean_squared_error(y_test, y_pred))
 
 #1. 데이터
-path = "./_data/bike/"  # '.'은 현재 나의 작업폴더, '..'은 현재폴더의 전 폴더
+path = "../_data/kaggle/bike/"  # '.'은 현재 나의 작업폴더, '..'은 현재폴더의 전 폴더
 
 train = pd.read_csv(path + 'train.csv')
 #print(train)  
@@ -119,6 +119,7 @@ model.add(Dense(20))
 model.add(Dense(10)) 
 model.add(Dense(1)) 
 '''
+model.save("./_save/keras23_1_save_bike.h5")  
 model.summary()
 '''
 _________________________________________________________________
@@ -148,6 +149,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
 
 model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.2, callbacks=[es])
+model.save("./_save/keras23_3_save_bike.h5")  
+'''
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -184,7 +187,7 @@ print(submit_file[:10])
 submit_file.to_csv(path + "final.csv", index=False)
 
 # 루트와 로그 (RMSE-MSE에 루트, RMSLE-로그)
-
+'''
 ''' 
 =========================================== Scaler만 적용 후 결과 비교 =============================================================
 ☆ 1. No Scaler

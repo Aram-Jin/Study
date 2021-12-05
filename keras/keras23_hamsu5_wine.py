@@ -53,6 +53,7 @@ model.add(Dense(20, activation='relu'))
 model.add(Dense(10))
 model.add(Dense(3, activation='softmax'))
 '''
+model.save("./_save/keras23_1_save_wine.h5")  
 model.summary()
 '''
 _________________________________________________________________
@@ -78,6 +79,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=10, mode='auto', verbose=1, restore_best_weights=True)
 
 model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_split=0.2, callbacks=[es]) # callbacks의 []는 다른게 들어갈수 있음
+model.save("./_save/keras23_3_save_wine.h5")  
 
 
 #4. 평가, 예측

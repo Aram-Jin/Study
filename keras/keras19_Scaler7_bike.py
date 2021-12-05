@@ -8,7 +8,7 @@ def RMSE(y_test, y_pred):
     return np.sqrt(mean_squared_error(y_test, y_pred))
 
 #1. 데이터
-path = "./_data/bike/"  # '.'은 현재 나의 작업폴더, '..'은 현재폴더의 전 폴더
+path = "../_data/kaggle/bike/"  # '.'은 현재 나의 작업폴더, '..'은 현재폴더의 전 폴더
 
 train = pd.read_csv(path + 'train.csv')
 #print(train)  

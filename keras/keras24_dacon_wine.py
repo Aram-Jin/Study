@@ -97,21 +97,22 @@ print(y.shape)
 
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8, shuffle=True, random_state=66)
+                                                    train_size=0.8, shuffle=True, random_state=49)
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
-scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+#scaler = RobustScaler()
+scaler = MaxAbsScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 
 #2. 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(30, activation='relu')(input1)
-dense2 = Dense(40, activation='relu')(dense1)
-dense3 = Dense(20)(dense2)
+dense1 = Dense(50, activation='relu')(input1)
+dense2 = Dense(80, activation='relu')(dense1)
+dense3 = Dense(100)(dense2)
+dense3 = Dense(50)(dense2)
 dense4 = Dense(10)(dense3)
 output1 = Dense(5, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)
@@ -122,7 +123,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=1000, batch_size=1, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs=10000, batch_size=5, validation_split=0.2, callbacks=[es])
 
 #model.save("./_save/keras24_3_save_model.h5") 
 
@@ -136,7 +137,7 @@ print(y_test[:7])
 print(resulte)
 
 
-###################### 제출용 제작 ###########################
+########################### 제출용 제작 ################################
 results = model.predict(test_file)
 results_int = np.argmax(results, axis=1).reshape(-1,1) + 4
 
