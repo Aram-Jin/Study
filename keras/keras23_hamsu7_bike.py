@@ -150,7 +150,7 @@ es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
 
 model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.2, callbacks=[es])
 model.save("./_save/keras23_3_save_bike.h5")  
-'''
+
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -187,7 +187,7 @@ print(submit_file[:10])
 submit_file.to_csv(path + "final.csv", index=False)
 
 # 루트와 로그 (RMSE-MSE에 루트, RMSLE-로그)
-'''
+
 ''' 
 =========================================== Scaler만 적용 후 결과 비교 =============================================================
 ☆ 1. No Scaler
