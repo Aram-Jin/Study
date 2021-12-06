@@ -1,7 +1,8 @@
+from enum import auto
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras.layers import Dense, Input
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 
@@ -102,22 +103,31 @@ test_file = scaler.transform(test_file)
 
 #2. 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(50, activation='relu')(input1)
-dense2 = Dense(30, activation='relu')(dense1)
-dense3 = Dense(20)(dense2)
-dense4 = Dense(10)(dense3)
+dense1 = Dense(100, activation='relu')(input1)
+dense2 = Dense(60, activation='relu')(dense1)
+dense3 = Dense(30, activation='relu')(dense2)
+dense4 = Dense(10, activation='relu')(dense3)
 output1 = Dense(5, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)
 
 #3. 컴파일, 훈련
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-from tensorflow.keras.callbacks import EarlyStopping
+###################################################################################################################################
+import datetime
+date = datetime.datetime.now()
+datetime_spot = date.strftime("%m%d_%H%M")  # 1206_0456
+#print(datetime_spot)   
+filepath = './_dacon_wine/'                 # ' ' -> 문자열 형태
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'     # epoch:04d -> 네자리수;천단위,  val_loss:.4f -> 소수점뒤로 0네개  #2500-0.3724
+model_path = "".join([filepath, 'dacon_wine_', datetime_spot, '_', filename])
+####################################################################################################################################
 
-#es = EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
-
-model.fit(x_train, y_train, epochs=10000, batch_size=1, validation_split=0.2, callbacks=[es])
+mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only=True, filepath= model_path)
+model.fit(x_train, y_train, epochs=10000, batch_size=1, validation_split=0.2, callbacks=[es, mcp])
 
 #model.save("./_save/keras24_3_save_model.h5") 
 

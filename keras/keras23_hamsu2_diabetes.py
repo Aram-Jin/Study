@@ -37,7 +37,7 @@ dense5 = Dense(10, activation='relu')(dense4)
 output1 = Dense(1)(dense5)
 model = Model(inputs=input1, outputs=output1)
 
-model.save("./_save/keras23_1_save_diabetes.h5")  
+#model.save("./_save/keras23_1_save_diabetes.h5")  
 
 
 '''
@@ -49,7 +49,7 @@ model.add(Dense(50))
 model.add(Dense(10, activation='relu'))
 model.add(Dense(1))
 '''
-model.summary()
+#model.summary()
 '''
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #
@@ -81,7 +81,7 @@ es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
 model.fit(x_train, y_train, epochs=500, batch_size=1, 
                  validation_split=0.2, callbacks=[es])
 
-model.save("./_save/keras23_3_save_diabetes.h5")  
+#model.save("./_save/keras23_3_save_diabetes.h5")  
 
 
 #4. 평가, 예측
