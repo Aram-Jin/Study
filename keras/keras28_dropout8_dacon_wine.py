@@ -38,14 +38,13 @@ label = x['type']
 le.fit(label)
 x['type'] = le.transform(label)
 
-
 label2 = test_file['type']
 le.fit(label2) 
 test_file['type'] = le.transform(label2)
 
 #print(test_file['type'])       # testfile의 type열의 값이 0,1로 바뀌어있는지 확인해봄.
 
-print(np.unique(y))  # [4 5 6 7 8]
+#print(np.unique(y))  # [4 5 6 7 8]
 
 y = pd.get_dummies(y)  # pd.get_dummies 처리 : 결측값을 제외하고 0과 1로 구성된 더미값이 만들어진다. 
 # 결측값 처리(dummy_na = True 옵션) : Nan을 생성하여 결측값도 인코딩하여 처리해준다.
@@ -66,41 +65,47 @@ test_file = scaler.transform(test_file)
 
 #2. 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(80, activation='relu')(input1)
+dense1 = Dense(100, activation='relu')(input1)
 drop1 = Dropout(0.2)(dense1)
-dense2 = Dense(60, activation='relu')(drop1)
-dense3 = Dense(40, activation='relu')(dense2)
-drop2 = Dropout(0.2)(dense3)
-dense4 = Dense(20, activation='relu')(drop2)
-dense5 = Dense(10, activation='relu')(dense4)
-output1 = Dense(5, activation='softmax')(dense5)
+dense2 = Dense(60, activation='relu')(dense1)
+drop2 = Dropout(0.1)(dense2)
+dense3 = Dense(30, activation='relu')(drop2)
+dense4 = Dense(10, activation='relu')(dense3)
+output1 = Dense(5, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)
 
 #3. 컴파일, 훈련
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-###################################################################################################################################
+##################################################################################################################################
 import datetime
 date = datetime.datetime.now()
 datetime_spot = date.strftime("%m%d_%H%M")  # 1206_0456
 #print(datetime_spot)   
-filepath = './_dacon_wine/'                 # ' ' -> 문자열 형태
-filename = '{epoch:04d}-{val_accuracy:.4f}.hdf5'     # epoch:04d -> 네자리수;천단위,  val_loss:.4f -> 소수점뒤로 0네개  #2500-0.3724
-model_path = "".join([filepath, 'dacon_wine_', datetime_spot, '_', filename])
+filepath = './_ModelCheckPoint/'                 # ' ' -> 문자열 형태
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'     # epoch:04d -> 네자리수;천단위,  val_loss:.4f -> 소수점뒤로 0네개  #2500-0.3724
+model_path = "".join([filepath, 'k28_8_', datetime_spot, '_', filename])
 ####################################################################################################################################
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
-mcp = ModelCheckpoint(monitor='val_accuracy', mode='max', verbose=1, save_best_only=True, filepath= model_path)
-model.fit(x_train, y_train, epochs=60000, batch_size=1, validation_split=0.2, callbacks=[es, mcp])
+es = EarlyStopping(monitor='val_loss', patience=200, mode='min', verbose=1, restore_best_weights=True)
+mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only=True, filepath= model_path)
+model.fit(x_train, y_train, epochs=10000, batch_size=5, validation_split=0.2, callbacks=[es, mcp])
 
-model.save("./_save/keras24_3_save_model.h5") 
+model.save("./_save/keras28_8_save_dacon_wine.h5") 
 
 #4. 평가, 예측
+print("================================== 1. 기본 출력  =========================================")
 loss = model.evaluate(x_test, y_test)
 print('loss : ',loss[0])
 print('accuracy : ', loss[1])
+
+print("================================ 2. load_model 출력  =========================================")
+model2 = load_model('./_save/keras28_8_save_dacon_wine.h5')
+loss2 = model2.evaluate(x_test, y_test)
+print('loss : ',loss2[0])
+print('accuracy : ', loss2[1])
 
 
 ########################### 제출용 제작 ################################
@@ -114,27 +119,34 @@ results_int = np.argmax(results, axis=1).reshape(-1,1) + 4
 
 submit_file['quality'] = results_int
 
-submit_file.to_csv(path+'subfile.csv', index=False)
+#submit_file.to_csv(path+'subfile.csv', index=False)
       
 acc = str(round(loss[1],4)).replace(".","_")
 submit_file.to_csv(path +f"result/accuracy_{acc}.csv", index=False)
 
 '''
-Epoch 00565: val_accuracy did not improve from 0.54739
-Epoch 00565: early stopping
-21/21 [==============================] - 0s 1ms/step - loss: 1.0065 - accuracy: 0.5734
-loss :  1.0065391063690186
-accuracy :  0.5734157562255859
+Epoch 00311: val_loss did not improve from 1.06175
+Epoch 00311: early stopping
+================================== 1. 기본 출력  =========================================
+21/21 [==============================] - 0s 498us/step - loss: 1.0467 - accuracy: 0.5626
+loss :  1.0466537475585938
+accuracy :  0.5625966191291809
+================================ 2. load_model 출력  =========================================
+21/21 [==============================] - 0s 549us/step - loss: 1.0467 - accuracy: 0.5626
+loss :  1.0466537475585938
+accuracy :  0.5625966191291809
 
-Epoch 00213: val_accuracy did not improve from 0.54932
-Epoch 00213: early stopping
-21/21 [==============================] - 0s 893us/step - loss: 1.0047 - accuracy: 0.5842
-loss :  1.0046560764312744
-accuracy :  0.5842349529266357
+//////////////////////////////////// Dropout 적용 후 결과 //////////////////////////////////////////////
 
-Epoch 00354: val_accuracy did not improve from 0.53578
-Epoch 00354: early stopping
-21/21 [==============================] - 0s 846us/step - loss: 0.9979 - accuracy: 0.5657
-loss :  0.9978770613670349
-accuracy :  0.5656877756118774
+Epoch 00307: val_loss did not improve from 1.07628
+Epoch 00307: early stopping
+================================== 1. 기본 출력  =========================================
+21/21 [==============================] - 0s 499us/step - loss: 1.0294 - accuracy: 0.5611
+loss :  1.0294150114059448
+accuracy :  0.5610510110855103
+================================ 2. load_model 출력  =========================================
+21/21 [==============================] - 0s 887us/step - loss: 1.0294 - accuracy: 0.5611
+loss :  1.0294150114059448
+accuracy :  0.5610510110855103
+
 '''
