@@ -15,25 +15,6 @@ y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 print(y_train.shape)   # (50000, 10)
 
-#1
-#scaler = MinMaxScaler()
-#scaler = StandardScaler()
-#scaler = RobustScaler()
-scaler = MaxAbsScaler()
-
-
-n = x_train.shape[0]
-x_train_reshape = x_train.reshape(n,-1) 
-scaler.fit(x_train_reshape) 
-x_train_transform = scaler.transform(x_train_reshape)
-x_train = x_train_reshape.reshape(n,-1) 
-
-m = x_test.shape[0]
-x_test_reshape = x_test.reshape(n,-1) 
-x_test_transform = scaler.transform(x_test_reshape)
-x_test = x_test_reshape.reshape(n,-1) 
-
-
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x_train, y_train,
                                                     train_size=0.8, shuffle=True, random_state=66)
@@ -41,6 +22,22 @@ x_train, x_test, y_train, y_test = train_test_split(x_train, y_train,
 print(x_train.shape, y_train.shape)  # (40000, 32, 32, 3) (40000, 10)
 print(x_test.shape, y_test.shape)   # (10000, 32, 32, 3) (10000, 10) 
 
+#scaler = MinMaxScaler()
+#scaler = StandardScaler()
+#scaler = RobustScaler()
+scaler = MaxAbsScaler()
+
+n = x_train.shape[0]
+x_train_reshape = x_train.reshape(n,-1) 
+scaler.fit(x_train_reshape) 
+x_train_transform = scaler.fit_transform(x_train_reshape)
+x_train = x_train_transform.reshape(x_train.shape) 
+
+m = x_test.shape[0]
+x_test = scaler.transform(x_test.reshape(m,-1)).reshape(x_test.shape)
+
+#x_test_transform = scaler.transform(x_test.reshape(m,-1))
+#x_test = x_test_transform.reshape(x_test.shape)
 
 
 #2. 모델구성
@@ -48,9 +45,9 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
 
 model = Sequential()
-model.add(Conv2D(20, kernel_size=(2,2), padding='same', strides=1, input_shape=(32, 32, 3)))  
+model.add(Conv2D(50, kernel_size=(2,2), padding='same', strides=1, input_shape=(32, 32, 3)))  
 model.add(MaxPooling2D())  
-model.add(Conv2D(10, (2,2), activation='relu'))
+model.add(Conv2D(20, (2,2), activation='relu'))
 model.add(MaxPooling2D())   
 model.add(Flatten())
 model.add(Dense(30, activation='relu'))
@@ -72,11 +69,11 @@ filepath = './_ModelCheckPoint/'
 filename = '{epoch:04d}-{val_accuracy:.4f}.hdf5'     
 model_path = "".join([filepath, 'k32_cifar100_', datetime_spot, '_', filename])
 ####################################################################################################################################
-es = EarlyStopping(monitor='val_loss', patience=300, mode='min', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=10000, mode='min', verbose=1, restore_best_weights=True)
 mcp = ModelCheckpoint(monitor='val_accuracy', mode='max', verbose=1,
                       save_best_only=True, filepath=model_path)   # EarlyStopping의 patience를 넓게 주어야 효과가 좋음. verbose=1은 중간중간 저장될때마다 보여줌
 
-model.fit(x_train, y_train, epochs=1000, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es, mcp]) # callbacks의 []는 다른게 들어갈수 있음
+model.fit(x_train, y_train, epochs=500000, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es, mcp]) # callbacks의 []는 다른게 들어갈수 있음
 
 
 #4. 평가, 예측
