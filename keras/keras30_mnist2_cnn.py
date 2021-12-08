@@ -6,16 +6,16 @@ from tensorflow.keras.datasets import mnist
 print(x_train.shape, y_train.shape)   # (60000, 28, 28) (60000,)
 print(x_test.shape, y_test.shape)    # (10000, 28, 28) (10000,)
 
-x_train = x_train.reshape(60000, 28, 28, 1)   # 4차원 데이터로 변환시켜야함, 흑백 데이터이므로 1을 넣었지만 (60000,28,14,2) 도 가능
+x_train = x_train.reshape(60000, 28, 28, 1)   # 4차원 데이터로 변환시켜야하기때문에 reshape해줌, 흑백 데이터이므로 1을 넣었지만 (60000,28,14,2) 도 가능
 x_test = x_test.reshape(10000, 28, 28, 1)   
 print(x_train.shape)   # (60000, 28, 28, 1)
 
 print(np.unique(y_train, return_counts=True))
- 
-x = x_train
+
 
 from tensorflow.keras.utils import to_categorical
-y = to_categorical(y_train)
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
 #print(y.shape)   # (60000, 10)
 
 from sklearn.model_selection import train_test_split
@@ -30,10 +30,10 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
 
 model = Sequential()
-model.add(Conv2D(20, kernel_size=(3,3), input_shape=(28, 28, 1)))    
-model.add(Conv2D(40, (2,2), activation='relu'))                                                                  
+model.add(Conv2D(10, kernel_size=(3,3), input_shape=(28, 28, 1)))    
+model.add(Conv2D(10, (2,2), activation='relu'))                                                                  
 model.add(Flatten())
-model.add(Dense(30, activation='relu'))
+model.add(Dense(50, activation='relu'))
 model.add(Dropout(0.2)) 
 model.add(Dense(20, activation='relu'))
 model.add(Dense(10, activation='softmax'))
@@ -44,7 +44,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=1000, batch_size=10, verbose=1, validation_split=0.2, callbacks=[es]) # callbacks의 []는 다른게 들어갈수 있음
+model.fit(x_train, y_train, epochs=1000, batch_size=80, verbose=1, validation_split=0.2, callbacks=[es]) # callbacks의 []는 다른게 들어갈수 있음
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)

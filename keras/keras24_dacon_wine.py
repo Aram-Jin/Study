@@ -38,7 +38,6 @@ label = x['type']
 le.fit(label)
 x['type'] = le.transform(label)
 
-
 label2 = test_file['type']
 le.fit(label2) 
 test_file['type'] = le.transform(label2)
@@ -66,15 +65,15 @@ test_file = scaler.transform(test_file)
 
 #2. 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(80, activation='relu')(input1)
+dense1 = Dense(60, activation='relu')(input1)
 drop1 = Dropout(0.2)(dense1)
-dense2 = Dense(60, activation='relu')(drop1)
-dense3 = Dense(40, activation='relu')(dense2)
-drop2 = Dropout(0.2)(dense3)
-dense4 = Dense(20, activation='relu')(drop2)
-dense5 = Dense(10, activation='relu')(dense4)
-output1 = Dense(5, activation='softmax')(dense5)
+dense2 = Dense(40, activation='relu')(drop1)
+drop2 = Dropout(0.2)(dense2)
+dense3 = Dense(20, activation='relu')(drop2)
+dense4 = Dense(10, activation='relu')(dense3)
+output1 = Dense(5, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)
+model.summary()
 
 #3. 컴파일, 훈련
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -91,9 +90,9 @@ model_path = "".join([filepath, 'dacon_wine_', datetime_spot, '_', filename])
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=10000, mode='min', verbose=1, restore_best_weights=True)
 mcp = ModelCheckpoint(monitor='val_accuracy', mode='max', verbose=1, save_best_only=True, filepath= model_path)
-model.fit(x_train, y_train, epochs=60000, batch_size=1, validation_split=0.2, callbacks=[es, mcp])
+model.fit(x_train, y_train, epochs=5000000, batch_size=100, validation_split=0.2, callbacks=[es, mcp])
 
 model.save("./_save/keras24_3_save_model.h5") 
 
@@ -119,6 +118,8 @@ submit_file.to_csv(path+'subfile.csv', index=False)
 acc = str(round(loss[1],4)).replace(".","_")
 submit_file.to_csv(path +f"result/accuracy_{acc}.csv", index=False)
 
+
+
 '''
 Epoch 00565: val_accuracy did not improve from 0.54739
 Epoch 00565: early stopping
@@ -137,4 +138,16 @@ Epoch 00354: early stopping
 21/21 [==============================] - 0s 846us/step - loss: 0.9979 - accuracy: 0.5657
 loss :  0.9978770613670349
 accuracy :  0.5656877756118774
+
+Epoch 00401: val_accuracy did not improve from 0.55899
+Epoch 00401: early stopping
+21/21 [==============================] - 0s 400us/step - loss: 0.9968 - accuracy: 0.5719
+loss :  0.996820867061615
+accuracy :  0.5718701481819153
+
+loss :  0.9886926412582397
+accuracy :  0.5765069723129272
+
+loss :  0.995951235294342
+accuracy :  0.5780525207519531
 '''
