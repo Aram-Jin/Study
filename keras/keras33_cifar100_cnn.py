@@ -29,7 +29,6 @@ scaler = MaxAbsScaler()
 
 n = x_train.shape[0]
 x_train_reshape = x_train.reshape(n,-1) 
-scaler.fit(x_train_reshape) 
 x_train_transform = scaler.fit_transform(x_train_reshape)
 x_train = x_train_transform.reshape(x_train.shape) 
 
@@ -51,9 +50,9 @@ model.add(Conv2D(20, (2,2), activation='relu'))
 model.add(MaxPooling2D())   
 model.add(Flatten())
 model.add(Dense(30, activation='relu'))
-model.add(Dropout(0.5)) 
+model.add(Dropout(0.2)) 
 model.add(Dense(20, activation='relu'))
-model.add(Dropout(0.5)) 
+model.add(Dropout(0.2)) 
 model.add(Dense(10, activation='softmax'))
 
 #3. 컴파일, 훈련
@@ -69,11 +68,11 @@ filepath = './_ModelCheckPoint/'
 filename = '{epoch:04d}-{val_accuracy:.4f}.hdf5'     
 model_path = "".join([filepath, 'k32_cifar100_', datetime_spot, '_', filename])
 ####################################################################################################################################
-es = EarlyStopping(monitor='val_loss', patience=10000, mode='min', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1, restore_best_weights=True)
 mcp = ModelCheckpoint(monitor='val_accuracy', mode='max', verbose=1,
                       save_best_only=True, filepath=model_path)   # EarlyStopping의 patience를 넓게 주어야 효과가 좋음. verbose=1은 중간중간 저장될때마다 보여줌
 
-model.fit(x_train, y_train, epochs=500000, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es, mcp]) # callbacks의 []는 다른게 들어갈수 있음
+model.fit(x_train, y_train, epochs=1000, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es, mcp]) # callbacks의 []는 다른게 들어갈수 있음
 
 
 #4. 평가, 예측
@@ -83,9 +82,9 @@ print('accuracy : ', loss[1])
 
 
 '''
-Epoch 00126: val_accuracy did not improve from 0.10262
-Epoch 00126: early stopping
-313/313 [==============================] - 1s 3ms/step - loss: 2.3026 - accuracy: 0.0972
-loss :  2.3026280403137207
-accuracy :  0.09719999879598618
+Epoch 00087: val_accuracy did not improve from 0.62787
+Epoch 00087: early stopping
+313/313 [==============================] - 1s 4ms/step - loss: 1.1026 - accuracy: 0.6174
+loss :  1.102616786956787
+accuracy :  0.6173999905586243
 '''

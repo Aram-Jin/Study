@@ -28,11 +28,11 @@ print(x_test.shape, y_test.shape)   # (10000, 32, 32, 3) (10000, 10)
 #scaler = RobustScaler()
 scaler = MaxAbsScaler()
 
-n = x_train.shape[0]
-x_train_reshape = x_train.reshape(n,-1) 
-scaler.fit(x_train_reshape) 
-x_train_transform = scaler.fit_transform(x_train_reshape)
-x_train = x_train_transform.reshape(x_train.shape) 
+n = x_train.shape[0]  # 이미지갯수 50000
+x_train_reshape = x_train.reshape(n,-1)   #----> (50000,32,32,3) --> (50000, 32*32*3 ) 0~255
+scaler.fit(x_train_reshape)              
+x_train_transform = scaler.fit_transform(x_train_reshape)  #0~255 -> 0~1
+x_train = x_train_transform.reshape(x_train.shape)    #--->(50000,32,32,3) 0~1
 
 m = x_test.shape[0]
 x_test = scaler.transform(x_test.reshape(m,-1)).reshape(x_test.shape)

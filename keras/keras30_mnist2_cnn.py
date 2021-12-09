@@ -18,10 +18,6 @@ y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 #print(y.shape)   # (60000, 10)
 
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8, shuffle=True, random_state=66)
-
 print(x_train.shape, y_train.shape)  # (48000, 28, 28, 1) (48000, 10)
 print(x_test.shape, y_test.shape)   # (12000, 28, 28, 1) (12000, 10) 
 
