@@ -32,6 +32,7 @@ scaler = MinMaxScaler()
 x_train = scaler.fit_transform(x_train).reshape(len(x_train),2,2,1)
 x_test = scaler.transform(x_test).reshape(len(x_test),2,2,1)
 
+#2. 모델구성
 model = Sequential()
 model.add(Conv2D(4, kernel_size=(2,2), padding='same', strides=1, input_shape=(2,2,1)))
 model.add(Conv2D(4, (2,2), activation='relu'))
@@ -40,3 +41,5 @@ model.add(Dense(9, activation='relu'))
 model.add(Dense(6))
 model.add(Dense(3, activation='softmax'))
 model.summary()
+
+#3. 
