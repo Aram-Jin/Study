@@ -22,7 +22,6 @@ y = to_categorical(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
-#print(x_train.shape, x_test.shape)    # (120, 4) (30, 4)
 
 scaler = MinMaxScaler()
 #scaler = StandardScaler()
@@ -31,6 +30,7 @@ scaler = MinMaxScaler()
 
 x_train = scaler.fit_transform(x_train).reshape(x_train.shape[0],x_train.shape[1],1)
 x_test = scaler.fit_transform(x_test).reshape(x_test.shape[0],x_test.shape[1],1)
+#print(x_train.shape, x_test.shape)    # (120, 4, 1) (30, 4, 1)
 
 #2. 모델구성
 model = Sequential()
@@ -38,11 +38,11 @@ model.add(LSTM(32, return_sequences=False, input_shape=(4,1)))
 model.add(Dropout(0.2))               
 model.add(Dense(16))
 model.add(Dense(8))
-model.add(Dense(1, activation='softmax'))
+model.add(Dense(3, activation='softmax'))
 #model.summary()   
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam')
+model.compile(loss='mse', optimizer='adam', metrics='accuracy')
 
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=False)
 
@@ -51,7 +51,12 @@ model.fit(x_train, y_train, epochs=500, validation_split=0.2, callbacks=[es])
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
-print('loss :',loss)
+print('loss :',loss[0])
+print('accuracy :',loss[1])
 
 y_predict = model.predict(x_test)
 
+'''
+loss : 0.007205064408481121
+accuracy : 1.0
+'''

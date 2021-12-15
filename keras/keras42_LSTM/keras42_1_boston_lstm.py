@@ -13,7 +13,6 @@ datasets = load_boston()
 
 x = datasets.data
 y = datasets.target
-
 #print(x.shape, y.shape)    # (506, 13) (506,)
 #print(np.unique(y)) 
 
@@ -25,10 +24,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 #scaler = RobustScaler()
 scaler = MaxAbsScaler()
 
-#print(x_train.shape, x_test.shape) # (404, 13) (102, 13)
+x_train = scaler.fit_transform(x_train).reshape(x_train.shape[0],x_train.shape[1],1)
+x_test = scaler.transform(x_test).reshape(x_test.shape[0],x_test.shape[1],1)
+#print(x_train.shape, x_test.shape) # (404, 13, 1) (102, 13, 1)
 
-x_train = scaler.fit_transform(x_train).reshape(404,13,1)
-x_test = scaler.transform(x_test).reshape(102,13,1)
 
 # 2. 모델구성
 model = Sequential()

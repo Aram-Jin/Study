@@ -19,15 +19,16 @@ y = datasets.target
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
-#print(x_train.shape, x_test.shape)    # (455, 30) (114, 30)
 
 scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
 #scaler = MaxAbsScaler()
 
-x_train = scaler.fit_transform(x_train).reshape(455,30,1)
-x_test = scaler.fit_transform(x_test).reshape(114,30,1)
+x_train = scaler.fit_transform(x_train).reshape(x_train.shape[0],x_train.shape[1],1)
+x_test = scaler.fit_transform(x_test).reshape(x_test.shape[0],x_test.shape[1],1)
+# print(x_train.shape, x_test.shape)    # (455, 30, 1) (114, 30, 1)
+
 
 #2. 모델구성
 model = Sequential()
