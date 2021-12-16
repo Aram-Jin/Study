@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np, time
 from sklearn import datasets
 from sklearn.datasets import load_iris
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
@@ -43,11 +43,13 @@ model.add(Dense(3, activation='softmax'))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam', metrics='accuracy')
-
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=False)
 
+start = time.time()
 model.fit(x_train, y_train, epochs=500, validation_split=0.2, callbacks=[es])
+end = time.time() - start
 
+print("걸린시간: ", round(end, 3), '초')
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -57,6 +59,7 @@ print('accuracy :',loss[1])
 y_predict = model.predict(x_test)
 
 '''
-loss : 0.007205064408481121
+걸린시간:  10.349 초
+loss : 0.009940145537257195
 accuracy : 1.0
 '''

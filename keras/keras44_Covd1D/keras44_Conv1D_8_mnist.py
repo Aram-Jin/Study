@@ -2,7 +2,7 @@ import numpy as np
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, LSTM
+from tensorflow.keras.layers import Dense, Dropout, Conv1D, Flatten
 from tensorflow.keras.callbacks import EarlyStopping
 
 #1. 데이터
@@ -17,7 +17,8 @@ y_test = to_categorical(y_test)
 
 #2. 모델구성
 model = Sequential()
-model.add(LSTM(64, return_sequences=False, input_shape=(28,28)))   
+model.add(Conv1D(64, 2, input_shape=(28,28)))  
+model.add(Flatten()) 
 model.add(Dropout(0.2))
 model.add(Dense(32, activation='relu'))
 model.add(Dropout(0.2))
@@ -42,6 +43,10 @@ print('accuracy : ', loss[1])
 
 
 '''
-loss :  0.37675896286964417
-accuracy :  0.9121000170707703
+
+
+
+==================================
+loss :  0.4677174687385559
+accuracy :  0.9248999953269958
 '''

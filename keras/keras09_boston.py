@@ -38,13 +38,15 @@ model.add(Dense(2))
 model.add(Dense(1)) 
 
 #2. 모델구성
-model.compile(loss='mse', optimizer='adam')
+model.compile(loss='mse', optimizer='adam', metrics=['mae'])   # loss에 들어가는 지표는 성능에 영향을 미치지만, metrics에 들어가는 지표는 성능에 영향을 미치지 않음(단순평가지표)
 
 model.fit(x_train, y_train, epochs=500, batch_size=13)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
-print('loss :', loss)
+print('loss :', loss[0])
+print('mae :', loss[1])
+
 
 y_predict = model.predict(x_test)
 

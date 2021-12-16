@@ -4,7 +4,7 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import LSTM, Dense, Dropout
+from tensorflow.keras.layers import Conv1D, Dense, Dropout, Flatten
 from tensorflow.keras.callbacks import EarlyStopping
 
 #1. 데이터
@@ -32,7 +32,8 @@ x_test = scaler.fit_transform(x_test).reshape(x_test.shape[0],x_test.shape[1],1)
 
 #2. 모델구성
 model = Sequential()
-model.add(LSTM(40, return_sequences=False, input_shape=(30,1)))
+model.add(Conv1D(40, 2, input_shape=(30,1)))
+model.add(Flatten())
 model.add(Dropout(0.2))  
 model.add(Dense(30))
 model.add(Dropout(0.2))                  
@@ -58,8 +59,15 @@ print('accuracy :',loss[1])
 
 y_predict = model.predict(x_test)
 
+
 '''
 걸린시간:  24.039 초
 loss : 0.059186626225709915
 accuracy : 0.9210526347160339
+=====================================
+걸린시간:  5.427 초
+loss : 0.0437961220741272
+accuracy : 0.9561403393745422
+
+=> LSTM과 비교했을때 속도향상
 '''

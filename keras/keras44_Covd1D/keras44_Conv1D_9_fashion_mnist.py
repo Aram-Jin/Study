@@ -1,7 +1,7 @@
 import numpy as np, datetime
 from tensorflow.keras.datasets import fashion_mnist
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Dropout
+from tensorflow.keras.layers import Dense, Conv1D, Dropout, Flatten
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.utils import to_categorical
 

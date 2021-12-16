@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np, time
 from sklearn import datasets
 from sklearn.datasets import load_boston
 from sklearn.metrics import r2_score
@@ -42,11 +42,13 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-
 es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1, restore_best_weights=False)
 
+start = time.time()
 model.fit(x_train, y_train, epochs=100, validation_split=0.2, callbacks=[es])
+end = time.time() - start
 
+print("걸린시간: ", round(end, 3),'초')
 
 #4. 평가, 예측
 
@@ -59,6 +61,7 @@ r2 = r2_score(y_test, y_predict)
 print('r2스코어 : ', r2)
 
 '''
+걸린시간:  6.947 초
 loss : 34.37178421020508
 r2스코어 :  0.5887703768665
 '''

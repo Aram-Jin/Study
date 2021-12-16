@@ -4,7 +4,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, Ma
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 from tensorflow.keras.models import Sequential, Model, load_model
-from tensorflow.keras.layers import LSTM, Dense, Dropout, Input
+from tensorflow.keras.layers import Conv1D, Dense, Dropout, Input, Flatten
 from tensorflow.keras.callbacks import EarlyStopping
 
 def RMSE(y_test, y_predict):
@@ -50,7 +50,8 @@ test_file = scaler.transform(test_file).reshape(test_file.shape[0],test_file.sha
 
 #2. 모델구성
 model = Sequential()
-model.add(LSTM(80, return_sequences=False, input_shape=(x_train.shape[1],x_train.shape[2]), activation='relu')) 
+model.add(Conv1D(80, 2, input_shape=(x_train.shape[1],x_train.shape[2]), activation='relu')) 
+model.add(Flatten())
 model.add(Dropout(0.2))
 model.add(Dense(50, activation='relu')) 
 model.add(Dropout(0.2))
@@ -102,7 +103,12 @@ r2스코어 :  0.15161890594160143
 RMSE :  163.7540899102404
 걸린시간:  51.167 초
 -----------------------------------------------------
+loss : 24016.466796875
+r2스코어 :  0.24017126658097687
+RMSE :  154.97245790723088
+걸린시간:  34.327 초
 
+/////////////////////////////////////////////////////
 < 기본 결과값 >
 loss : 22330.763671875
 r2스코어 :  0.29350292789173293

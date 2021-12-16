@@ -4,7 +4,7 @@ from sklearn.datasets import load_wine
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import LSTM, Dense, Dropout
+from tensorflow.keras.layers import Conv1D, Dense, Dropout, Flatten
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
 
@@ -35,20 +35,20 @@ x_test = scaler.fit_transform(x_test).reshape(x_test.shape[0],x_test.shape[1],1)
 
 #2. 모델구성
 model = Sequential()
-model.add(LSTM(32, return_sequences=False, input_shape=(13,1)))
+model.add(Conv1D(32, 2, input_shape=(13,1)))
+model.add(Flatten())
 model.add(Dropout(0.2))               
 model.add(Dense(16))
 model.add(Dense(8))
 model.add(Dense(3, activation='softmax'))
 # model.summary()   
 
-
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam', metrics='accuracy')
-#es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=False)
+# es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=False)
 
 start = time.time()
-model.fit(x_train, y_train, epochs=500, validation_split=0.2)  # callbacks=[es]
+model.fit(x_train, y_train, epochs=500, validation_split=0.2)  # , callbacks=[es]
 end = time.time() - start
 
 print("걸린시간: ", round(end, 3), '초')
@@ -61,7 +61,18 @@ print('accuracy :',loss[1])
 y_predict = model.predict(x_test)
 
 '''
-걸린시간:  9.004 초
-loss : 0.04276493564248085
-accuracy : 0.8888888955116272
+걸린시간:  9.229 초
+loss : 0.013855204917490482
+accuracy : 0.9444444179534912
+
+< EarlyStopping 없이 모든 epochs 돌렸을때 연산속도 비교(LSTM vs Conv1D) >
+
+걸린시간:  15.265 초
+loss : 0.025034435093402863
+accuracy : 0.9444444179534912
+==========================================
+걸린시간:  9.266 초
+loss : 0.013928375206887722
+accuracy : 0.9722222089767456
+
 '''
