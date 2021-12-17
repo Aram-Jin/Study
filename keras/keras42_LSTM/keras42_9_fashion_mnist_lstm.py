@@ -52,19 +52,7 @@ print('loss : ',loss[0])
 print('accuracy : ', loss[1])
 
 '''
-375/375 [==============================] - 1s 2ms/step - loss: 0.3837 - accuracy: 0.8708
-loss :  0.38367900252342224
-accuracy :  0.8708333373069763
+loss :  0.46201324462890625
+accuracy :  0.8352000117301941
 
-loss :  0.4533367156982422
-accuracy :  0.8849166631698608
-
-Epoch 00117: val_accuracy did not improve from 0.88885
-Epoch 00117: early stopping
-375/375 [==============================] - 1s 3ms/step - loss: 0.3462 - accuracy: 0.8838
-loss :  0.3461590111255646
-accuracy :  0.8838333487510681
-
-loss :  0.37810197472572327
-accuracy :  0.8863333463668823
 '''
