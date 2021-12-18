@@ -1,5 +1,4 @@
-import numpy as np
-import pandas as pd
+import numpy as np, pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder, OneHotEncoder
 from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier

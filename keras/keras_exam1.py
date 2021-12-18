@@ -28,16 +28,28 @@ y1 = samsung['종가']
 x1_train, x1_test, y1_train, y1_test = train_test_split(x1, y1,
                                                     train_size=0.8, shuffle=True, random_state=66)
 
-def split_x(dataset, size):
-    list = []
-    for i in range(len(dataset) - size + 1):
-        subset = dataset[i : (i + size)]
-        list.append(subset)
-    return np.array(list)
+print(x1.shape)
 
-train = split_x(x1, 5)
-print(train)
-print(train.shape)  # (889, 5, 2)
+scaler = MinMaxScaler()
+#scaler = StandardScaler()
+# scaler = RobustScaler()
+#scaler = MaxAbsScaler()
+x_train = scaler.fit_transform(x1_train)
+x_test = scaler.fit_transform(x1_test)
+
+
+print(x_train.shape, x_test.shape, test_file.shape)   # (8708, 8, 1) (2178, 8, 1) (6493, 8, 1)
+
+# def split_x(dataset, size):
+#     list = []
+#     for i in range(len(dataset) - size + 1):
+#         subset = dataset[i : (i + size)]
+#         list.append(subset)
+#     return np.array(list)
+
+# train = split_x(x1, 5)
+# print(train)
+# print(train.shape)  # (889, 5, 2)
 
 # print(samsung.columns)
 # print(kiwoom.columns)
@@ -75,13 +87,6 @@ print(train.shape)  # (889, 5, 2)
 
 
 
-# # scaler = MinMaxScaler()
-# #scaler = StandardScaler()
-# # scaler = RobustScaler()
-# #scaler = MaxAbsScaler()
-# # x_train = scaler.fit_transform(x_train)
-# # x_test = scaler.fit_transform(x_test)
-# # test_file = scaler.transform(test_file)
 
 # # plt.figure(figsize=(10,10))
 # # sns.heatmap(data=samsung.columns.corr(), square=True, annot=True, cbar=True) 
@@ -112,5 +117,9 @@ print(train.shape)  # (889, 5, 2)
 
 # # y = train['count']
 # # #print(y.shape)  # (10886,)
+
+
+
+
 
 # # test_file = test_file.drop(['datetime'], axis=1)  
