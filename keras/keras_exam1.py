@@ -1,5 +1,4 @@
-import numpy as np, pandas as pd, datetime, time
-import matplotlib.pyplot as plt,  seaborn as sns  
+import numpy as np, pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
@@ -18,7 +17,7 @@ def split_xy5(dataset, time_steps, y_column):
             break
         
         tmp_x = dataset[i:x_end_number, :] 
-        tmp_y = dataset[x_end_number: y_end_number, 3] 
+        tmp_y = dataset[x_end_number: y_end_number, 1] 
         x.append(tmp_x)
         y.append(tmp_y)   
     return np.array(x),np.array(y)
@@ -29,57 +28,44 @@ path = "../samsung/"
 samsung = pd.read_csv(path +"삼성전자.csv", index_col=0, header = 0, thousands =',', encoding='cp949')
 kiwoom = pd.read_csv(path + '키움증권.csv', index_col=0, header = 0, thousands =',', encoding='cp949')
 
-samsung = samsung.iloc[:893,:].drop(['전일비','Unnamed: 6','등락률', '거래량','금액(백만)', '신용비', '개인', '기관', '외인(수량)', '외국계', '프로그램', '외인비'], axis=1).sort_values(['일자'],ascending=[True]).values 
-kiwoom = kiwoom.iloc[:893,:].drop(['전일비','Unnamed: 6','등락률', '거래량','금액(백만)', '신용비', '개인', '기관', '외인(수량)', '외국계', '프로그램', '외인비'], axis=1).sort_values(['일자'],ascending=[True]).values  
+print(samsung)
 
-# x1 = samsung
-# y1 = samsung['종가']
+# samsung = samsung.values
+samsung = samsung.iloc[:250,:].sort_values(['일자'],ascending=[True])
+kiwoom = kiwoom.iloc[:250,:].sort_values(['일자'],ascending=[True])
 
-# x2 = kiwoom
-# y2 = kiwoom['종가'] 
+# print(samsung,kiwoom)   # 2020/12/15부터 데이터를 쓰겠다.
 
-x1, y1 = split_xy5(samsung,5,1)
-x2, y2 = split_xy5(kiwoom,5,1)
+s = samsung[['시가','종가']].values
+k = kiwoom[['시가','종가']].values
+# print(s,k)    #시가와 종가만 가져왔다.
 
-x1 = x1.reshape(888,-1)
-x2 = x2.reshape(888,-1)
+x1, y1 = split_xy5(s,5,1)
+x2, y2 = split_xy5(k,5,1)
 
-print(x1.shape, y1.shape)  # (888, 20) (888, 1)
-print(x2.shape, y1.shape)  # (888, 20) (888, 1)
+#RNN사용시  이미알기때문에 그냥 사용함.
+#print(x1.shape)     #(243, 5, 4)
+#print(y1.shape)     #(243, 1)
 
-# print(samsung.index, kiwoom.index)
+#DNN쓰기위해 2차원으로 바꿔줌.
+#x1 = x1.reshape(len(x1),-1)
+#x2 = x2.reshape(len(x2),-1)
 
-x1_train, x1_test, y1_train, y1_test = train_test_split(x1, y1, train_size=0.8, shuffle=True, random_state=66)
-x2_train, x2_test, y2_train, y2_test = train_test_split(x2, y2, train_size=0.8, shuffle=True, random_state=66)
-
-print(x1_train.shape, x1_test.shape)   # (710, 20) (178, 20)
-print(x2_train.shape, x2_test.shape)   # (710, 20) (178, 20)
-
-scaler = MinMaxScaler()
-#scaler = StandardScaler()
-# scaler = RobustScaler()
-#scaler = MaxAbsScaler()
-x1_train = scaler.fit_transform(x1_train).reshape(len(x1_train),5,4)
-x1_test = scaler.transform(x1_test).reshape(len(x1_test),5,4)
-
-x2_train = scaler.fit_transform(x2_train).reshape(len(x2_train),5,4)
-x2_test = scaler.transform(x2_test).reshape(len(x2_test),5,4)
-
-print(x1_train.shape, x1_test.shape)   # (710, 5, 4)
-print(x2_train.shape, x2_test.shape)   # (710, 5, 4)
-print(y1_train.shape, y2_train.shape, y1_test.shape, y2_test.shape)   # (710, 1) (710, 1) (178, 1) (178, 1)
+x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1,x2,y1,y2, train_size=0.8, shuffle=True, random_state=66)
 
 #2. 모델구성
 
+print(x1_train.shape)   # (196, 5, 2)
+
 #2-1 모델1
-input1 = Input(shape=(5,4))
-dense1 = LSTM(16, activation='relu', name='dense1')(input1)
-dense2 = Dense(8, activation='relu', name='dense2')(dense1)
-dense3 = Dense(4, activation='relu', name='dense3')(dense2)
-output1 = Dense(1, activation='relu', name='output1')(dense3)
+input1 = Input(shape=(5,2))
+dense1 = LSTM(16, activation='relu')(input1)
+dense2 = Dense(8, activation='relu')(dense1)
+dense3 = Dense(4, activation='relu')(dense2)
+output1 = Dense(1, activation='relu')(dense3)
 
 #2-1 모델2
-input2 = Input(shape=(5,4))
+input2 = Input(shape=(5,2))
 dense11 = LSTM(16, activation='relu')(input1)
 dense12 = Dense(8, activation='relu')(dense11)
 dense13 = Dense(4, activation='relu')(dense12)
@@ -100,37 +86,37 @@ output33 = Dense(4, activation='relu')(output32)
 last_output2 = Dense(1, activation='relu')(output33)
 
 model = Model(inputs=[input1,input2], outputs=[last_output1,last_output2])
-# model.summary()
+model.summary()
 
 #3. 컴파일, 훈련
-from tensorflow.keras.callbacks import EarlyStopping
 
 model.compile(loss='mae', optimizer='adam') 
 
-es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit([x1_train, x2_train], [y1_train, y2_train], epochs=500, verbose=1, validation_split=0.2, callbacks=[es]) 
+model.fit([x1_train, x2_train], [y1_train, y2_train], epochs=500, batch_size=1 ,verbose=1, validation_split=0.2, callbacks=[es]) 
 
 model.save("./save/keras.exam1.h5")
 
+
 #4. 평가, 예측
+
 results = model.evaluate([x1_test, x2_test], [y1_test, y2_test])
 print('loss : ',results)
 
-y1_predict, y2_predict = model.predict([x1_test, x2_test])
-print('삼성전자 종가 : ', y1_predict[-1])
-print('키움증권 종가 : ', y2_predict[-1])
+y1_pred, y2_pred = model.predict([x1, x2])
 
-r21 = r2_score(y1_test, y1_predict)
-r22 = r2_score(y2_test, y2_predict)
+ss = y1_pred[-1]    # 79000       y1_test 
+kw = y2_pred[-1]
 
-print('r2_1스코어 : ', r21)
-print('r2_2스코어 : ', r22)
+print('삼성전자 종가 : ', ss)
+print('키움증권 종가 : ', kw)
 
-'''
-loss :  [160229.5, 60845.2265625, 99384.2734375]
-삼성전자 종가 :  [0.]
-키움증권 종가 :  [0.]
-r2_1스코어 :  -16.174177281513195
-r2_2스코어 :  -16.905485998919648
-'''
+# r21 = r2_score(y1_test, ss)
+# r22 = r2_score(y2_test, kw)
+
+# # result_ss = model.predict(ss)
+# # print(result_ss[-5:-1])
+
+# print('r2_1스코어 : ', r21)
+# print('r2_2스코어 : ', r22)
