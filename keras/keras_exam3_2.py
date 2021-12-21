@@ -67,7 +67,6 @@ x2, y2 = split_xy5(k, time_steps, y_column)
 s = s.reshape(1,s.shape[0],s.shape[1])   
 k = k.reshape(1,k.shape[0],k.shape[1]) 
 
-
 s_wed = s[-time_steps:]
 k_wed = k[-time_steps:]
 # print(s_wed, k_wed)
@@ -130,7 +129,7 @@ output33 = Dense(30, activation='relu')(output32)
 last_output2 = Dense(3)(output33)
 
 model = Model(inputs=[input1,input2], outputs=[last_output1,last_output2])
-model.summary()
+# model.summary()
 
 #3. 컴파일, 훈련
 
