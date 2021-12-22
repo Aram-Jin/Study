@@ -27,8 +27,8 @@ path = "../samsung/"
 samsung = pd.read_csv(path +"삼성전자.csv", index_col=0, header = 0, thousands =',', encoding='cp949')
 kiwoom = pd.read_csv(path + '키움증권.csv', index_col=0, header = 0, thousands =',', encoding='cp949')
 
-samsung = samsung.iloc[:100,:].sort_values(['일자'],ascending=[True])
-kiwoom = kiwoom.iloc[:100,:].sort_values(['일자'],ascending=[True])
+samsung = samsung.iloc[:200,:].sort_values(['일자'],ascending=[True])
+kiwoom = kiwoom.iloc[:200,:].sort_values(['일자'],ascending=[True])
 
 s = samsung[['시가','종가']].values
 k = kiwoom[['시가','종가']].values
@@ -77,7 +77,7 @@ dense13 = Dense(32, activation='relu')(drop11)
 dense14 = Dense(16, activation='relu')(dense13)
 output2 = Dense(10)(dense14)
 
-merge1 = Concatenate(axis=1)([output1, output2])
+merge1 = Concatenate(axis=1)([output1, output2])    #(axis=1)
 
 #2-3 output모델1
 output21 = Dense(32, activation='relu')(merge1)
@@ -99,9 +99,9 @@ model = Model(inputs=[input1,input2], outputs=[last_output1,last_output2])
 model.compile(loss='mae', optimizer='adam') 
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit([x1_train, x2_train], [y1_train, y2_train], epochs=1000, batch_size=1 ,verbose=1, validation_split=0.3, callbacks=[es]) 
+model.fit([x1_train, x2_train], [y1_train, y2_train], epochs=1, batch_size=1 ,verbose=1, validation_split=0.3, callbacks=[es]) 
 
-model.save("./save/keras.exam3_2.h5")
+# model.save("./save/keras.exam3_2.h5")
 
 #4. 평가, 예측
 
@@ -116,12 +116,17 @@ k_pred = k[-10:]
 s_pred = s_pred.reshape(1, s_pred.shape[0], s_pred.shape[1])
 k_pred = k_pred.reshape(1, k_pred.shape[0], k_pred.shape[1])
 
+print(s_pred.shape)
+
 # 에측하기
 s_wed_pred, k_wed_pred = model.predict([s_pred, k_pred])
+
+print(s_wed_pred.shape)
 
 print("===================== 2021/12/22 =========================")
 print('삼성전자 시가와 종가: ', s_wed_pred.round(0).astype(float))
 print('키움증권 시가와 종가: ', k_wed_pred.round(0).astype(float))
+
 
 
 '''

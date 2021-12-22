@@ -27,8 +27,8 @@ path = "../samsung/"
 samsung = pd.read_csv(path +"삼성전자.csv", index_col=0, header = 0, thousands =',', encoding='cp949')
 kiwoom = pd.read_csv(path + '키움증권.csv', index_col=0, header = 0, thousands =',', encoding='cp949')
 
-samsung = samsung.iloc[:100,:].sort_values(['일자'],ascending=[True])
-kiwoom = kiwoom.iloc[:100,:].sort_values(['일자'],ascending=[True])
+samsung = samsung.iloc[:200,:].sort_values(['일자'],ascending=[True])
+kiwoom = kiwoom.iloc[:200,:].sort_values(['일자'],ascending=[True])
 
 s = samsung[['시가','종가']].values
 k = kiwoom[['시가','종가']].values
@@ -44,9 +44,10 @@ x1, y1 = split_xy5(s, time_steps, y_column)
 x2, y2 = split_xy5(k, time_steps, y_column)
 # print(x2.shape, y2.shape)   #(188, 10, 2) (188, 3, 2)
 
+
 x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1,x2,y1,y2, train_size=0.8, shuffle=True, random_state=66)
 
-
+'''
 #2.모델 불러오기
 model = load_model("./save/keras.exam3_2.h5") 
 
@@ -71,7 +72,7 @@ print("===================== 2021/12/22 =========================")
 print('삼성전자 시가와 종가: ', s_wed_pred.round(0).astype(float))
 print('키움증권 시가와 종가: ', k_wed_pred.round(0).astype(float))
 
-
+'''
 '''
 loss :  [7379.056640625, 3022.320556640625, 4356.73486328125]
 ===================== 2021/12/22 =========================
