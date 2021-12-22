@@ -43,8 +43,8 @@ test_file = test_file.drop(['id'], axis=1)
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=61)
 
-# scaler = MinMaxScaler()
-scaler = StandardScaler()
+scaler = MinMaxScaler()
+# scaler = StandardScaler()
 # scaler = RobustScaler()
 #scaler = MaxAbsScaler()
 # x_train = scaler.fit_transform(x_train)
