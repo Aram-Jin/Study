@@ -62,7 +62,7 @@ model.add(Dropout(0.2))
 model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.2))  
 model.add(Dense(16, activation='relu'))
-model.add(Dropout(0.2))  
+# model.add(Dropout(0.2))  
 model.add(Dense(4, activation='relu')) 
 model.add(Dense(1, activation='sigmoid'))
 # model.summary()
@@ -76,10 +76,10 @@ model.compile(loss='binary_crossentropy', optimizer='adam')
 #filename = '{epoch:04d}-{val_accuracy:.4f}.hdf5'     
 #model_path = "".join([filepath, 'dacon_', datetime_spot, '_', filename])
 
-Es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
+Es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1, restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='f1_score', mode='min', verbose=1, save_best_only=True, filepath= model_path)
 
-model.fit(x_train, y_train, epochs=10000, batch_size=20, validation_split=0.2, callbacks=[Es])   
+model.fit(x_train, y_train, epochs=10000, batch_size=10, validation_split=0.2, callbacks=[Es])   
 
 model.save("./_save/heart_disease_save_model.h5") 
 
