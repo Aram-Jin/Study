@@ -53,20 +53,20 @@ scaler = MinMaxScaler()
 
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
-print(x_train.shape, x_test.shape) # (120, 13) (31, 13)
+# print(x_train.shape, x_test.shape) # (120, 13) (31, 13)
 
 #2. 모델구성
 model = Sequential() 
-model.add(Dense(88, input_dim=13))
-model.add(Dropout(0.2))  
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.2))  
-model.add(Dense(32, activation='relu'))
-model.add(Dropout(0.2))  
-model.add(Dense(16, activation='relu'))
-model.add(Dropout(0.2))  
+model.add(Dense(162, input_dim=13))
+# model.add(Dropout(0.2))  
+model.add(Dense(84, activation='relu'))
+model.add(Dropout(0.1))  
+model.add(Dense(64, activation='relu'))
+# model.add(Dropout(0.2))  
+model.add(Dense(32))
+model.add(Dropout(0.1))  
 model.add(Dense(16, activation='relu')) 
-model.add(Dense(4, activation='relu'))
+model.add(Dense(4))
 model.add(Dense(1, activation='sigmoid'))
 # model.summary()
 
@@ -79,10 +79,10 @@ model.compile(loss='binary_crossentropy', optimizer='adam')
 #filename = '{epoch:04d}-{val_accuracy:.4f}.hdf5'     
 #model_path = "".join([filepath, 'dacon_', datetime_spot, '_', filename])
 
-Es = EarlyStopping(monitor='val_loss', patience=500, mode='min', verbose=1, restore_best_weights=True)
+Es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='f1_score', mode='min', verbose=1, save_best_only=True, filepath= model_path)
 
-model.fit(x_train, y_train, epochs=10000, batch_size=10, validation_split=0.2, callbacks=[Es])   
+model.fit(x_train, y_train, epochs=10000, batch_size=1, validation_split=0.2, callbacks=[Es])   
 
 model.save("./_save/heart_disease_save_model.h5") 
 
