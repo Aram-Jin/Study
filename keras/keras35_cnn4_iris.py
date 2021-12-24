@@ -42,4 +42,4 @@ model.add(Dense(6))
 model.add(Dense(3, activation='softmax'))
 model.summary()
 
-#3. 
+#3. 컴파일, 훈련

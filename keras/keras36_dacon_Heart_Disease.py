@@ -8,7 +8,7 @@ from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score, f1_score, confusion_matrix, precision_recall_curve, roc_curve, roc_auc_score, classification_report
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential, Model, load_model
-from tensorflow.keras.layers import Dense, Input, Dropout, LSTM
+from tensorflow.keras.layers import Dense, Input, Dropout, LSTM, Conv1D, Flatten
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 #1. 데이터
@@ -36,34 +36,35 @@ x = train.drop(['id', 'target'], axis=1)
 #x = x.drop(['  '], axis=1) 
 test_file = test_file.drop(['id'], axis=1) 
 
-# print(x.shape, y.shape)   # (151, 9) (151,)
+# print(x.shape, y.shape)   # (151, 13) (151,)
 # print(np.unique(y))   # [0 1]
+# y = to_categorical(y)
 # print(y.shape)   # (151,)
-
+x = x.to_numpy()
+x = x.reshape(151,13,1)
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=61)
 
-scaler = MinMaxScaler()
+# scaler = MinMaxScaler()
 # scaler = StandardScaler()
 # scaler = RobustScaler()
 #scaler = MaxAbsScaler()
 # x_train = scaler.fit_transform(x_train)
 # x_test = scaler.transform(x_test)
-# test_file = scaler.transform(test_file)
+test_file = test_file.reshape(152,13,1)
 
-x_train = scaler.fit_transform(x_train)
-x_test = scaler.transform(x_test)
-print(x_train.shape, x_test.shape) # (120, 13) (31, 13)
+# x_train = x_train.reshape(1,x_train.shape[0],x_train.shape[1])#scaler.fit_transform(x_train).
+# x_test = x_test.reshape(1,x_test.shape[0],x_test.shape[1])#scaler.transform(x_test).
+# print(x_train.shape, x_test.shape, test_file.shape) # (1, 120, 13) (1, 31, 13)
 
 #2. 모델구성
 model = Sequential() 
-model.add(Dense(32, input_dim=13))
+model.add(Conv1D(64, 2, input_shape=(13,1)))
+model.add(Flatten())
+model.add(Dense(132, activation='relu'))
 model.add(Dropout(0.2))  
-model.add(Dense(64, activation='relu'))
-model.add(Dropout(0.2))  
-model.add(Dense(16, activation='relu'))
-# model.add(Dropout(0.2))  
-model.add(Dense(4, activation='relu')) 
+model.add(Dense(36, activation='relu'))
+model.add(Dense(8, activation='relu')) 
 model.add(Dense(1, activation='sigmoid'))
 # model.summary()
 
@@ -78,6 +79,10 @@ model.compile(loss='binary_crossentropy', optimizer='adam')
 
 Es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1, restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='f1_score', mode='min', verbose=1, save_best_only=True, filepath= model_path)
+# y_train = y_train.reshape(y_train.shape[0],1)
+# y_test = y_test.reshape(y_test.shape[0],1)
+# print(x_train.shape, x_test.shape, y_train.shape, y_test.shape)  # (1, 120, 13) (1, 31, 13) (120,) (31,)
+
 
 model.fit(x_train, y_train, epochs=10000, batch_size=10, validation_split=0.2, callbacks=[Es])   
 
@@ -93,7 +98,7 @@ y_predict2 = y_predict.round(0).astype(int)
 #print(y_predict2)
 #print(y_predict2.shape)  # (152, 1)
 
-f1 = f1_score(y_test, y_predict2)  #, labels=None, pos_label=1, average='binary', sample_weight=None, zero_division='warn')/// average : binary, macro, micro, weighted, None  / zero_division : 1
+f1 = f1_score(y_test, y_predict)  #, labels=None, pos_label=1, average='binary', sample_weight=None, zero_division='warn')/// average : binary, macro, micro, weighted, None  / zero_division : 1
 #print(f1)   # 0.8
 confusion = confusion_matrix(y_test, y_predict2) #, labels=None, sample_weight=None, normalize=None)
 accuracy = accuracy_score(y_test, y_predict2) #, normalize=True, sample_weight=None)
@@ -109,9 +114,11 @@ print('오차행렬')
 print(confusion)
 print('정확도 : {:.4f}\n정밀도 : {:.4f}\n재현율 : {:.4f}'.format(accuracy, precision, recall))
 
+
+'''
 # 임계값을 낮출 수록 TPR(재현율)이 올라가는 것을 확인했었다.
 print(classification_report(y_test, y_predict2))
-
+'''
 '''
               precision    recall  f1-score   support
 
@@ -121,13 +128,13 @@ print(classification_report(y_test, y_predict2))
     accuracy                           0.77        31
    macro avg       0.74      0.75      0.75        31
 weighted avg       0.78      0.77      0.78        31
+
 '''
+# roc_curve = roc_curve(y_test, y_predict2, pos_label=None, sample_weight=None, drop_intermediate=True)
+# roc_auc_score = roc_auc_score(y_test, y_predict2, average='macro', sample_weight=None, max_fpr=None, multi_class='raise', labels=None)
 
-roc_curve = roc_curve(y_test, y_predict2, pos_label=None, sample_weight=None, drop_intermediate=True)
-roc_auc_score = roc_auc_score(y_test, y_predict2, average='macro', sample_weight=None, max_fpr=None, multi_class='raise', labels=None)
-
-print("ROC curve: ", roc_curve)   # (array([0. , 0.1, 1. ]), array([0.        , 0.80952381, 1.        ]), array([2, 1, 0]))
-print("ROC | AUC Score: ", roc_auc_score)   # 0.8547619047619047
+# print("ROC curve: ", roc_curve)   # (array([0. , 0.1, 1. ]), array([0.        , 0.80952381, 1.        ]), array([2, 1, 0]))
+# print("ROC | AUC Score: ", roc_auc_score)   # 0.8547619047619047
 
 result = model.predict(test_file)
 test_file = result.round(0).astype(int)
