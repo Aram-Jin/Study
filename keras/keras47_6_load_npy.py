@@ -15,7 +15,7 @@ y_test = np.load('./_save_npy/keras47_5_test_y.npy')
 print(x_train)
 print(x_train.shape)   # (160, 150, 150, 3)
 
-#2. 모델 구성하기~!
+#2. 모델 구성
 model = Sequential()
 model.add(Conv2D(32, (2,2), input_shape = (150,150,3))) 
 model.add(Flatten())
