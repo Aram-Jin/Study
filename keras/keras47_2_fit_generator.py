@@ -56,7 +56,7 @@ model.add(Dense(1, activation='sigmoid'))
 #3. 컴파일, 훈련
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
 
-es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1)
 
 # model.fit(xy_train[0][0], xy_train[0][1])
 hist = model.fit_generator(xy_train, epochs=100, steps_per_epoch=32, validation_data=xy_test, validation_steps=4, callbacks=[es])  # steps_per_epochs -> 전체데이터/batchsize = 160/5=32
@@ -87,8 +87,6 @@ acc :  0.5562499761581421
 val_acc :  0.6000000238418579
 '''
 
-
-
 import matplotlib.pyplot as plt
 plt.plot(hist.history['loss'], marker='.', c='red', label='loss')
 plt.plot(hist.history['val_loss'], marker='.', c='blue', label='val_loss')
@@ -98,34 +96,3 @@ plt.xlabel('epoch')
 plt.grid()
 plt.legend(loc='upper right')
 plt.show()
-
-
-# # summarize history for accuracy
-# plt.plot(acc)
-# plt.plot(val_acc)
-# plt.title('model accuracy')
-# plt.ylabel('accuracy')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
-# # summarize history for loss
-# plt.plot(loss)
-# plt.plot(val_loss)
-# plt.title('model loss')
-# plt.ylabel('loss')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
-
-
-
-# import matplotlib.pyplot as plt
-# plt.figure(figsize=(9,5))
-# plt.plot(hist.history['loss'], marker='.', c='red', label='loss')
-# plt.plot(hist.history['val_loss'], marker='.', c='blue', label='val_loss')
-# plt.grid()
-# plt.title('loss')
-# plt.ylabel('loss')
-# plt.xlabel('epoch')
-# plt.legend(loc='upper right')
-# plt.show()
