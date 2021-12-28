@@ -27,14 +27,14 @@ xy_test = test_datagen.flow_from_directory('../_data/Image/brain/test', target_s
 
 # print(xy_train)
 # <tensorflow.python.keras.preprocessing.image.DirectoryIterator object at 0x000002B85C344F70>
-# print(xy_train[31])       # 마지막배치
+# print(xy_train[31])       # 마지막 배치
 # print(xy_train[0][0])     # 첫번쨰 괄호 '0'은 첫번째배치 두번째괄호의 '0'은 첫번쨰 배치의 x값
-# print(xy_train[0][1])
-# print(xy_train[0][2])   #IndexError: tuple index out of range -> tuple은 수정이 안됨 list는 수정가능
+print(xy_train[0][1])     # 앞에[]는 배치 뒤[]는 클래스
+# print(xy_train[0][2])     # IndexError: tuple index out of range -> tuple은 수정이 안됨 list는 수정가능
 print(xy_train[0][0].shape, xy_train[0][1].shape)     # (5, 150, 150, 3) (5,)
 
-print(type(xy_train))  # <class 'tensorflow.python.keras.preprocessing.image.DirectoryIterator'>
-print(type(xy_train[0]))   # <class 'tuple'>
-print(type(xy_train[0][0]))   # <class 'numpy.ndarray'>
-print(type(xy_train[0][1]))   # <class 'numpy.ndarray'>
+# print(type(xy_train))  # <class 'tensorflow.python.keras.preprocessing.image.DirectoryIterator'>
+# print(type(xy_train[0]))   # <class 'tuple'>
+# print(type(xy_train[0][0]))   # <class 'numpy.ndarray'>
+# print(type(xy_train[0][1]))   # <class 'numpy.ndarray'>
 

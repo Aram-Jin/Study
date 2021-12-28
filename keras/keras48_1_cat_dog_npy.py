@@ -1,10 +1,9 @@
 #http://www.kaggle.com/c/dogs-vs-cats/data
-import numpy as np
+import numpy as np, time
 from sklearn import datasets
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
-
 from tensorflow.keras.callbacks import EarlyStopping
 
 train_datagen = ImageDataGenerator(rescale=1./255,                       # ImageDataGenerator 정의하기
@@ -23,21 +22,21 @@ xy_train = train_datagen.flow_from_directory('../_data/Image/cat_dog/training_se
 # Found 8005 images belonging to 2 classes.
 xy_test = test_datagen.flow_from_directory('../_data/Image/cat_dog/test_set', target_size=(50, 50), batch_size=50, class_mode='binary')
 # Found 2023 images belonging to 2 classes.
-print(xy_train[0][0].shape, xy_train[0][1].shape)   # (50, 50, 50, 3) (50,)
-print(xy_test[0][0].shape, xy_test[0][1].shape)   # (50, 50, 50, 3) (50,)
+# print(xy_train[0][0].shape, xy_train[0][1].shape)   # (50, 50, 50, 3) (50,)
+# print(xy_test[0][0].shape, xy_test[0][1].shape)   # (50, 50, 50, 3) (50,)
 
 # np.save('./_save_npy/keras48_1_train_x.npy',arr=xy_train[0][0])
 # np.save('./_save_npy/keras48_1_train_y.npy',arr=xy_train[0][1])
 # np.save('./_save_npy/keras48_1_test_x.npy',arr=xy_test[0][0])
 # np.save('./_save_npy/keras48_1_test_y.npy',arr=xy_test[0][1])
 
-x_train = np.load('./_save_npy/keras48_1_train_x.npy')
-y_train = np.load('./_save_npy/keras48_1_train_y.npy')
-x_test = np.load('./_save_npy/keras48_1_test_x.npy')
-y_test = np.load('./_save_npy/keras48_1_test_y.npy')
+x_train = np.load('../save/_save_npy/keras48_1_train_x.npy')
+y_train = np.load('../save/_save_npy/keras48_1_train_y.npy')
+x_test = np.load('../save/_save_npy/keras48_1_test_x.npy')
+y_test = np.load('../save/_save_npy/keras48_1_test_y.npy')
 
-print(x_train)
-print(x_train.shape)   # (50, 50, 50, 3)
+# print(x_train)
+# print(x_train.shape)   # (50, 50, 50, 3)
 
 #2. 모델 구성
 model = Sequential()
@@ -52,15 +51,16 @@ model.add(Dense(32))
 model.add(Dense(16))
 model.add(Dense(1, activation='sigmoid'))
 
-
 #3. 컴파일, 훈련
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
 
 es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
 
+start = time.time()
 hist = model.fit(x_train, y_train, epochs=1000, batch_size=50, validation_split=0.2, callbacks=[es])
+end = time.time() - start
 
-model.save_weights('./_save/keras48_1_save_weights.h5')
+print("걸린시간 : ", round(end, 3), '초')
 
 #4. 평가, 예측
 loss_acc = model.evaluate(x_test, y_test)
@@ -85,6 +85,54 @@ val_loss :  1.4927408695220947
 acc :  0.9750000238418579
 val_acc :  0.6000000238418579
 '''
+
+# 샘플 케이스 경로지정
+sample_directory = '../_data/Image/aram/'
+sample_image = sample_directory + "aram.jpg"
+
+# 샘플 케이스 확인
+import matplotlib.pyplot as plt
+from tensorflow.keras.preprocessing import image
+
+image_ = plt.imread(str(sample_image))
+plt.title("Test Case")
+plt.imshow(image_)
+plt.axis('Off')
+plt.show()
+
+print("-- Evaluate --")
+scores = model.evaluate_generator(xy_test, steps=5)
+print("%s: %.2f%%" %(model.metrics_names[1], scores[1]*100))
+
+print("-- Predict --")
+image_ = image.load_img(str(sample_image), target_size=(50, 50))
+x = image.img_to_array(image_)
+x = np.expand_dims(x, axis=0)
+x /=255.
+images = np.vstack([x])
+classes = model.predict(images, batch_size=50)
+# y_predict = np.argmax(classes)#NDIMS
+
+print(classes)
+xy_test.reset()
+print(xy_test.class_indices)
+# {'cats': 0, 'dogs': 1}
+if(classes[0][0]<=0.5):
+    cat = 100 - classes[0][0]*100
+    print(f"당신은 {round(cat,2)} % 확률로 고양이 입니다")
+elif(classes[0][0]>=0.5):
+    dog = classes[0][0]*100
+    print(f"당신은 {round(dog,2)} % 확률로 개 입니다")
+else:
+    print("ERROR")
+    
+'''
+-- Predict --
+[[0.02125992]]
+{'cats': 0, 'dogs': 1}
+당신은 97.87 % 확률로 고양이 입니다
+'''
+
 '''
 import numpy as np
 import pandas as pd
@@ -123,11 +171,4 @@ if __name__ == '__main__':
    
 load_my_image(pic_path,show=False)
 '''
-  
 
-predict_datagen = ImageDataGenerator(rescale=1./255) 
-predict_aram = predict_datagen.flow_from_directory('../_data/Image/aram', target_size=(50, 50), batch_size=50)
-
-result = model.predict(predict_aram)
-
-# print('아람은 개인가 고양이인가? ', result)
