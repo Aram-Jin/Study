@@ -12,8 +12,8 @@ y_train = np.load('./_save_npy/keras47_5_train_y.npy')
 x_test = np.load('./_save_npy/keras47_5_test_x.npy')
 y_test = np.load('./_save_npy/keras47_5_test_y.npy')
 
-print(x_train)
-print(x_train.shape)   # (160, 150, 150, 3)
+#print(x_train)
+#print(x_train.shape)   # (160, 150, 150, 3)
 
 #2. 모델 구성
 model = Sequential()
