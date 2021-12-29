@@ -17,3 +17,4 @@ train_datagen = ImageDataGenerator(rescale=1./255,                       # Image
 
 train_generator = train_datagen.flow_from_directory('../_data/Image/rps', target_size=(50, 50), batch_size=10, class_mode='binary', subset='training')  
 validation_generator = train_datagen.flow_from_directory('../_data/Image/rps', target_size=(50, 50), batch_size=10, class_mode='binary', subset='validation')   
+
