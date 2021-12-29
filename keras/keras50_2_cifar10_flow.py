@@ -47,7 +47,8 @@ y_train = np.concatenate((y_train, y_augmented))
 
 xy_train = train_datagen.flow(x_train, y_train, 
                                   batch_size=100,   #augment_size, 
-                                  shuffle=False)#.next()
+                                  shuffle=False,
+                                  save_to_dir='../_temp')#.next()
 
 xy_test = test_datagen.flow(x_test, y_test, 
                                   batch_size=100,   #augment_size, 
@@ -75,7 +76,7 @@ print(len(xy_train))   #1250
 es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1)
 
 start = time.time()
-model.fit_generator(xy_train, epochs=10, steps_per_epoch=len(xy_train), validation_data=xy_test, callbacks=[es])
+model.fit_generator(xy_train, epochs=500, steps_per_epoch=len(xy_train), validation_data=xy_test, callbacks=[es])
 end = time.time() - start
 
 print("걸린시간 : ", round(end, 3), '초')
@@ -88,8 +89,12 @@ print('loss:', loss[0])
 print('accuracy:', loss[1])
 
 
-# '''
-# 걸린시간 :  3631.886 초
-# loss: 1.1852543354034424
-# accuracy: 0.10010000318288803
-# '''
+'''
+걸린시간 :  323.547 초
+loss: 1.4155843257904053
+accuracy: 0.07410000264644623
+
+걸린시간 :  7373.753 초
+loss: 1.1682072877883911
+accuracy: 0.09719999879598618
+'''
