@@ -7,13 +7,13 @@ import numpy as np
 
 train_datagen = ImageDataGenerator(rescale=1./255,                       # ImageDataGenerator 정의하기
                                    horizontal_flip=True,                 # train용 이미지데이터는 변형하여 정의시킨다.
-                                   vertical_flip=True, 
+                                #    vertical_flip=True, 
                                    width_shift_range=0.1, 
                                    height_shift_range=0.1, 
-                                   rotation_range=5, 
-                                   zoom_range=1.2, 
-                                   shear_range=0.7, 
-                                   fill_mode='nearest')   # 1./255 minmax scale 지정 0~1사이로(사진에선 최대값이 255이므로), horizontal_flip은 상하반전, vertical_flip은 좌우반전, width_shift_range는 이미지 이동해도 인식(이미지증폭)
+                                #    rotation_range=5, 
+                                   zoom_range=0.1, 
+                                #    shear_range=0.7, 
+                                   fill_mode='nearest')   # 1./255 minmax scale 지정 0~1사이로(사진에선 최대값이 255이므로), horizontal_flip은 좌우반전, vertical_flip은 상하반전, width_shift_range는 이미지 이동해도 인식(이미지증폭)
 
 augument_size = 100  # 증폭하는 사이즈 정의
 
