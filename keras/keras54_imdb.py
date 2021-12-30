@@ -55,7 +55,9 @@ model.fit(x_train, y_train, epochs=50, batch_size=100, validation_split=0.2, cal
 #4. 평가, 예측
 acc = model.evaluate(x_test, y_test)
 print('acc : ', acc)
-
+'''
+acc :  [nan, 0.5]
+'''
 
 #########################################################################################
 

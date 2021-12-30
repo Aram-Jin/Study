@@ -45,7 +45,78 @@ y_augmented = y_train[randidx].copy()
 
 x_train = np.concatenate((x_train, x_augmented))    # concatenate를 사용할때는 (())괄호 두개로 사용해주어야함
 y_train = np.concatenate((y_train, y_augmented))
-print(x_train.shape, y_train.shape)   # (200, 150, 150, 3) (200,)
-print(x_test.shape, y_test.shape)   # (120, 150, 150, 3) (120,)
+# print(x_train.shape, y_train.shape)   # (10000, 100, 100, 3) (10000,)
+# print(x_test.shape, y_test.shape)   # (2023, 100, 100, 3) (2023,)
 
-                    
+#2. 모델구성
+model = Sequential()
+model.add(Conv2D(32, (2,2), padding='same', input_shape=(100, 100, 3))) 
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(48, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(32))
+model.add(Dense(16))
+model.add(Dense(1, activation='sigmoid'))
+
+
+#3. 컴파일, 훈련
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
+
+  
+es = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1)
+
+start = time.time()
+hist = model.fit(x_train, y_train, epochs=150, batch_size=100, validation_split=0.2, callbacks=[es])  
+end = time.time() - start
+ 
+print("걸린시간 : ", round(end, 3), '초')
+
+
+#4. 평가, 예측
+loss = model.evaluate(x_test, y_test)
+print('loss:', loss[0])
+print('accuracy:', loss[1])
+
+
+# 샘플 케이스 경로지정
+sample_directory = '../_data/Image/aram/'
+sample_image = sample_directory + "aram.jpg"
+
+# 샘플 케이스 확인
+import matplotlib.pyplot as plt
+from tensorflow.keras.preprocessing import image
+
+image_ = plt.imread(str(sample_image))
+plt.title("Test Case")
+plt.imshow(image_)
+plt.axis('Off')
+plt.show()
+
+print("-- Evaluate --")
+scores = model.evaluate_generator(xy_test, steps=5)
+print("%s: %.2f%%" %(model.metrics_names[1], scores[1]*100))
+
+print("-- Predict --")
+image_ = image.load_img(str(sample_image), target_size=(50, 50))
+x = image.img_to_array(image_)
+x = np.expand_dims(x, axis=0)
+x /=255.
+images = np.vstack([x])
+classes = model.predict(images, batch_size=40)
+# y_predict = np.argmax(classes)#NDIMS
+
+print(classes)
+xy_test.reset()
+print(xy_test.class_indices)
+# {'cats': 0, 'dogs': 1}
+if(classes[0][0]<=0.5):
+    cat = 100 - classes[0][0]*100
+    print(f"당신은 {round(cat,2)} % 확률로 고양이 입니다")
+elif(classes[0][0]>=0.5):
+    dog = classes[0][0]*100
+    print(f"당신은 {round(dog,2)} % 확률로 개 입니다")
+else:
+    print("ERROR")
