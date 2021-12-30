@@ -28,5 +28,24 @@ y_train = xy_train[0][1]
 x_test = xy_test[0][0]
 y_test = xy_test[0][1]
 
-print(x_train.shape, y_train.shape)  # (160, 150, 150, 3) (160,)
-print(x_test.shape, y_test.shape)  # (120, 150, 150, 3) (120,)
+# print(x_train.shape, y_train.shape)  # (8005, 100, 100, 3) (8005,)
+# print(x_test.shape, y_test.shape)  # (2023, 100, 100, 3) (2023,)
+
+augment_size = 1995   
+randidx = np.random.randint(x_train.shape[0], size=augment_size)   # randint : 랜덤한 정수값을 생성하겠다. 
+# print(x_train.shape[0])   # 8005
+# print(randidx)   # [7644  639 3740 ... 3304 1243 3083]
+# print(np.min(randidx), np.max(randidx))   # 1 8001
+# print(randidx.shape)   # (1995,)
+
+x_augmented = x_train[randidx].copy()
+y_augmented = y_train[randidx].copy()
+# print(x_augmented.shape)   # (1995, 100, 100, 3)
+# print(y_augmented.shape)   # (1995,)
+
+x_train = np.concatenate((x_train, x_augmented))    # concatenate를 사용할때는 (())괄호 두개로 사용해주어야함
+y_train = np.concatenate((y_train, y_augmented))
+print(x_train.shape, y_train.shape)   # (200, 150, 150, 3) (200,)
+print(x_test.shape, y_test.shape)   # (120, 150, 150, 3) (120,)
+
+                    
