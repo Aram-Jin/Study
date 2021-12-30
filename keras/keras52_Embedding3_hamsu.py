@@ -37,29 +37,38 @@ print(np.unique(pad_x))   # [ 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 
 # 원핫인코딩하면 뭘로 바껴? (13, 5) -> (13, 5, 28)
 # 옥스포드 사전은? (13, 5, 1000000) -> 65만개??  이렇게하면 망함!!
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Embedding, Dropout   # layers에서 Embedding 좌표로 바꿔주겠다
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, LSTM, Embedding, Dropout, Input   # layers에서 Embedding 좌표로 바꿔주겠다
 
 #2. 모델구성
-model = Sequential()
-#                                                인풋은 (13, 5)
-#                   단어사전의 갯수               단어수, 길이
-# model.add(Embedding(input_dim=28, output_dim=10, input_length=5))  # Embedding 원핫인코딩 하지 않은 데이터를 벡터화시키는것
-# model.add(Embedding(28, 10, input_length=5))  
-model.add(Embedding(28, 10))  
-model.add(LSTM(32, activation='relu'))
-model.add(Dense(64))
-model.add(Dropout(0.2))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(8))
-model.add(Dense(4))
-model.add(Dense(1, activation='sigmoid'))
 
-model.summary()
+input1 = Input(shape=(5,))
+dense1 = Dense(32)(input1)
+dense2 = Dense(64, activation='relu')(dense1)
+dense3 = Dense(16)(dense2)
+dense4 = Dense(8, activation='relu')(dense3)
+output1 = Dense(1)(dense4)
+model = Model(inputs=input1, outputs=output1)
+
+# model = Sequential()
+# #                                                인풋은 (13, 5)
+# #                   단어사전의 갯수               단어수, 길이
+# # model.add(Embedding(input_dim=28, output_dim=10, input_length=5))  # Embedding 원핫인코딩 하지 않은 데이터를 벡터화시키는것
+# # model.add(Embedding(28, 10, input_length=5))  
+# model.add(Embedding(28, 10))  
+# model.add(LSTM(32, activation='relu'))
+# model.add(Dense(64))
+# model.add(Dropout(0.2))
+# model.add(Dense(16, activation='relu'))
+# model.add(Dense(8))
+# model.add(Dense(4))
+# model.add(Dense(1, activation='sigmoid'))
+
+# model.summary()
 
 #3. 컴파일, 훈련
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
-model.fit(pad_x, labels, epochs=100, batch_size=32)
+model.fit(pad_x, labels, epochs=100, batch_size=1)
 
 #4. 평가, 예측
 acc = model.evaluate(pad_x, labels)[1]
@@ -80,3 +89,8 @@ pad_x2 = pad_sequences(x_predict2, padding='pre', maxlen=5)  # maxlen은 맞출(
 final_predict = model.predict(pad_x2)
 
 print(final_predict)
+
+'''
+acc :  0.5384615659713745
+[[8.022137]]
+'''

@@ -64,7 +64,6 @@ model.fit(pad_x, labels, epochs=30, batch_size=1)
 acc = model.evaluate(pad_x, labels)[1]
 print('acc : ', acc)
 
-
 '''
 acc :  0.9230769276618958
 '''
