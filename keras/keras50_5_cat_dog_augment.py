@@ -80,43 +80,54 @@ loss = model.evaluate(x_test, y_test)
 print('loss:', loss[0])
 print('accuracy:', loss[1])
 
+'''
+걸린시간 :  185.109 초
+loss: 3.5637805461883545
+accuracy: 0.5768660306930542
+'''
 
-# 샘플 케이스 경로지정
-sample_directory = '../_data/Image/aram/'
-sample_image = sample_directory + "aram.jpg"
+# # 샘플 케이스 경로지정
+# sample_directory = '../_data/Image/aram/'
+# sample_image = sample_directory + "aram.jpg"
 
-# 샘플 케이스 확인
-import matplotlib.pyplot as plt
-from tensorflow.keras.preprocessing import image
+# # 샘플 케이스 확인
+# import matplotlib.pyplot as plt
+# from tensorflow.keras.preprocessing import image
 
-image_ = plt.imread(str(sample_image))
-plt.title("Test Case")
-plt.imshow(image_)
-plt.axis('Off')
-plt.show()
+# image_ = plt.imread(str(sample_image))
+# plt.title("Test Case")
+# plt.imshow(image_)
+# plt.axis('Off')
+# plt.show()
 
-print("-- Evaluate --")
-scores = model.evaluate_generator(xy_test, steps=5)
-print("%s: %.2f%%" %(model.metrics_names[1], scores[1]*100))
+# print("-- Evaluate --")
+# scores = model.evaluate(x_test,y_test)
+# print("%s: %.2f%%" %(model.metrics_names[1], scores[1]*100))
 
-print("-- Predict --")
-image_ = image.load_img(str(sample_image), target_size=(50, 50))
-x = image.img_to_array(image_)
-x = np.expand_dims(x, axis=0)
-x /=255.
-images = np.vstack([x])
-classes = model.predict(images, batch_size=40)
-# y_predict = np.argmax(classes)#NDIMS
+# print("-- Predict --")
+# image_ = image.load_img(str(sample_image), target_size=(50, 50))
+# x = image.img_to_array(image_)
+# x = np.expand_dims(x, axis=0)
+# x /=255.
+# images = np.vstack([x])
+# classes = model.predict(images, batch_size=40)
+# # y_predict = np.argmax(classes)#NDIMS
 
-print(classes)
-xy_test.reset()
-print(xy_test.class_indices)
-# {'cats': 0, 'dogs': 1}
-if(classes[0][0]<=0.5):
-    cat = 100 - classes[0][0]*100
-    print(f"당신은 {round(cat,2)} % 확률로 고양이 입니다")
-elif(classes[0][0]>=0.5):
-    dog = classes[0][0]*100
-    print(f"당신은 {round(dog,2)} % 확률로 개 입니다")
-else:
-    print("ERROR")
+# print(classes)
+# x_test.reset()
+# y_test.reset()
+# print(x_test.class_indices)
+# print(y_test.class_indices)
+# # {'cats': 0, 'dogs': 1}
+# if(classes[0][0]<=0.5):
+#     cat = 100 - classes[0][0]*100
+#     print(f"당신은 {round(cat,2)} % 확률로 고양이 입니다")
+# elif(classes[0][0]>=0.5):
+#     dog = classes[0][0]*100
+#     print(f"당신은 {round(dog,2)} % 확률로 개 입니다")
+# else:
+#     print("ERROR")
+    
+    
+
+
