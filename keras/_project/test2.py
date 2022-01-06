@@ -43,22 +43,22 @@ def get_fnguide_table(tickers):
         tr = tbody.find_all('tr')
 
         Table = DataFrame()
-        # print(Table)
+        print(Table.head)
 
 
-        for i in tr:
+#         for i in tr:
         
-            ''' 항목 가져오기'''
-            category = i.find('tr',{'id':'p_grid1_'+i})
+#             ''' 항목 가져오기'''
+#             category = i.find('tr',{'id':'p_grid1_'+i})
             
-            if category == None:
-                category = i.find('td')   
+#             if category == None:
+#                 category = i.find('td')   
         
-            category = category.text.strip()
+#             category = category.text.strip()
 
         
-            '''값 가져오기'''
-#             value_list =[]
+#             '''값 가져오기'''
+# #             value_list =[]
 
 #             j = i.find_all('td',{'class':'r'})
             
