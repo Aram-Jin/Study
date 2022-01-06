@@ -15,6 +15,7 @@ for code in codes:
     res = requests.get(url)
     data = res.text  
     soup = BeautifulSoup(data, "html.parser")
+    
     for i in range(1,24):  
         aaa = soup.select_one("#p_grid1_"+ str(i))
         for j in aaa:
