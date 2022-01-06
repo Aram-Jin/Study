@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 
 code = '131100'
-url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{code}&cID=&MenuYn=Y&ReportGB=B&NewMenuID=104&stkGb=701'
+url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{code}'
 # print(url)
 res = requests.get(url)
 df = pd.read_html(res.text)

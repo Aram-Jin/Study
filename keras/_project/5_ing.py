@@ -7,8 +7,6 @@ from tabulate import tabulate
 codes = 'A010580','A091970'
 
 for code in codes: 
-# url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{code}&cID=&MenuYn=Y&ReportGB=B&NewMenuID=104&stkGb=701'
-# print(url)
     url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode={code}' 
     # print(url)
 
