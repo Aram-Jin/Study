@@ -5,7 +5,7 @@ from tabulate import tabulate
 
 code = '131100'
 url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{code}&cID=&MenuYn=Y&ReportGB=B&NewMenuID=104&stkGb=701'
-#print(url)
+# print(url)
 res = requests.get(url)
 df = pd.read_html(res.text)
 print(tabulate(df[0], headers='keys', tablefmt='psql'))
