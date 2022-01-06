@@ -11,7 +11,7 @@ from tabulate import tabulate
 res = requests.get('http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A091970&cID=&MenuYn=Y&ReportGB=&NewMenuID=104&stkGb=701')
 soup = BeautifulSoup(res.content,'lxml')
 table = soup.find_all('table')
-df = pd.read_html(str(table))
+df = pd.read_html(str(table))]v 
 print(tabulate(df[0], headers='keys', tablefmt='psql'))
 
 # dataframe = fs_data(code)
