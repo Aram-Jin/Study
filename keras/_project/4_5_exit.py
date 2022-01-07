@@ -2,10 +2,9 @@ import pandas as pd
 import numpy as np
 from pandas.core.frame import DataFrame
 from sklearn.model_selection import train_test_split
-# from tensorflow.keras.models import Sequential
-# from tensorflow.keras.layers import Dense, Input
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
-
+from tensorflow.keras.layers import Dense, Input
+from tensorflow.keras.models import Sequential
 data1 = pd.read_csv("./관리종목data.csv")
 data2 = pd.read_csv("./안전종목data.csv")
 # print(type(data1))
@@ -16,7 +15,7 @@ del dataset['Unnamed: 0']
 # print(dataset)
 # dataset.to_csv('data_reset.csv', index=True, encoding='utf-8-sig')
 
-# print(dataset.info)
+print(dataset.info())
 # print(dataset.feature_names)
 # print(dataset.DESCR)
 # print(np.min(dataset), np.max(dataset))
@@ -28,21 +27,23 @@ del dataset['Unnamed: 0']
 
 x = dataset.drop(['Target'], axis=1)
 y = dataset['Target']
+
+
 # print(np.unique(y))    # [0 1] 
 
-print(x.shape)   # (36, 55)
-print(y.shape)   # (36,)
+# print(x.shape)   # (36, 55)
+# print(y.shape)   # (36,)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8, shuffle=True, random_state=49)
+# x_train, x_test, y_train, y_test = train_test_split(x, y,
+#                                                     train_size=0.8, shuffle=True, random_state=49)
 
-# scaler = MinMaxScaler()
-# scaler = StandardScaler()
-# scaler = RobustScaler()
-scaler = MaxAbsScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+# # scaler = MinMaxScaler()
+# # scaler = StandardScaler()
+# # scaler = RobustScaler()
+# scaler = MaxAbsScaler()
+# scaler.fit(x_train)
+# x_train = scaler.transform(x_train)
+# x_test = scaler.transform(x_test)
 
 
 # model = Sequential()

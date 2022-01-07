@@ -31,14 +31,32 @@ dataset_all = pd.DataFrame()
 for code in codes:
     dataframe = fs_data(code)
     dataframe = dataframe.T
-    dataframe = dataframe.reset_index(drop=True)
-    dataframe = dataframe.values
+    # dataframe.columns = ['유동비율','당좌비율','부채비율','유보율',
+    #                        '순차입금비율','이자보상배율','매출액증가율',
+    #                        '판매비와관리비증가율','EBITDA증가율','매출총이익율',
+    #                        '영업이익률']
+    # print(dataframe.shape)
+   
+    # dataframe = dataframe.reset_index(drop=False)
+    dataframe_vl = dataframe.values
     datalist =[]
-    datalist.append(dataframe)
+    datalist.append(dataframe_vl)
     data_np = np.array(datalist)
+    # print(type(data_np))
     dataset = data_np.reshape(1,55)
+    # print(dataset)
     dataset = pd.DataFrame(dataset)
+    # print(dataset)
+    dataset.columns = ['유동비율1','당좌비율1','부채비율1','유보율1','순차입금비율1','이자보상배율1','매출액증가율1','판매비와관리비증가율1','EBITDA증가율1','매출총이익율1','영업이익률1',
+                       '유동비율2','당좌비율2','부채비율2','유보율2','순차입금비율2','이자보상배율2','매출액증가율2','판매비와관리비증가율2','EBITDA증가율2','매출총이익율2','영업이익률2',
+                       '유동비율3','당좌비율3','부채비율3','유보율3','순차입금비율3','이자보상배율3','매출액증가율3','판매비와관리비증가율3','EBITDA증가율3','매출총이익율3','영업이익률3',
+                       '유동비율4','당좌비율4','부채비율4','유보율4','순차입금비율4','이자보상배율4','매출액증가율4','판매비와관리비증가율4','EBITDA증가율4','매출총이익율4','영업이익률4',
+                       '유동비율5','당좌비율5','부채비율5','유보율5','순차입금비율5','이자보상배율5','매출액증가율5','판매비와관리비증가율5','EBITDA증가율5','매출총이익율5','영업이익률5']
+    # print(dataset)
+    
+    # print(dataframe.shape)
     dataset_all = dataset_all.append(dataset)
+    
 
 dataset_all["Target"] = 1
 print(dataset_all)  
