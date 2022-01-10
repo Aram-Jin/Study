@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="http://localhost:8080/login" method="get">
+      <p>Enter Name:</p>
+      <p><input type="text" name="user_name" /></p>
+      <p><input type="text" name="pw" /></p>
+      <p><input type="submit" value="submit" /></p>
+    </form>
+  </body>
+</html>
+
+<!-- html은 별도의 서버 port num 5500 에서 실행 중이다..
+flask server는 다른 서버이므로 
+다른 서버에 요청하는 경우 전체 주소를 적어주어야 한다.
+
+
+-->
