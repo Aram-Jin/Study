@@ -3,8 +3,8 @@ import numpy as np
 from pandas.core.frame import DataFrame
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
-from tensorflow.keras.layers import Dense, Input
-from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import Dense, Input
+# from tensorflow.keras.models import Sequential
 data1 = pd.read_csv("./관리종목data.csv")
 data2 = pd.read_csv("./안전종목data.csv")
 # print(type(data1))

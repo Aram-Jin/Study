@@ -34,11 +34,11 @@ for code in codes:
     data_np = np.array(datalist)
     dataset = data_np.reshape(1,55)
     dataset = pd.DataFrame(dataset)
-    dataset.columns = ['유동비율1','당좌비율1','부채비율1','유보율1','순차입금비율1','이자보상배율1','매출액증가율1','판매비와관리비증가율1','EBITDA증가율1','매출총이익율1','영업이익률1',
-                       '유동비율2','당좌비율2','부채비율2','유보율2','순차입금비율2','이자보상배율2','매출액증가율2','판매비와관리비증가율2','EBITDA증가율2','매출총이익율2','영업이익률2',
-                       '유동비율3','당좌비율3','부채비율3','유보율3','순차입금비율3','이자보상배율3','매출액증가율3','판매비와관리비증가율3','EBITDA증가율3','매출총이익율3','영업이익률3',
-                       '유동비율4','당좌비율4','부채비율4','유보율4','순차입금비율4','이자보상배율4','매출액증가율4','판매비와관리비증가율4','EBITDA증가율4','매출총이익율4','영업이익률4',
-                       '유동비율5','당좌비율5','부채비율5','유보율5','순차입금비율5','이자보상배율5','매출액증가율5','판매비와관리비증가율5','EBITDA증가율5','매출총이익율5','영업이익률5']
+    dataset.columns = ['CR1','QR1','DR1','RR1','NDR1','ICR1','SGR1','SAEGR1','EBITDA1','GPM1','OPP1',
+                       'CR2','QR2','DR2','RR2','NDR2','ICR2','SGR2','SAEGR2','EBITDA2','GPM2','OPP2',
+                       'CR3','QR3','DR3','RR3','NDR3','ICR3','SGR3','SAEGR3','EBITDA3','GPM3','OPP3',
+                       'CR4','QR4','DR4','RR4','NDR4','ICR4','SGR4','SAEGR4','EBITDA4','GPM4','OPP4',
+                       'CR5','QR5','DR5','RR5','NDR5','ICR5','SGR5','SAEGR5','EBITDA5','GPM5','OPP5']
     dataset_all = dataset_all.append(dataset)
 
 dataset_all["Target"] = 0
