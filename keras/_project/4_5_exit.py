@@ -34,7 +34,6 @@ del pre_data['Unnamed: 0']
 x = dataset.drop(['Target'], axis=1)
 y = dataset['Target']
 
-
 # print(np.unique(y))    # [0 1] 
 
 # print(x.shape)   # (36, 55)

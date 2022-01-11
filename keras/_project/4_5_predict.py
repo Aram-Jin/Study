@@ -39,8 +39,8 @@ for code in pre_code:
                        'CR4','QR4','DR4','RR4','NDR4','ICR4','SGR4','SAEGR4','EBITDA4','GPM4','OPP4',
                        'CR5','QR5','DR5','RR5','NDR5','ICR5','SGR5','SAEGR5','EBITDA5','GPM5','OPP5']
     predict_all = predict_all.append(predict_data)
-predict_all = predict_all.where(pd.notnull(predict_all), '1')
 
+predict_all = predict_all.where(pd.notnull(predict_all), '1')
 print(predict_all)  
 
 predict_all.to_csv('평가종목data.csv', index=True, encoding='utf-8-sig')
