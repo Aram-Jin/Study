@@ -78,7 +78,7 @@ print('loss : ',loss[0])
 print('accuracy : ',loss[1])
 
 resulte = model.predict(pre_data)
-print(resulte)
+# print(resulte)
 
 # {'safe': 0, 'danger': 1}
 if(resulte[0][0]<=0.5):

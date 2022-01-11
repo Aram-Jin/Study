@@ -7,7 +7,7 @@ import pickle, csv
 import numpy as np
 from pandas import Series, DataFrame
 
-pre_code = ['000150','026960']
+pre_code = ['000150']
 
 def fs_data(code):
     url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{code}'
@@ -39,7 +39,7 @@ for code in pre_code:
                        'CR4','QR4','DR4','RR4','NDR4','ICR4','SGR4','SAEGR4','EBITDA4','GPM4','OPP4',
                        'CR5','QR5','DR5','RR5','NDR5','ICR5','SGR5','SAEGR5','EBITDA5','GPM5','OPP5']
     predict_all = predict_all.append(predict_data)
-predict_all = predict_all.where(pd.notnull(predict_all), '0')
+predict_all = predict_all.where(pd.notnull(predict_all), '1')
 
 print(predict_all)  
 

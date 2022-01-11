@@ -70,7 +70,7 @@ EBITDA증가율 : EBITDA
 매출총이익율 : GPM
 영업이익률 : OPP
 '''    
-dataset_all = dataset_all.where(pd.notnull(dataset_all), '0')
+dataset_all = dataset_all.where(pd.notnull(dataset_all), '1')
 dataset_all["Target"] = 1
 print(dataset_all)  
 
