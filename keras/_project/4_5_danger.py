@@ -1,11 +1,9 @@
 import pandas as pd
+import numpy as np
+import requests, csv
 from pandas.core.frame import DataFrame
-import requests
 from bs4 import BeautifulSoup
 from tabulate import tabulate
-import pickle, csv
-import numpy as np
-from pandas import Series, DataFrame
 
 # [ 1: 관리종목 , 0: 안전종목 ] - 유가증권
 # 관리종목 18개, 안전종목 18개
@@ -70,11 +68,85 @@ EBITDA증가율 : EBITDA
 매출총이익율 : GPM
 영업이익률 : OPP
 '''    
-dataset_all = dataset_all.where(pd.notnull(dataset_all), '1')
+dataset_all = dataset_all.where(pd.notnull(dataset_all), '0')
 dataset_all["Target"] = 1
+# del dataset_all['Unnamed: 0']
 print(dataset_all)  
 
+print(dataset_all.info())  
+
+'''
+[18 rows x 56 columns]
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 18 entries, 0 to 0
+Data columns (total 56 columns):
+ #   Column   Non-Null Count  Dtype
+---  ------   --------------  -----
+ 0   CR1      18 non-null     object
+ 1   QR1      18 non-null     object
+ 2   DR1      18 non-null     object
+ 3   RR1      18 non-null     object
+ 4   NDR1     18 non-null     object
+ 5   ICR1     18 non-null     object
+ 6   SGR1     18 non-null     object
+ 7   SAEGR1   18 non-null     object
+ 8   EBITDA1  18 non-null     object
+ 9   GPM1     18 non-null     object
+ 10  OPP1     18 non-null     object
+ 11  CR2      18 non-null     object
+ 12  QR2      18 non-null     object
+ 13  DR2      18 non-null     object
+ 14  RR2      18 non-null     object
+ 15  NDR2     18 non-null     object
+ 16  ICR2     18 non-null     object
+ 17  SGR2     18 non-null     object
+ 18  SAEGR2   18 non-null     object
+ 19  EBITDA2  18 non-null     object
+ 20  GPM2     18 non-null     object
+ 21  OPP2     18 non-null     object
+ 22  CR3      18 non-null     object
+ 23  QR3      18 non-null     object
+ 24  DR3      18 non-null     object
+ 25  RR3      18 non-null     object
+ 26  NDR3     18 non-null     object
+ 27  ICR3     18 non-null     object
+ 28  SGR3     18 non-null     object
+ 29  SAEGR3   18 non-null     object
+ 30  EBITDA3  18 non-null     object
+ 31  GPM3     18 non-null     object
+ 32  OPP3     18 non-null     object
+ 33  CR4      18 non-null     object
+ 34  QR4      18 non-null     object
+ 35  DR4      18 non-null     object
+ 36  RR4      18 non-null     object
+ 37  NDR4     18 non-null     object
+ 38  ICR4     18 non-null     object
+ 39  SGR4     18 non-null     object
+ 40  SAEGR4   18 non-null     object
+ 41  EBITDA4  18 non-null     object
+ 42  GPM4     18 non-null     object
+ 43  OPP4     18 non-null     object
+ 44  CR5      18 non-null     object
+ 45  QR5      18 non-null     object
+ 46  DR5      18 non-null     object
+ 47  RR5      18 non-null     object
+ 48  NDR5     18 non-null     object
+ 49  ICR5     18 non-null     object
+ 50  SGR5     18 non-null     object
+ 51  SAEGR5   18 non-null     object
+ 52  EBITDA5  18 non-null     object
+ 53  GPM5     18 non-null     object
+ 54  OPP5     18 non-null     object
+ 55  Target   18 non-null     int64
+dtypes: int64(1), object(55)
+memory usage: 8.0+ KB
+None
+'''
+
 dataset_all.to_csv('관리종목data.csv', index=True, encoding='utf-8-sig')
+
+
+
 
 
 #1-2) 안전종목 데이터 생성 (시총 상위 18종목)

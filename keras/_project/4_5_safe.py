@@ -43,7 +43,7 @@ for code in codes:
                        'CR5','QR5','DR5','RR5','NDR5','ICR5','SGR5','SAEGR5','EBITDA5','GPM5','OPP5']
     dataset_all = dataset_all.append(dataset)
 
-dataset_all = dataset_all.where(pd.notnull(dataset_all), '1')
+dataset_all = dataset_all.where(pd.notnull(dataset_all), '0')
 dataset_all["Target"] = 0
 print(dataset_all)  
 

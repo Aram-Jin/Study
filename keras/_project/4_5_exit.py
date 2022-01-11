@@ -13,12 +13,19 @@ data3 = pd.read_csv("./평가종목data.csv")
 # print(type(data1))
 # print(type(data2))
 
-dataset = pd.concat([data1,data2],ignore_index=True)
-pre_data = data3
+dataset = pd.concat([data1,data2],ignore_index=True).astype('float')
+pre_data = data3.astype('float')
+# print(type(pre_data))
 del dataset['Unnamed: 0']
 del pre_data['Unnamed: 0']
 
+# print(type(dataset))
+# print(type(pre_data))
+# print(dataset.info())
+# print(pre_data.info())
+
 # print(dataset)
+
 # dataset.to_csv('data_reset.csv', index=True, encoding='utf-8-sig')
 
 # print(dataset.info())
@@ -44,31 +51,32 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 
 # scaler = MinMaxScaler()
 # scaler = StandardScaler()
-# scaler = RobustScaler()
-scaler = MaxAbsScaler()
+scaler = RobustScaler()
+# scaler = MaxAbsScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 
 
 model = Sequential()
-model.add(Dense(64, activation='relu', input_dim=55))
-model.add(Dense(48))
+model.add(Dense(128, activation='relu', input_dim=55))
+model.add(Dense(64))
 model.add(Dense(32))
+model.add(Dense(32, activation='relu'))
 model.add(Dense(16))
-model.add(Dense(18))
+model.add(Dense(8))
 model.add(Dense(1, activation='sigmoid'))
 
-model.summary()
+# model.summary()
 
 
 #3. 컴파일, 훈련
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']) 
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss', patience=10, mode='auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_split=0.2, callbacks=[es]) 
+model.fit(x_train, y_train, epochs=10000, batch_size=1, verbose=1, validation_split=0.2, callbacks=[es]) 
 
 
 #4. 평가, 예측
@@ -77,15 +85,20 @@ print('loss : ',loss[0])
 print('accuracy : ',loss[1])
 
 resulte = model.predict(pre_data)
-# print(resulte)
+print(resulte)
+print(type(resulte))
+print(resulte.shape)
 
 # {'safe': 0, 'danger': 1}
-if(resulte[0][0]<=0.5):
-    safe = 100 - resulte[0][0]*100
-    print(f"이 종목은 {round(safe,2)} % 확률로 투자해도 안전한 종목입니다")
-elif(resulte[0][0]>=0.5):
-    danger = resulte[0][0]*100
-    print(f"이 종목은 {round(danger,2)} % 확률로 관리종목으로 지정될 가능성이 있는 위험한 종목입니다")
-else:
-    print("ERROR")
 
+# for print_result()
+
+# if(resulte[0][0]<=0.5):
+#     safe = 100 - resulte[0][0]*100
+#     print(f"이 종목은 {round(safe,2)} % 확률로 투자해도 안전한 종목입니다")
+# elif(resulte[0][0]>=0.5):
+#     danger = resulte[0][0]*100
+#     print(f"이 종목은 {round(danger,2)} % 확률로 관리종목으로 지정될 가능성이 있는 위험한 종목입니다")
+# else:
+#     print("ERROR")
+    
