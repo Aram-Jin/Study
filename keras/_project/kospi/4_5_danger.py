@@ -67,12 +67,13 @@ EBITDA증가율 : EBITDA
 매출총이익율 : GPM
 영업이익률 : OPP
 '''    
+
 dataset_all = dataset_all.where(pd.notnull(dataset_all), '0')
 dataset_all["Target"] = 1
 # del dataset_all['Unnamed: 0']
 print(dataset_all)  
 
-print(dataset_all.info())  
+# print(dataset_all.info())  
 
 '''
 [18 rows x 56 columns]
@@ -142,7 +143,7 @@ memory usage: 8.0+ KB
 None
 '''
 
-dataset_all.to_csv('관리종목data.csv', index=True, encoding='utf-8-sig')
+dataset_all.to_csv('관리종목18data.csv', index=True, encoding='utf-8-sig')
 
 
 

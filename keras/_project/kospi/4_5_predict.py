@@ -6,8 +6,9 @@ from tabulate import tabulate
 import pickle, csv
 import numpy as np
 from pandas import Series, DataFrame
-# 아센디오'012170', CJ제일제당'097950'
-pre_code = ['012170','097950']
+# 아센디오'012170' 
+# 신풍제약'019170','001440'
+pre_code = ['012170','019170','001440']
 
 def fs_data(code):
     url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{code}'
@@ -43,4 +44,4 @@ for code in pre_code:
 predict_all = predict_all.where(pd.notnull(predict_all), '0')
 print(predict_all)  
 
-predict_all.to_csv('평가종목data.csv', index=True, encoding='utf-8-sig')
+predict_all.to_csv('평가종목3data.csv', index=True, encoding='utf-8-sig')
