@@ -6,8 +6,8 @@ from tabulate import tabulate
 import pickle, csv
 import numpy as np
 from pandas import Series, DataFrame
-
-pre_code = ['012170','026960']
+# 아센디오'012170', CJ제일제당'097950'
+pre_code = ['012170','097950']
 
 def fs_data(code):
     url = f'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{code}'

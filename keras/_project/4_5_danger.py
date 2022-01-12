@@ -2,14 +2,12 @@ import pandas as pd
 import numpy as np
 import requests, csv
 from pandas.core.frame import DataFrame
-from bs4 import BeautifulSoup
 from tabulate import tabulate
+from bs4 import BeautifulSoup
 
-# [ 1: 관리종목 , 0: 안전종목 ] - 유가증권
-# 관리종목 18개, 안전종목 18개
+# {1: 관리종목 , 0: 안전종목} - 유가증권
    
 #1-1) 관리종목 데이터 생성
-
 codes = ['001520','001740','009270','004560','016380','010580','013000','019490','144620','015540','002630','012600','003620','011300','011690','096760','234080','002420']
 
 def fs_data(code):
@@ -25,6 +23,7 @@ def fs_data(code):
                            '영업이익률계산에 참여한 계정 펼치기']]
     return temp_df
 
+#2) 행열변환 및 테이블 수정 
 dataset_all = pd.DataFrame()
 for code in codes:
     dataframe = fs_data(code)
