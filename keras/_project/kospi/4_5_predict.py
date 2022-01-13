@@ -1,13 +1,10 @@
+import requests
+import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
-import requests
-from bs4 import BeautifulSoup
-from tabulate import tabulate
-import pickle, csv
-import numpy as np
-from pandas import Series, DataFrame
-# 아센디오'012170' 
-# 신풍제약'019170', 대한전선'001440'
+
+# 아센디오(012170) 
+# 신풍제약(019170), 대한전선(001440)
 pre_code = ['012170','019170','001440']
 
 def fs_data(code):

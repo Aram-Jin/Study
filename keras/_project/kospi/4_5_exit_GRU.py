@@ -5,7 +5,7 @@ from pandas.core.frame import DataFrame
 from sklearn.model_selection import train_test_split, KFold, StratifiedKFold
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.metrics import confusion_matrix
-from tensorflow.keras.layers import Dense, Input, LSTM
+from tensorflow.keras.layers import Dense, Input, LSTM, GRU
 from tensorflow.keras.models import Sequential
 from tensorflow.python.keras.layers.core import Dropout
 data1 = pd.read_csv("./관리종목18data.csv")
@@ -71,15 +71,18 @@ x_test = scaler.transform(x_test).reshape(len(x_test),11,5)
 
 #2. 모델구성
 model = Sequential()
-model.add(LSTM(32, activation='tanh', input_shape=(11,5))) 
+model.add(GRU(32, activation='tanh', input_shape=(11,5))) 
+model.add(Dropout(0.2))
 model.add(Dense(48, activation='tanh'))
 model.add(Dropout(0.2))
 model.add(Dense(32, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(16))
-model.add(Dropout(0.2))
+model.add(Dropout(0.1))
 model.add(Dense(8, activation='relu'))
-model.add(Dropout(0.2))
+model.add(Dropout(0.1))
 model.add(Dense(4))
+model.add(Dropout(0.1))
 model.add(Dense(1, activation='sigmoid'))
 # model.summary()
 
@@ -90,7 +93,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-model.fit(x_train, y_train, epochs=100000, batch_size=10, verbose=1, validation_split=0.2, callbacks=[es]) 
+model.fit(x_train, y_train, epochs=100000, batch_size=5, verbose=1, validation_split=0.2, callbacks=[es]) 
 
 
 #4. 평가
@@ -132,6 +135,7 @@ for i in result:
 # 신풍제약(019170),대한전선(001440)
 # pre_code = ['012170','019170','001440']
 
+================== LSTM ==================
 loss :  0.3151543438434601
 accuracy :  0.9285714030265808
 [69.83464]
@@ -140,6 +144,17 @@ accuracy :  0.9285714030265808
 이 종목은 위험률 [69.83] % 으로 관리종목으로 지정될 가능성이 있는 위험한 종목입니다.
 이 종목은 투자해도 좋습니다. 위험률 [4.87] %
 이 종목은 투자해도 좋습니다. 위험률 [3.15] %
+
+===================GRU ====================
+loss :  0.33735767006874084
+accuracy :  0.8928571343421936
+[1.1348187]
+[1.3560197]
+[0.32763317]
+이 종목은 투자해도 좋습니다. 위험률 [1.13] %
+이 종목은 투자해도 좋습니다. 위험률 [1.36] %
+이 종목은 투자해도 좋습니다. 위험률 [0.33] %
+
 '''
 
 '''
