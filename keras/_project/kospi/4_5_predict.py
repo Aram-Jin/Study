@@ -7,7 +7,7 @@ import pickle, csv
 import numpy as np
 from pandas import Series, DataFrame
 # 아센디오'012170' 
-# 신풍제약'019170','001440'
+# 신풍제약'019170', 대한전선'001440'
 pre_code = ['012170','019170','001440']
 
 def fs_data(code):
