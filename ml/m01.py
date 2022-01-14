@@ -64,3 +64,8 @@ acc = accuracy_score(y_test, y_predict)
 
 print("result : ", result)
 print("accuracy_score : ", acc)
+
+'''
+result :  0.9666666666666667
+accuracy_score :  0.9666666666666667
+'''

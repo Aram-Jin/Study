@@ -1,6 +1,6 @@
 from unittest import result
 import numpy as np
-from sklearn.svm import LinearSVC
+from sklearn.svm import LinearSVC, SVC
 from sklearn.linear_model import Perceptron
 from sklearn.metrics import accuracy_score
 
@@ -10,7 +10,8 @@ y_data = [0, 1, 1, 0]
 
 #2. 모델
 # model = LinearSVC()
-model = Perceptron()
+# model = Perceptron()
+model = SVC()
 
 #3. 훈련
 model.fit(x_data, y_data)
@@ -29,3 +30,5 @@ print("accuracy_score : ", acc)
 model.score :  0.5
 accuracy_score :  0.5
 '''
+
+# polynomaial개념으로 SVC적용하여 XOR문제 해결
