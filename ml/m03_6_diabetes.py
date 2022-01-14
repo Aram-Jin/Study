@@ -10,28 +10,13 @@ from sklearn import datasets
 from sklearn import linear_model
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-
-def RMSE(y_test, y_predict):
-    return np.sqrt(mean_squared_error(y_test, y_predict))
+from sklearn.metrics import r2_score
 
 #1. 데이터
-path = "../_data/kaggle/bike/"    
+datasets = load_diabetes()
 
-train = pd.read_csv(path + 'train.csv')
-#print(train.shape)  # (10886, 12)
-test_file = pd.read_csv(path + 'test.csv')
-#print(test_file.shape)  # (6493, 9)
-submit_file = pd.read_csv(path + 'sampleSubmission.csv')
-#print(submit_file.shape)  # (6493, 2)
-
-x = train.drop(['datetime', 'casual','registered','count'], axis=1)  
-#print(x.shape)  # (10886, 8)
-
-y = train['count']
-#print(y.shape)  # (10886,)
-
-test_file = test_file.drop(['datetime'], axis=1)  
+x = datasets.data
+y = datasets.target
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
@@ -45,9 +30,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 # model = LogisticRegression()
 # model = LinearRegression()
 # model = DecisionTreeClassifier()
-model = DecisionTreeRegressor()
+# model = DecisionTreeRegressor()
 # model = RandomForestClassifier()
-# model = RandomForestRegressor()
+model = RandomForestRegressor()
 
 #3. 훈련
 model.fit(x_train, y_train)
@@ -68,16 +53,17 @@ print('r2스코어 : ', r2)
 # print("LogisticRegression : ", result)
 # print("LinearRegression : ", result)
 # print("DecisionTreeClassifier : ", result)
-print("DecisionTreeRegressor : ", result)
+# print("DecisionTreeRegressor : ", result)
 # print("RandomForestClassifier : ", result)
-# print("RandomForestRegressor : ", result)
- 
+print("RandomForestRegressor : ", result)
+
+
 '''
-# Perceptron :  0.0009182736455463728
-# LinearSVC :  0.002295684113865932
-# SVC :  0.018365472910927456   
-KNeighborsRegressor :  0.1867313357142426
-LinearRegression :  0.2494896826312223
-DecisionTreeRegressor :  -0.21438741191357558
-RandomForestRegressor :  0.26241193664149065
+Perceptron :  0.0
+LinearSVC :  0.0
+SVC :  0.0
+KNeighborsRegressor :  0.3968391279034368
+LinearRegression :  0.5063891053505035
+DecisionTreeRegressor :  -0.27089113849097446
+RandomForestRegressor :  0.35613523072556763
 '''

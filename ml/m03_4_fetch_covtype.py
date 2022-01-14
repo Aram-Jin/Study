@@ -24,10 +24,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 # model = Perceptron()
 # model = LinearSVC()
 # model = SVC()
-model = KNeighborsClassifier()
+# model = KNeighborsClassifier()
 # model = LogisticRegression()
 # model = DecisionTreeClassifier()
-# model = RandomForestClassifier()
+model = RandomForestClassifier()
 
 #3. 훈련
 model.fit(x_train, y_train)
@@ -41,12 +41,17 @@ acc = accuracy_score(y_test, y_predict)
 # print("Perceptron : ", result)
 # print("LinearSVC : ", result)
 # print("SVC : ", result)
-print("KNeighborsClassifier : ", result)
+# print("KNeighborsClassifier : ", result)
 # print("LogisticRegression : ", result)
 # print("DecisionTreeClassifier : ", result)
-# print("RandomForestClassifier : ", result)
+print("RandomForestClassifier : ", result)
 
 '''
 Perceptron :  0.49991824651687133
+LinearSVC :  0.4584563221259348 
 
+KNeighborsClassifier :  0.9688304088534719
+LogisticRegression :  0.6198721203411272
+DecisionTreeClassifier :  0.9390463241052296
+RandomForestClassifier :  0.9548462604235691
 '''
