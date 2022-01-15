@@ -68,6 +68,6 @@ RandomForestClassifier 의 정답률 :  0.9553798094713561
 RidgeClassifier 의 정답률 :  0.7008510967875184
 RidgeClassifierCV 의 정답률 :  0.7008424911577154
 SGDClassifier 의 정답률 :  0.7114360214452294
-
+SVC 의 정답률 :  0.773955921964149
 
 '''    
