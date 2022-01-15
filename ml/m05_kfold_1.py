@@ -24,5 +24,8 @@ scores = cross_val_score(model, x, y, cv=kfold)
 
 print("ACC : ", scores, "\n cross_val_score : ", np.mean(scores),4)
       
-    #    5번 cross_val했던값, 값들의 평균
-
+    
+'''
+ACC :  [0.96666667 0.96666667 1.         0.93333333 0.96666667]   # 5번 cross_val했던값, 값들의 평균
+ cross_val_score :  0.9666666666666668 4
+'''

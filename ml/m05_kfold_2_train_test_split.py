@@ -25,3 +25,7 @@ model = SVC()
 scores = cross_val_score(model, x_train, y_train, cv=kfold)
 print("ACC : ", scores, "\n cross_val_score : ", np.mean(scores),4)
       
+'''
+ACC :  [0.95833333 1.         0.95833333 1.         0.875     ] 
+ cross_val_score :  0.9583333333333334 4
+'''
