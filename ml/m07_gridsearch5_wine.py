@@ -41,14 +41,14 @@ model = GridSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, 
 model.fit(x_train, y_train)
 
 #4. 평가, 예측
-print("최적의 매개변수 : ", model.best_estimator_)   # 최적의 매개변수 :  SVC(C=1, kernel='linear')
-print("최적의 파라미터 : ", model.best_params_)      # 최적의 파라미터 :  {'C': 1, 'degree': 3, 'kernel': 'linear'}
+print("최적의 매개변수 : ", model.best_estimator_)  
+print("최적의 파라미터 : ", model.best_params_)      
 
-print("best_score_ : ", model.best_score_)            # best_score_ :  0.9916666666666668  -> train부분에서 훈련시킨 값 중 최고 값(acc)
-print("model.score : ", model.score(x_test, y_test))  # model.score :  0.9666666666666667  -> test까지 넣어서 나온 값 중 최고값(val_acc).  iris는 분류모델이므로 accuracy 값
+print("best_score_ : ", model.best_score_)            
+print("model.score : ", model.score(x_test, y_test))  
 
 y_predict = model.predict(x_test)
-print("accuracy_score : ", accuracy_score(y_test, y_predict))   # accuracy_score :  0.9666666666666667  -> test까지 넣어서 나온 값 중 최고값(val_acc).  iris는 분류모델이므로 accuracy 값
+print("accuracy_score : ", accuracy_score(y_test, y_predict))   
 
 
 y_pred_best = model.best_estimator_.predict(x_test)    # gridsearch 사용할떄 model.predict보다는 model.best_estimator_.predict 사용하길 권장함
