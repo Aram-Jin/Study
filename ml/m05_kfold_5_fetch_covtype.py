@@ -20,9 +20,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_s
 n_splits = 5
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
-model = Perceptron()
+# model = Perceptron()
 # model = LinearSVC()
-# model = SVC()
+model = SVC()
 # model = KNeighborsClassifier()
 # model = KNeighborsRegressor()
 # model = LogisticRegression()
@@ -34,3 +34,17 @@ model = Perceptron()
 
 scores = cross_val_score(model, x_train, y_train, cv=kfold)
 print("ACC : ", scores, "\n cross_val_score : ", np.mean(scores),4)
+
+'''
+Perceptron
+ACC :  [0.51103677 0.57477249 0.31403154 0.4990964  0.41989652] 
+ cross_val_score :  0.4637667431778915 4
+ 
+LinearSVC
+ACC :  [0.4229255  0.42143026 0.55838945 0.49343818 0.55726595] 
+ cross_val_score :  0.4906898673994755 4
+ 
+SVC
+
+
+'''

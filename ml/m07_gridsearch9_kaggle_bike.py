@@ -70,3 +70,11 @@ print("r2_score : ", r2_score(y_test, y_predict))
 y_pred_best = model.best_estimator_.predict(x_test)    # gridsearch 사용할떄 model.predict보다는 model.best_estimator_.predict 사용하길 권장함
 print("최적 튠 r2 : ", r2_score(y_test, y_pred_best))
 
+'''
+최적의 매개변수 :  RandomForestRegressor(max_depth=10, min_samples_leaf=3, min_samples_split=5)
+최적의 파라미터 :  {'max_depth': 10, 'min_samples_leaf': 3, 'min_samples_split': 5, 'n_estimators': 100}
+best_score_ :  0.35486135799104473
+model.score :  0.3552544714728997
+r2_score :  0.3552544714728997
+최적 튠 r2 :  0.3552544714728997
+'''
