@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import datasets
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_wine
 
 from sklearn.linear_model import Perceptron
 from sklearn.svm import LinearSVC, SVC
@@ -9,11 +9,11 @@ from sklearn.linear_model import LogisticRegression  # LogisticRegression :ë¶„ë¥
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
-datasets = load_iris()
+datasets = load_wine()
 x = datasets.data
 y = datasets.target
 
-from sklearn.model_selection import train_test_split, KFold, cross_val_score
+from sklearn.model_selection import train_test_split, KFold, cross_val_score, StratifiedKFold
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_state=66, train_size=0.8)
 
@@ -24,8 +24,8 @@ model = SVC()
 
 scores = cross_val_score(model, x_train, y_train, cv=kfold)
 print("ACC : ", scores, "\n cross_val_score : ", np.mean(scores),4)
-      
+
 '''
-ACC :  [0.95833333 1.         0.95833333 1.         0.875     ] 
-cross_val_score :  0.9583333333333334 4
+ACC :  [0.5862069  0.65517241 0.5        0.67857143 0.67857143] 
+ cross_val_score :  0.619704433497537 4
 '''

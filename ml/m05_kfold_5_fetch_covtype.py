@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import datasets
-from sklearn.datasets import load_iris
+from sklearn.datasets import fetch_covtype
 
 from sklearn.linear_model import Perceptron
 from sklearn.svm import LinearSVC, SVC
@@ -9,7 +9,7 @@ from sklearn.linear_model import LogisticRegression  # LogisticRegression :ë¶„ë¥
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
-datasets = load_iris()
+datasets = fetch_covtype()
 x = datasets.data
 y = datasets.target
 
@@ -24,8 +24,3 @@ model = SVC()
 
 scores = cross_val_score(model, x_train, y_train, cv=kfold)
 print("ACC : ", scores, "\n cross_val_score : ", np.mean(scores),4)
-      
-'''
-ACC :  [0.95833333 1.         0.95833333 1.         0.875     ] 
-cross_val_score :  0.9583333333333334 4
-'''

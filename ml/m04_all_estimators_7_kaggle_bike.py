@@ -112,6 +112,4 @@ TheilSenRegressor 의 정답률 :  0.24310707829989475
 TransformedTargetRegressor 의 정답률 :  0.2494896826312223
 TweedieRegressor 의 정답률 :  0.03552307392335319
 VotingRegressor 은 에러 터진 놈!!!!
-
-
 '''        
