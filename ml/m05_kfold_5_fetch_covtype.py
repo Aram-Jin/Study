@@ -20,7 +20,17 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_s
 n_splits = 5
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
-model = SVC()
+model = Perceptron()
+# model = LinearSVC()
+# model = SVC()
+# model = KNeighborsClassifier()
+# model = KNeighborsRegressor()
+# model = LogisticRegression()
+# model = LinearRegression()
+# model = DecisionTreeClassifier()
+# model = DecisionTreeRegressor()
+# model = RandomForestClassifier()
+# model = RandomForestRegressor()
 
 scores = cross_val_score(model, x_train, y_train, cv=kfold)
 print("ACC : ", scores, "\n cross_val_score : ", np.mean(scores),4)
