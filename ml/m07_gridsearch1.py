@@ -31,11 +31,14 @@ parameters = [
 ]                                                                 # 총 42개
 
 #2. 모델구성
-model = GridSearchCV(SVC(), parameters, cv=kfold, verbose=1, refit=True)
+model = GridSearchCV(SVC(), parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)   # -> 너무 중요해~~!!!!  *n_jobs: 속도에만 영향을 미칠뿐 성능향상에는 효과없음(data많을때만 사용하는게 좋음. '-1'은 모든 코어를 써주겠다는것)
 # model = SVC(C=1, kernel='linear', degree=3)
 
 #3. 훈련
+import time 
+start = time.time()
 model.fit(x_train, y_train)
+end = time.time()
 
 #4. 평가, 예측
 
@@ -52,9 +55,10 @@ y_predict = model.predict(x_test)
 print("accuracy_score : ", accuracy_score(y_test, y_predict))   # accuracy_score :  0.9666666666666667  -> test까지 넣어서 나온 값 중 최고값(val_acc).  iris는 분류모델이므로 accuracy 값
 
 
-y_pred_best = model.best_estimator_.predict(x_test)
+y_pred_best = model.best_estimator_.predict(x_test)    # gridsearch 사용할떄 model.predict보다는 model.best_estimator_.predict 사용하길 권장함
 print("최적 튠 ACC : ", accuracy_score(y_test, y_pred_best))
 
+print("걸린시간 : ", end - start)
 ################################################################################################################
 # print(model.cv_results_)  42번 훈련시킨 결과
 '''
@@ -206,7 +210,7 @@ print("최적 튠 ACC : ", accuracy_score(y_test, y_pred_best))
         7, 24, 30,  1,  7, 30,  1,  7])}
 '''
 
-aaa = pd.DataFrame(model.cv_results_)
+# aaa = pd.DataFrame(model.cv_results_)
 # print(aaa)
 '''
     mean_fit_time  std_fit_time  mean_score_time  std_score_time param_C param_degree  ... split2_test_score split3_test_score split4_test_score  mean_test_score  std_test_score  rank_test_score
@@ -256,7 +260,7 @@ aaa = pd.DataFrame(model.cv_results_)
 [42 rows x 17 columns]
 '''
 
-bbb = aaa[['params', 'mean_test_score', 'rank_test_score','split0_test_score']] 
+# bbb = aaa[['params', 'mean_test_score', 'rank_test_score','split0_test_score']] 
         #    'split0_test_score', 'split1_test_score', 'split2_test_score', 
         #    'split3_test_score', 'split4_test_score']]
 
