@@ -53,3 +53,13 @@ print("accuracy_score : ", accuracy_score(y_test, y_predict))   # accuracy_score
 
 y_pred_best = model.best_estimator_.predict(x_test)    # gridsearch 사용할떄 model.predict보다는 model.best_estimator_.predict 사용하길 권장함
 print("최적 튠 ACC : ", accuracy_score(y_test, y_pred_best))
+
+'''
+최적의 매개변수 :  RandomForestClassifier(max_depth=6, min_samples_leaf=3, min_samples_split=10,
+                       n_estimators=200)
+최적의 파라미터 :  {'max_depth': 6, 'min_samples_leaf': 3, 'min_samples_split': 10, 'n_estimators': 200}
+best_score_ :  0.9626373626373625
+model.score :  0.956140350877193
+accuracy_score :  0.956140350877193
+최적 튠 ACC :  0.956140350877193
+'''
