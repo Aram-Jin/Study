@@ -39,8 +39,8 @@ parameters = [
 #2. 모델구성
 # model = GridSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)   # -> 너무 중요해~~!!!!  *n_jobs: 속도에만 영향을 미칠뿐 성능향상에는 효과없음(data많을때만 사용하는게 좋음. '-1'은 모든 코어를 써주겠다는것)
 # model = RandomizedSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1, random_state=66, n_iter=20)   # 20 * 5 = 100 . n_iter는 랜덤으로 연산해 줄 갯수를 지정해줌
-model = HalvingGridSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)   # 아직 완성 된 건 아니지만, GridSearch보다 연산량은 많지만(모든 파라미터를 돌리고 더 돌림) 데이터의 일부만 돌리기 때문에 속도가 훨씬 빠르다. 일부만 쓰면서 상위 몇퍼만 빼서 완전히 돌린다.
-# model = HalvingRandomSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)   # 아직 완성 된 건 아니지만, GridSearch보다 연산량은 많지만(모든 파라미터를 돌리고 더 돌림) 데이터의 일부만 돌리기 때문에 속도가 훨씬 빠르다. 일부만 쓰면서 상위 몇퍼만 빼서 완전히 돌린다.
+# model = HalvingGridSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)   # 아직 완성 된 건 아니지만, GridSearch보다 연산량은 많지만(모든 파라미터를 돌리고 더 돌림) 데이터의 일부만 돌리기 때문에 속도가 훨씬 빠르다. 일부만 쓰면서 상위 몇퍼만 빼서 완전히 돌린다.
+model = HalvingRandomSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)   # 아직 완성 된 건 아니지만, GridSearch보다 연산량은 많지만(모든 파라미터를 돌리고 더 돌림) 데이터의 일부만 돌리기 때문에 속도가 훨씬 빠르다. 일부만 쓰면서 상위 몇퍼만 빼서 완전히 돌린다.
 
 # model = SVC(C=1, kernel='linear', degree=3)
 
@@ -71,5 +71,23 @@ print("최적 튠 ACC : ", accuracy_score(y_test, y_pred_best))
 print("걸린시간 : ", end - start)
 '''
 <HalvingGridSearchCV>
+Fitting 5 folds for each of 3 candidates, totalling 15 fits
+최적의 매개변수 :  RandomForestClassifier(n_jobs=2)
+최적의 파라미터 :  {'n_jobs': 2}
+best_score_ :  0.9505877733441824
+model.score :  0.9558703303701281
+accuracy_score :  0.9558703303701281
+최적 튠 ACC :  0.9558703303701281
+걸린시간 :  806.0796892642975
+
+<HalvingRandomSearchCV>
+Fitting 5 folds for each of 3 candidates, totalling 15 fits
+최적의 매개변수 :  RandomForestClassifier(n_jobs=2)
+최적의 파라미터 :  {'n_jobs': 2}
+best_score_ :  0.7331943918150815
+model.score :  0.955810090961507
+accuracy_score :  0.955810090961507
+최적 튠 ACC :  0.955810090961507
+걸린시간 :  67.66589856147766
 
 '''
