@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn import datasets
 from sklearn.datasets import load_iris
-
 from sklearn.linear_model import Perceptron
 from sklearn.svm import LinearSVC, SVC
 from sklearn.neighbors import KNeighborsClassifier   # Classifier :분류모델
