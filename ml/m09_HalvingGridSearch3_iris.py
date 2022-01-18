@@ -72,22 +72,6 @@ print("걸린시간 : ", end - start)
 
 '''
 <HalvingGridSearchCV>
-n_iterations: 2
-n_required_iterations: 4
-n_possible_iterations: 2
-min_resources_: 30
-max_resources_: 120
-aggressive_elimination: False
-factor: 3
-----------
-iter: 0
-n_candidates: 71
-n_resources: 30
-Fitting 5 folds for each of 71 candidates, totalling 355 fits
-----------
-iter: 1
-n_candidates: 24
-n_resources: 90
 Fitting 5 folds for each of 24 candidates, totalling 120 fits
 최적의 매개변수 :  RandomForestClassifier(max_depth=10, min_samples_leaf=5, min_samples_split=5,
                        n_estimators=200)
@@ -99,22 +83,6 @@ accuracy_score :  0.9666666666666667
 걸린시간 :  10.77599310874939
 
 <HalvingRandomSearchCV>
-n_iterations: 2
-n_required_iterations: 2
-n_possible_iterations: 2
-min_resources_: 30
-max_resources_: 120
-aggressive_elimination: False
-factor: 3
-----------
-iter: 0
-n_candidates: 4
-n_resources: 30
-Fitting 5 folds for each of 4 candidates, totalling 20 fits
-----------
-iter: 1
-n_candidates: 2
-n_resources: 90
 Fitting 5 folds for each of 2 candidates, totalling 10 fits
 최적의 매개변수 :  RandomForestClassifier(max_depth=8, min_samples_leaf=3, min_samples_split=10,
                        n_estimators=200)
