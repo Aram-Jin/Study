@@ -1,11 +1,13 @@
 import numpy as np
 from sklearn import datasets
 from sklearn import linear_model
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_wine
 from sklearn.preprocessing import MinMaxScaler
 
+# model : RandomForestClassifier
+
 #1. 데이터
-datasets = load_iris()
+datasets = load_wine()
 # print(datasets.DESCR)
 # print(datasets.feature_names)
 
@@ -28,7 +30,7 @@ from sklearn.pipeline import make_pipeline, Pipeline
 
 #2.모델
 # model = SVC()
-model = make_pipeline(MinMaxScaler(), SVC())
+model = make_pipeline(MinMaxScaler(), RandomForestClassifier())
 
 #3. 훈련
 model.fit(x_train, y_train)
@@ -43,8 +45,5 @@ acc = accuracy_score(y_test, y_predict)
 print("model.score : ", result)
 
 '''
-model.score :  0.9666666666666667
-
-<make_pipeline>
 model.score :  1.0
 '''

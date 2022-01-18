@@ -1,11 +1,13 @@
 import numpy as np
 from sklearn import datasets
 from sklearn import linear_model
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_diabetes
 from sklearn.preprocessing import MinMaxScaler
 
+# model : RandomForestClassifier
+
 #1. 데이터
-datasets = load_iris()
+datasets = load_diabetes()
 # print(datasets.DESCR)
 # print(datasets.feature_names)
 
@@ -22,13 +24,13 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 
 #2. 모델구성
 from sklearn.svm import LinearSVC, SVC
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
 from sklearn.pipeline import make_pipeline, Pipeline
 
 #2.모델
 # model = SVC()
-model = make_pipeline(MinMaxScaler(), SVC())
+model = make_pipeline(MinMaxScaler(), RandomForestRegressor())
 
 #3. 훈련
 model.fit(x_train, y_train)
@@ -36,15 +38,12 @@ model.fit(x_train, y_train)
 #4. 평가, 예측
 result = model.score(x_test, y_test)    # score는 자동으로 맞춰서 반환해줌; 여기서 반환해주는건 'accuracy' (분류모델이기 때문에)
 
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import r2_score
 y_predict = model.predict(x_test)
-acc = accuracy_score(y_test, y_predict)
+r2_score = r2_score(y_test, y_predict)
 
 print("model.score : ", result)
 
 '''
-model.score :  0.9666666666666667
-
-<make_pipeline>
-model.score :  1.0
+model.score :  0.384095665738983
 '''

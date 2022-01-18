@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from sklearn import datasets
-from sklearn.datasets import load_boston
 from sklearn.linear_model import Perceptron
 from sklearn.svm import LinearSVC, SVC
 from sklearn.neighbors import KNeighborsClassifier   # Classifier :분류모델

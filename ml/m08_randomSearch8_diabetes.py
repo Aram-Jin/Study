@@ -56,7 +56,7 @@ print("best_score_ : ", model.best_score_)
 print("model.score : ", model.score(x_test, y_test))  
 
 y_predict = model.predict(x_test)
-print("r2_score : ", r2_score(y_test, y_predict))   # test까지 넣어서 나온 값 중 최고값(val_acc).  iris는 분류모델이므로 accuracy 값
+print("r2_score : ", r2_score(y_test, y_predict))   # test까지 넣어서 나온 값 중 최고값(val_acc).
 
 
 y_pred_best = model.best_estimator_.predict(x_test)    # gridsearch 사용할떄 model.predict보다는 model.best_estimator_.predict 사용하길 권장함
