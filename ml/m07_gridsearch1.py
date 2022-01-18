@@ -59,6 +59,17 @@ y_pred_best = model.best_estimator_.predict(x_test)    # gridsearch 사용할떄
 print("최적 튠 ACC : ", accuracy_score(y_test, y_pred_best))
 
 print("걸린시간 : ", end - start)
+
+'''
+Fitting 5 folds for each of 42 candidates, totalling 210 fits
+최적의 매개변수 :  SVC(C=1, kernel='linear')
+최적의 파라미터 :  {'C': 1, 'degree': 3, 'kernel': 'linear'}
+best_score_ :  0.9916666666666668
+model.score :  0.9666666666666667
+accuracy_score :  0.9666666666666667
+최적 튠 ACC :  0.9666666666666667
+걸린시간 :  1.1993284225463867
+'''
 ################################################################################################################
 # print(model.cv_results_)  42번 훈련시킨 결과
 '''
