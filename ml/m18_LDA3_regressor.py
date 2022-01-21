@@ -19,7 +19,14 @@ warnings.filterwarnings(action='ignore')
 datasets = fetch_california_housing()
 x = datasets.data
 y = datasets.target
-y = np.round(y,0)
+
+a = []
+for i in y:
+    a.append(len(str(i).split('.')[1]))
+print(np.unique(a,return_counts=True))
+# (array([1, 2, 3, 5]), array([  693,  1972, 17006,   969], dtype=int64))
+y = np.round(y*1000,0)
+
 print("LDA 전 : ", x.shape)    
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66, shuffle=True)   # stratify
@@ -30,8 +37,8 @@ x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 
 # pca = PCA(n_components=8)
-lda = LinearDiscriminantAnalysis()  # n_components=29를 넣었더니 "ValueError: n_components cannot be larger than min(n_features, n_classes - 1)." 
-# x = pca.fit_transform(x)          # => 1개 이상 쓸수 없음!!
+lda = LinearDiscriminantAnalysis()  
+# x = pca.fit_transform(x)          
 
 # x_train = lda.fit_transform(x_train, y_train)
 lda.fit(x_train, y_train)
@@ -66,6 +73,6 @@ LDA 후:  (353, 10)
 
 fetch_california_housing
 LDA 전 :  (20640, 8)
-LDA 후:  (16512, 5)
-결과 :  0.6575931583547636
+LDA 후:  (16512, 8)
+결과 :  0.7896251657019159
 '''
