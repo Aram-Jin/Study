@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
@@ -50,17 +51,19 @@ model.add(Dense(10, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy']) # metrics는 평가지표에 의한 값이 어떤모양으로 돌아가는지 출력하여 보여줌(출력된 loss의 두번째값)
 
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
-
+start = time.time()
 model.fit(x_train, y_train, epochs=1000, batch_size=80, verbose=1, validation_split=0.2, callbacks=[es])
+end = time.time()
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
 print('loss : ',loss[0])
 print('accuracy : ', loss[1])
-
+print("걸린시간 : ", end - start)
 
 '''
-loss :  0.23126453161239624
-accuracy :  0.9621999859809875
+loss :  0.1944376528263092
+accuracy :  0.9621000289916992
+걸린시간 :  438.8361737728119
 '''
 

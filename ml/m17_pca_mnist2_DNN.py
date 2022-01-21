@@ -10,6 +10,7 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
+from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 
@@ -21,16 +22,12 @@ x_test = x_test.reshape(10000, 28*28).astype('float32')/255
 
 # print(x_train.shape, x_test.shape)   # (60000, 784) (10000, 784)
 
-x = np.append(x_train, x_test, axis=0)
-# print(x.shape)   # (70000, 784)
-
 # y_train = to_categorical(y_train)
 # y_test = to_categorical(y_test)
 
 pca = PCA(n_components=154)
-x = pca.fit_transform(x)
-# print(x)
-# print(x.shape)  
+x_train = pca.fit_transform(x_train)
+x_test = pca.transform(x_test) 
 
 pca_EVR = pca.explained_variance_ratio_
 # print(pca_EVR)
@@ -45,7 +42,6 @@ cumsum = np.cumsum(pca_EVR)
 # print(np.argmax(cumsum == 1.0) + 1)  # 1
 
 # print(np.argmax(cumsum) +1)  # 713
-
 
 #2. 모델구성
 model = Sequential()
@@ -74,7 +70,7 @@ end = time.time()
 loss = model.evaluate(x_test, y_test)
 print('loss : ',loss[0])
 print('accuracy : ', loss[1])
-print('걸린시간 : ', end - start)
+print('time : ', end - start)
 
 # scaler = MinMaxScaler()
 # #scaler = StandardScaler()
@@ -94,28 +90,28 @@ print('걸린시간 : ', end - start)
 
 '''
 1. 나의 최고 DNN
-time = ???
-acc = 0.9621999859809875
+time = 438.8361737728119
+accuracy :  0.9621000289916992
 
 2. 나의 최고 CNN
-time = ???
-acc = ???
+time :  330.9091305732727
+accuracy :  0.9771999716758728
 
 3. PCA 0.95  --> ing
-time = ???
-acc = ???
+time =  438.8361737728119
+accuracy :  0.9621000289916992
 
 4. PCA 0.99
 time =  822.6579537391663
-acc = 0.9609000086784363
+accuracy = 0.9609000086784363
 
 5. PCA 0.999
-time = ???
-acc = ???
+time = 565.8984546661377
+accuracy =  0.9606000185012817
 
 6. PCA 1.0
-time = ???
-acc = ???
+time = 382.4758925437927
+accuracy = 0.9575999975204468
 '''
 
 

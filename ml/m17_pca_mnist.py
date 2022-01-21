@@ -2,13 +2,13 @@ from matplotlib.pyplot import axis
 import numpy as np
 from sklearn.decomposition import PCA
 from tensorflow.keras.datasets import mnist
-(x_train, _ ), (x_test, _ ) = mnist.load_data()
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-print(x_train.shape, x_test.shape)   # (60000, 28, 28) (10000, 28, 28)
+# print(x_train.shape, x_test.shape)   # (60000, 28, 28) (10000, 28, 28)
 
-x = np.append(x_train, x_test, axis=0)
+# x = np.append(x_train, x_test, axis=0)
 # print(x.shape)   # (70000, 28, 28)
-x = x.reshape(x.shape[0], x.shape[1]*x.shape[2])
+# x = x.reshape(x.shape[0], x.shape[1]*x.shape[2])
 # print(x.shape)   # (70000, 784)
 
 ########################################################
@@ -21,9 +21,8 @@ x = x.reshape(x.shape[0], x.shape[1]*x.shape[2])
 ########################################################
 
 pca = PCA(n_components=784)
-x = pca.fit_transform(x)
-# print(x)
-# print(x.shape)  
+x_train = pca.fit_transform(x_train)
+x_test = pca.transform(x_test)
 
 pca_EVR = pca.explained_variance_ratio_
 # print(pca_EVR)

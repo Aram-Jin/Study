@@ -38,16 +38,25 @@ model.add(Dense(10, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy']) # metrics는 평가지표에 의한 값이 어떤모양으로 돌아가는지 출력하여 보여줌(출력된 loss의 두번째값)
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
+import time
 
+es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
+start = time.time()
 model.fit(x_train, y_train, epochs=1000, batch_size=80, verbose=1, validation_split=0.2, callbacks=[es]) # callbacks의 []는 다른게 들어갈수 있음
+end = time.time()
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
 print('loss : ',loss[0])
 print('accuracy : ', loss[1])
+print('time : ', end - start)
 
 '''
+loss :  0.08725973963737488
+accuracy :  0.9771999716758728
+time :  330.9091305732727
+
+
 768/768 [==============================] - 34s 45ms/step - loss: 0.0289 - accuracy: 0.9909 - val_loss: 0.1502 - val_accuracy: 0.9789
 Restoring model weights from the end of the best epoch.
 Epoch 00024: early stopping

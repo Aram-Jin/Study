@@ -23,7 +23,7 @@ df['Target(Y)'] = y
 print(df)
 
 print("====================================== 상관계수 히트 맵 ==========================================")
-print(df.corr())  # 여기서 상관관계는 linear로 결정된 것 
+print(df.corr())  # 여기서 상관관계는 linear관계로 결정된 것 
 
 import matplotlib.pyplot as plt
 import seaborn as sns
