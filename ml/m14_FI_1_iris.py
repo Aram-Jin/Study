@@ -1,12 +1,6 @@
 # 피처임포턴스가 전체 중요도에서 하위 20~25% 컬럼들을 제거하여 데이터셋 재구성후 각모델별로 돌려서 결과 도출
 # 기존 모델결과와 결과비교
 
-#2. 모델구성   -> feature importance는 트리계열에만 있음
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from xgboost import XGBClassifier
-
 # 결과비교
 # 1.DecisionTree
 # 기존 acc
@@ -33,6 +27,7 @@ y = datasets.target
 # print(x.shape, y.shape)  # (150, 4) (150,)
 #print(y)
 #print(np.unique(y))  # [0 1 2]
+x = np.delete(x,[0,1],axis=1)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
@@ -58,10 +53,6 @@ result2 = model2.score(x_test, y_test)
 result3 = model3.score(x_test, y_test)
 result4 = model4.score(x_test, y_test)
 
-# from sklearn.metrics import accuracy_score
-# y_predict = model.predict(x_test)
-# acc = accuracy_score(y_test, y_predict)
-
 print("DecisionTreeClassifier 했을때 accuracy_score : ", result1)
 print("RandomForestClassifier 했을때 accuracy_score : ", result2)
 print("GradientBoostingClassifier 했을때 accuracy_score : ", result3)
@@ -81,14 +72,14 @@ def plot_feature_importances_dataset(model):
     plt.ylabel("Features")
     plt.ylim(-1,n_features)
 
-plt.subplot(2, 2, 1)
-plot_feature_importances_dataset(model1)
-plt.subplot(2, 2, 2)
-plot_feature_importances_dataset(model2)
-plt.subplot(2, 2, 3)
-plot_feature_importances_dataset(model3)
-plt.subplot(2, 2, 4)
-plot_feature_importances_dataset(model4)
+# plt.subplot(2, 2, 1)
+# plot_feature_importances_dataset(model1)
+# plt.subplot(2, 2, 2)
+# plot_feature_importances_dataset(model2)
+# plt.subplot(2, 2, 3)
+# plot_feature_importances_dataset(model3)
+# plt.subplot(2, 2, 4)
+# plot_feature_importances_dataset(model4)
     
 plt.show()
 
@@ -97,10 +88,23 @@ DecisionTreeClassifier 했을때 accuracy_score :  0.9666666666666667
 RandomForestClassifier 했을때 accuracy_score :  0.9333333333333333
 GradientBoostingClassifier 했을때 accuracy_score :  0.9666666666666667
 XGBClassifier 했을때 accuracy_score :  0.9
-[0.         0.0125026  0.53835801 0.44913938]
-[0.09439622 0.02686471 0.40381226 0.4749268 ]
-[0.00162433 0.01504251 0.33160417 0.65172899]
+[0.         0.0125026  0.03213177 0.95536562]
+[0.11696523 0.03003001 0.42780392 0.42520084]
+[0.0046703  0.01139495 0.38557268 0.59836207]
 [0.01835513 0.0256969  0.6204526  0.33549538]
+
+컬럼제거후====================================================
+DecisionTreeClassifier 했을때 accuracy_score :  0.9333333333333333
+[0.54517411 0.45482589]
+
+RandomForestClassifier 했을때 accuracy_score :  0.9666666666666667
+[0.53647363 0.46352637]
+
+GradientBoostingClassifier 했을때 accuracy_score :  0.9666666666666667
+[0.18140014 0.81859986]
+
+XGBClassifier 했을때 accuracy_score :  0.9666666666666667
+[0.51089597 0.489104  ]
 """
 
 
