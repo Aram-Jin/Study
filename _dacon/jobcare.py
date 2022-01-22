@@ -17,14 +17,14 @@ print(test_file.shape)  # (46404, 34)
 submit_file = pd.read_csv(path + 'sample_submission.csv')
 print(submit_file.shape)  # (46404, 2) 
 
-x = train.drop(['id', 'contents_open_dt'], axis=1)  
+x = train.drop(['id', 'contents_open_dt', 'target'], axis=1)  
 print(x.shape)  # (501951, 33)
 
 y = train['target']
 print(y.shape)  # (501951,)
 
 test_file = test_file.drop(['id', 'contents_open_dt'], axis=1)  
-
+print(test_file.shape)   # (46404, 32)
 
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV, HalvingGridSearchCV, HalvingRandomSearchCV
@@ -65,19 +65,27 @@ end = time.time()
 result = model.score(x_test, y_test)    # score는 자동으로 맞춰서 반환해줌; 여기서 반환해주는건 'accuracy' (분류모델이기 때문에)
 
 from sklearn.metrics import accuracy_score
-y_predict = model.predict(x_test)
+y_predict = model.predict(test_file)
 acc = accuracy_score(y_test, y_predict)
 
 print("걸린시간 : ", end - start)
 print("model.score : ", result)
 print("accuracy_score : ", acc)
 
-'''
-Fitting 5 folds for each of 2 candidates, totalling 10 fits
-걸린시간 :  33.495421171188354
-model.score :  1.0
-accuracy_score :  1.0
-'''
+submission = pd.read_csv(path + 'sample_submission.csv')
+submission['target'] = y_predict
+
+submission.to_csv('baseline.csv', index=False)
+
+
+
+
+
+print(y_predict.shape)
+print(y_predict)
+
+
+
 
 
 # # from sklearn.model_selection import train_test_split, KFold, cross_val_score
@@ -98,7 +106,3 @@ accuracy_score :  1.0
 
 # print(preds)
 
-submission = pd.read_csv(path + 'sample_submission.csv')
-submission['target'] = y_predict
-
-submission.to_csv('baseline.csv', index=False)
