@@ -1,12 +1,15 @@
-from tqdm import tqdm
-import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.metrics import f1_score
-import pandas as pd
-import warnings
+import pandas as pd,numpy as np, warnings , sys
+
 warnings.filterwarnings(action='ignore')
+# 출력 관련 옵션
+np.set_printoptions(threshold=sys.maxsize)
+pd.set_option('display.max_row',100)
+pd.set_option('display.max_columns',50)
+pd.set_option('display.width', 190)
 
 #1. 데이터
 path = "../_data/dacon/Jobcare_data/"    
@@ -18,11 +21,26 @@ print(test_file.shape)  # (46404, 34)
 submit_file = pd.read_csv(path + 'sample_submission.csv')
 print(submit_file.shape)  # (46404, 2) 
 
-x = train.drop(['id', 'contents_open_dt'], axis=1)  
-print(x.shape)  # (501951, 33)
+
+x = train
+
+x['datetime'] = pd.to_datetime(x['contents_open_dt'])
+x['year'] = x['datetime'].dt.year
+x['month'] = x['datetime'].dt.month
+x['day'] = x['datetime'].dt.day
+x['hour'] = x['datetime'].dt.hour
+print(x.shape)  # (501951, 34)
+x = train.drop(['id','contents_open_dt'], axis=1)
+
 
 y = train['target']
 print(y.shape)  # (501951,)
+
+test_file['datetime'] = pd.to_datetime(test_file['contents_open_dt'])
+test_file['year'] = test_file['datetime'].dt.year
+test_file['month'] = test_file['datetime'].dt.month
+test_file['day'] = test_file['datetime'].dt.day
+test_file['hour'] = test_file['datetime'].dt.hour
 
 test_file = test_file.drop(['id', 'contents_open_dt'], axis=1)  
 print(test_file.shape)   # (46404, 32)
@@ -33,14 +51,14 @@ from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSe
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
 
-scaler = MinMaxScaler()
-x_train = scaler.fit_transform(x_train)
-x_test = scaler.transform(x_test)
+# scaler = MinMaxScaler()
+# x_train = scaler.fit_transform(x_train)
+# x_test = scaler.transform(x_test)
 
-lda = LinearDiscriminantAnalysis() 
-lda.fit(x_train, y_train)
-x_train = lda.transform(x_train)
-x_test = lda.transform(x_test)
+# lda = LinearDiscriminantAnalysis() 
+# lda.fit(x_train, y_train)
+# x_train = lda.transform(x_train)
+# x_test = lda.transform(x_test)
 
 parameters = [
     {"n_estimators":[100,200,300], "learning_rate":[0.3, 0.001, 0.01],"max_depth":[4,5]},
@@ -55,10 +73,10 @@ from sklearn.pipeline import make_pipeline, Pipeline
 from xgboost import XGBClassifier
 
 #2.모델
-# model = SVC()
+
 # pipe = make_pipeline(XGBClassifier())   
 
-model = GridSearchCV(XGBClassifier(), parameters, cv=5, verbose=1)
+model = XGBClassifier()
 # model = RandomizedSearchCV(XGBClassifier(),parameters, cv=5, verbose=1)
 # model = HalvingGridSearchCV(pipe, parameters, cv=5, verbose=1)
 # model = HalvingRandomSearchCV(pipe, parameters, cv=5, verbose=1)
@@ -85,10 +103,8 @@ submission['target'] = y_predict
 
 submission.to_csv('baseline.csv', index=False)
 
-
 print(y_predict.shape)
 print(y_predict)
-
 
 
 
