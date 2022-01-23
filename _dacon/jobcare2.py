@@ -88,26 +88,3 @@ submission.to_csv('baseline.csv', index=False)
 
 print(y_predict.shape)
 print(y_predict)
-
-
-
-
-
-# # from sklearn.model_selection import train_test_split, KFold, cross_val_score
-
-# # x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_state=66, train_size=0.8)
-
-# # n_splits = 5
-# # kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
-
-# model = RandomForestClassifier(n_estimators=300, max_depth=60, n_jobs=-1)
-
-# x = train.iloc[:, :-1]
-# y = train.iloc[:, -1]
-
-# model.fit(x,y)
-
-# preds = model.predict(test)
-
-# print(preds)
-
