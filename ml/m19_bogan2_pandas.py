@@ -54,3 +54,15 @@ print(data2)
 #2-3. 특정값채우기
 data2 = data.fillna(747474)
 print(data2)
+
+###################################### 특정 컬럼만!! #####################################################
+
+means = data['a'].mean()
+print(means)
+data['a'] = data['a'].fillna(means)
+print(data)
+
+meds = data['b'].median()
+print(meds)
+data['b'] = data['b'].fillna(meds)
+print(data)
