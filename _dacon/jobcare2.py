@@ -1,12 +1,18 @@
 from tqdm import tqdm
 import numpy as np
+import pandas as pd
+import os, sys, platform, random, math
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.model_selection import StratifiedKFold , KFold
 from sklearn.metrics import f1_score
-import pandas as pd
+
 import warnings
 warnings.filterwarnings(action='ignore')
+
+from typing import List ,Dict, Tuple
+from catboost import Pool,CatBoostClassifier
 
 #1. 데이터
 path = "../_data/dacon/Jobcare_data/"    

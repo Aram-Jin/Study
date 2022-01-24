@@ -75,7 +75,6 @@ from xgboost import XGBClassifier
 #2.모델
 
 # pipe = make_pipeline(XGBClassifier())   
-
 model = XGBClassifier()
 # model = RandomizedSearchCV(XGBClassifier(),parameters, cv=5, verbose=1)
 # model = HalvingGridSearchCV(pipe, parameters, cv=5, verbose=1)
