@@ -11,8 +11,6 @@ import time
 # import warnings
 # warnings.filterwarnings('ignore')
 
-# 피클은 인덱스와 칼럼을 모두 같이 저장해주므로 데이터 형태 그대로 보존가능(바이너리 형태로 저장하기떄문에)
-
 #1. 데이터
 # datasets = fetch_california_housing()   #(20640, 8) (20640,)
 datasets = load_boston()   #(506, 13) (506,)
@@ -64,11 +62,12 @@ hist = model.evals_result()
 print(hist)
 
 # 저장
-import pickle
-pickle.dump(model, open('../save/_save/m23_pickle1_save.dat', 'wb'))
-
-# path = '../save/_save'
+# import pickle
+path = '../save/_save/'
 # pickle.dump(model, open(path + 'm23_pickle1_save.dat', 'wb'))
+# pickle.dump(model, open('../save/_save/m23_pickle1_save.dat', 'wb'))
+
+model.save_model(path + 'm25_xgb1_save_model.dat')
 
 loss1 = hist.get('validation_0').get('rmse')
 loss2 = hist.get('validation_1').get('rmse')
