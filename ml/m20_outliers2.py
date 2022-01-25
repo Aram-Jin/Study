@@ -9,18 +9,18 @@ aaa = pd.DataFrame(aaa)
 aaa.columns = ['a', 'b']
 
 
-# def outliers(data_out, column):
-#     quartile_1, q2, quartile_3 = np.quantile(data_out[column], 0.25), np.quantile(data_out[column], 0.5), np.quantile(data_out[column], 0.75)   
-#     print("1사분위 : ", quartile_1)
-#     print("q2 : ", q2)
-#     print("3사분위 : ", quartile_3)
-#     iqr = quartile_3 - quartile_1
-#     print("iqr : ", iqr)
-#     lower_bound = quartile_1 - (iqr * 1.5)
-#     upper_bound = quartile_3 + (iqr * 1.5)
-#     data1 = data_out[data_out[column] > upper_bound]     
-#     data2 = data_out[data_out[column] < lower_bound]  
-#     return print('총 이상치 개수는', data1.shape[0] + data2.shape[0], '이다.')   
+def outliers(data_out, column):
+    quartile_1, q2, quartile_3 = np.quantile(data_out[column], 0.25), np.quantile(data_out[column], 0.5), np.quantile(data_out[column], 0.75)   
+    print("1사분위 : ", quartile_1)
+    print("q2 : ", q2)
+    print("3사분위 : ", quartile_3)
+    iqr = quartile_3 - quartile_1
+    print("iqr : ", iqr)
+    lower_bound = quartile_1 - (iqr * 1.5)
+    upper_bound = quartile_3 + (iqr * 1.5)
+    data1 = data_out[data_out[column] > upper_bound]     
+    data2 = data_out[data_out[column] < lower_bound]  
+    return print('총 이상치 개수는', data1.shape[0] + data2.shape[0], '이다.')   
 
 # print(outliers(aaa,'a'))
 # outliers_loc = outliers(aaa,'a')
