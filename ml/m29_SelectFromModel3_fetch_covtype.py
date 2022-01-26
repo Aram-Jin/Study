@@ -10,11 +10,11 @@ from sklearn.datasets import fetch_covtype
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold, cross_val_score, GridSearchCV
-from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.metrics import r2_score, mean_squared_error, accuracy_score
 from sklearn.feature_selection import SelectFromModel
 
 parameters = [
-    {'n_estimators' : [100, 200], 'max_depth' : [6, 8, 10, 12], 'min_samples_leaf' :[3, 5, 7, 10], 'min_samples_split' : [3, 5]},
+    {'n_estimators' : [100, 200], 'max_depth' : [10, 12], 'min_samples_leaf' :[3, 7, 10], 'min_samples_split' : [3, 5]},
     {'n_estimators' : [100], 'max_depth' : [6, 12], 'min_samples_leaf' :[7, 10], 'min_samples_split' : [2, 3]},
     {'n_estimators' : [200], 'max_depth' : [10, 12], 'min_samples_leaf' :[3, 5], 'min_samples_split' : [5, 10]},
     {'n_estimators' : [100, 200], 'max_depth' : [6, 8], 'min_samples_leaf' :[3, 10], 'min_samples_split' : [2, 10]},
@@ -61,13 +61,13 @@ for thresh in aaa:
     select_x_test = selection.transform(x_test)
     print(select_x_train.shape, select_x_test.shape)
     
-    selection_model = XGBRegressor(n_jobs=-1)
+    selection_model = XGBClassifier(n_jobs=-1)
     selection_model.fit(select_x_train, y_train)
     
     y_predict = selection_model.predict(select_x_test)
-    score = r2_score(y_test, y_predict)
+    score = accuracy_score(y_test, y_predict)
     
-    print("Thresh=%.3f, n=%d, R2: %.2f%%"
+    print("Thresh=%.3f, n=%d, acc: %.2f%%"
           %(thresh, select_x_train.shape[1], score*100))
 
 
