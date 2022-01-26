@@ -21,26 +21,11 @@ print(test_file.shape)  # (46404, 34)
 submit_file = pd.read_csv(path + 'sample_submission.csv')
 print(submit_file.shape)  # (46404, 2) 
 
-
-x = train
-
-x['datetime'] = pd.to_datetime(x['contents_open_dt'])
-x['year'] = x['datetime'].dt.year
-x['month'] = x['datetime'].dt.month
-x['day'] = x['datetime'].dt.day
-x['hour'] = x['datetime'].dt.hour
-print(x.shape)  # (501951, 34)
-x = train.drop(['id','contents_open_dt'], axis=1)
-
+x = train.drop(['id', 'contents_open_dt'], axis=1)  
+print(x.shape)  # (501951, 33)
 
 y = train['target']
 print(y.shape)  # (501951,)
-
-test_file['datetime'] = pd.to_datetime(test_file['contents_open_dt'])
-test_file['year'] = test_file['datetime'].dt.year
-test_file['month'] = test_file['datetime'].dt.month
-test_file['day'] = test_file['datetime'].dt.day
-test_file['hour'] = test_file['datetime'].dt.hour
 
 test_file = test_file.drop(['id', 'contents_open_dt'], axis=1)  
 print(test_file.shape)   # (46404, 32)
@@ -60,19 +45,42 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 # x_train = lda.transform(x_train)
 # x_test = lda.transform(x_test)
 
-parameters = [
-    {"n_estimators":[100,200,300], "learning_rate":[0.3, 0.001, 0.01],"max_depth":[4,5]},
-    {"n_estimators":[110], "learning_rate":[0.1, 0.01],"max_depth":[5], "colsample_bytree":[0.6]},
-    {"n_estimators":[90], "learning_rate":[0.1, 0.5],"max_depth":[6], "colsample_bytree":[0.9, 1],"colsample_bylevel":[0.6,0.9]}
-]  
+# parameters = [
+#     {"n_estimators":[100,200,300], "learning_rate":[0.3, 0.001, 0.01],"max_depth":[4,5]},
+#     {"n_estimators":[110], "learning_rate":[0.1, 0.01],"max_depth":[5], "colsample_bytree":[0.6]},
+#     {"n_estimators":[90], "learning_rate":[0.1, 0.5],"max_depth":[6], "colsample_bytree":[0.9, 1],"colsample_bylevel":[0.6,0.9]}
+# ]  
 
 #2. 모델구성
 from sklearn.svm import LinearSVC, SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import make_pipeline, Pipeline
 from xgboost import XGBClassifier
-
+import lightgbm as lgb
 #2.모델
+
+models = []
+for tri, vai in cv.split(x_train):
+    print("="*50)
+    preds = []
+
+    model = LGBMClassifier(n_estimators=iterations, learning_rate= 0.025, max_depth=10, subsample= 1, reg_alpha = 1,
+                        #    tree_method = 'gpu_hist',
+                        #    predictop = 'gpu_predictor',
+                        #    gpu_id = 0
+    )
+    model.fit(x_train.iloc[tri], y_train[tri], 
+            eval_set=[(x_train.iloc[vai], y_train[vai])], 
+            early_stopping_rounds=patience ,
+            verbose = 1000
+        )
+    
+    models.append(model)
+    scores.append(model.get_best_score()["validation"]["F1"])
+    if is_holdout:
+        break
+
+
 
 # pipe = make_pipeline(XGBClassifier())   
 model = XGBClassifier()
