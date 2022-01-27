@@ -42,28 +42,47 @@ print(np.unique(y, return_counts=True))   # (array([3., 4., 5., 6., 7., 8., 9.])
 # 4897    6.0
 # Name: quality, Length: 4898, dtype: float64
 
-x_new = x[:-1000]
-y_new = y[:-1000]
-print(pd.Series(y_new).value_counts())
-# 1    71
-# 0    59
-# 2    18
-# dtype: int64
-print(y_new)
-# 0       6.0
-# 1       6.0
-# 2       6.0
-# 3       6.0
-# 4       6.0
-#        ...
-# 3893    5.0
-# 3894    6.0
-# 3895    6.0
-# 3896    6.0
-# 3897    6.0
-# Name: quality, Length: 3898, dtype: float64
+for index, value in enumerate(y):
+    if value == 9 :    # == : 비교하는것
+       y[index] = 9
+    elif value == 8 :   
+       y[index] = 8
+    elif value == 7 :   
+        y[index] = 7
+    elif value == 6 :   
+        y[index] = 6
+    elif value == 5 :   
+        y[index] = 5
+    elif value == 4 :   
+        y[index] = 4
+    elif value == 3 :   
+        y[index] = 3
+    else :
+        y[index] = 1  
+          
+print(pd.Series(y).value_counts())
 
 
+# x_new = x[:-1500]
+# y_new = y[:-1500]
+# print(pd.Series(y_new).value_counts())
+# # 1    71
+# # 0    59
+# # 2    18
+# # dtype: int64
+# print(y_new)
+# # 0       6.0
+# # 1       6.0
+# # 2       6.0
+# # 3       6.0
+# # 4       6.0
+# #        ...
+# # 3893    5.0
+# # 3894    6.0
+# # 3895    6.0
+# # 3896    6.0
+# # 3897    6.0
+# # Name: quality, Length: 3898, dtype: float64
 
 x_train, x_test, y_train, y_test = train_test_split(x_new, y_new, train_size=0.75, shuffle=True, random_state=66, stratify=y_new)
 
@@ -83,19 +102,19 @@ y_predict = model.predict(x_test)
 print("accuracy score: ", round(accuracy_score(y_test, y_predict),4))
 
 print("=========================================== SMOTE 적용 ===============================================")
-
 start = time.time()
 
-smote = SMOTE(random_state=66,k_neighbors=3 )
+smote = SMOTE(random_state=66, k_neighbors=1)
 x_train, y_train = smote.fit_resample(x_train, y_train)
 
 end = time.time()
-print("smote걸린시간: ", end - start)
 
 model = XGBClassifier(n_jobs=4)
 model.fit(x_train, y_train)
 
 score = model.score(x_test, y_test)
+
+print("smote걸린시간: ", end - start)
 print("model.score : ", round(score, 4))
 
 y_predict = model.predict(x_test)
@@ -104,11 +123,11 @@ print("f1_score : ", round(f1_score(y_test, y_predict, average='macro')),4)
 
 
 '''
-model.score :  0.6379
-accuracy score:  0.6379
-=========================================== SMOTE 적용 ===============================================
-smote걸린시간:  0.019946575164794922
-model.score :  0.6256
-accuracy score:  0.6256
+model.score :  0.6282
+accuracy score:  0.6282
+====================== SMOTE 적용 =============================
+smote걸린시간:  0.01994633674621582
+model.score :  0.6318
+accuracy score:  0.6318
 f1_score :  0 4
 '''
