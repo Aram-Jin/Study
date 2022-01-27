@@ -27,9 +27,6 @@ print(np.unique(y, return_counts=True))   # (array([0, 1]), array([212, 357], dt
 for index, value in enumerate(y):
     if y[index] == 0:
         
-        
-      
-       
 
       
 print(np.unique(y, return_counts=True))   
