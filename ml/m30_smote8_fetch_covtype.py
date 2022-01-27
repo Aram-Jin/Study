@@ -40,6 +40,7 @@ end = time.time()
 
 np.save('../save/_save/smote_x.npy',arr=x_train)
 np.save('../save/_save/smote_y.npy', arr=y_train)
+
 print("smote걸린시간: ", end - start)
 
 """

@@ -93,11 +93,10 @@ cols_equi = [
     ("person_prefer_h_1_attribute_h_p" , "contents_attribute_h_attribute_h_p"),
     ("person_prefer_h_2_attribute_h_p" , "contents_attribute_h_attribute_h_p"),
     ("person_prefer_h_3_attribute_h_p" , "contents_attribute_h_attribute_h_p"),
-
 ]
 
 # 학습에 필요없는 컬럼 리스트
-cols_drop = ["id","person_prefer_f","person_prefer_g" ,"contents_open_dt", "contents_rn", ]
+cols_drop = ["id","person_prefer_f","person_prefer_g" ,"contents_open_dt", "contents_rn", "person_rn",]
 
 x_train, y_train = preprocess_data(train_data, cols_merge = cols_merge , cols_equi= cols_equi , cols_drop = cols_drop)
 x_test, _ = preprocess_data(test_data,is_train = False, cols_merge = cols_merge , cols_equi= cols_equi  , cols_drop = cols_drop)
@@ -108,13 +107,12 @@ cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 is_holdout = False
 n_splits = 5
 iterations = 3000
-patience = 50
+patience = 200
 
 cv = KFold(n_splits=n_splits, shuffle=True, random_state=SEED)
 
 scores = []
 models = []
-
 
 models = []
 for tri, vai in cv.split(x_train):
@@ -124,7 +122,7 @@ for tri, vai in cv.split(x_train):
     model = CatBoostClassifier(iterations=iterations,random_state=SEED,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
     model.fit(x_train.iloc[tri], y_train[tri], 
             eval_set=[(x_train.iloc[vai], y_train[vai])], 
-            early_stopping_rounds=patience ,
+            early_stopping_rounds=50 ,
             verbose = 100
         )
     
