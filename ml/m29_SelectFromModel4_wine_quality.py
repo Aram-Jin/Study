@@ -36,8 +36,26 @@ x = data.drop(['quality'], axis=1)
 # print(x.shape)  # (4898, 11)
 y = data['quality']
 # print(y.shape)  # (4898,)
+print(np.unique(y, return_counts=True))   # (array([3., 4., 5., 6., 7., 8., 9.]), array([  20,  163, 1457, 2198,  880,  175,    5], dtype=int64))
 
-# print(np.unique(y, return_counts=True))  # (array([3., 4., 5., 6., 7., 8., 9.]), array([  20,  163, 1457, 2198,  880,  175,    5], dtype=int64))
+# y = np.where(y == 9, 8, y)
+# y = np.where(y == 3, 4, y)
+# print(np.unique(y, return_counts=True))
+
+newlist = []
+for i in y:
+    # print(i)
+    if i<=4 :
+        newlist +=[0]
+    elif i<=7:
+        newlist +=[1]
+    else:
+        newlist +=[2]
+            
+y = np.array(newlist)
+print(y)        
+print(np.unique(y, return_counts=True))   
+
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66, stratify=y)
@@ -101,3 +119,10 @@ for thresh in aaa:
     
     print("Thresh=%.3f, n=%d, acc: %.2f%%"
           %(thresh, select_x_train.shape[1], score*100))
+
+'''
+results:  0.9398
+accuracy_score :  0.9398
+f1_score :  0.5926975110302047
+걸린시간:  481.7619113922119
+'''
