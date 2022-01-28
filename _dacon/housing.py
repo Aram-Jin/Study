@@ -21,9 +21,9 @@ path = "../_data/dacon/housing/"
 
 train = pd.read_csv(path + 'train.csv')
 # print(train.shape)  # (1350, 15)
-# test_file = pd.read_csv(path + 'test.csv', dtype=float)
+test_file = pd.read_csv(path + 'test.csv')
 # # print(test_file.shape)  # (1350, 14)
-# submit_file = pd.read_csv(path + 'sample_submission.csv', dtype=float)
+submit_file = pd.read_csv(path + 'sample_submission.csv')#, dtype=float
 # print(submit_file.shape)  # (1350, 2)
 
 print(train.head(5))
@@ -40,33 +40,33 @@ print(train.columns)
 # print(type(train))   # <class 'pandas.core.frame.DataFrame'>
 
 
-# x = train.drop(['id','target'], axis=1)
-# y = train['target']
+x = train.drop(['id','target'], axis=1)
+y = train['target']
 
-# test_file = test_file.drop(['id'], axis=1) 
+test_file = test_file.drop(['id'], axis=1) 
 
 # print(x.shape)  # (1350, 13)
 # print(y.shape)  # (1350,)
 
 # # print(np.unique(y, return_counts=True))   
 
-# x_train, x_test, y_train, y_test = train_test_split(x, y,
-#                                                     train_size=0.8, shuffle=True, random_state=66)
+x_train, x_test, y_train, y_test = train_test_split(x, y,
+                                                    train_size=0.8, shuffle=True, random_state=66)
 
-# scaler = StandardScaler()
-# x_train = scaler.fit(x_train)
-# x_train = scaler.transform(x_train)
-# x_test = scaler.transform(x_test)
+scaler = StandardScaler()
+x_train = scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
 
-# #2. 모델
-# model = XGBRegressor(n_jobs=-1)
+#2. 모델
+model = NGBoost(n_jobs=-1)
 
-# #3. 훈련
-# model.fit(x_train, y_train)
+#3. 훈련
+model.fit(x_train, y_train)
 
-# #4. 평가, 예측
-# score = model.score(x_test, y_test)
-# print('model.score : ', score)
+#4. 평가, 예측
+score = model.score(x_test, y_test)
+print('model.score : ', score)
 
 
 
