@@ -29,7 +29,7 @@ x_test = scaler.transform(x_test)
 
 model = XGBClassifier(n_estimators=1000,  
                      n_jobs=4,          
-                     learning_rate=0.15, 
+                     learning_rate=0.25, 
                      max_depth=5,        
                      min_child_weight=1,
                      subsample=1,

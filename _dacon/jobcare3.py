@@ -109,16 +109,12 @@ cols_equi = [
 cols_drop = ["id","person_prefer_f","person_prefer_g" ,"contents_open_dt", "contents_rn", ]
 
 
-
-
-
 x_train, y_train = preprocess_data(train_data, cols_merge = cols_merge , cols_equi= cols_equi , cols_drop = cols_drop)
 x_test, _ = preprocess_data(test_data,is_train = False, cols_merge = cols_merge , cols_equi= cols_equi  , cols_drop = cols_drop)
 x_train.shape , y_train.shape , x_test.shape
 
 
 cat_features = x_train.columns[x_train.nunique() > 2].tolist()
-
 
 is_holdout = False
 n_splits = 5

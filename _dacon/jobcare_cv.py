@@ -14,6 +14,7 @@ import sklearn
 from sklearn.model_selection import StratifiedKFold , KFold
 from sklearn.metrics import f1_score 
 from catboost import Pool,CatBoostClassifier
+from imblearn.over_sampling import SMOTE
 
 print(f"- os: {platform.platform()}")
 print(f"- python: {sys.version}")
@@ -102,12 +103,15 @@ x_train, y_train = preprocess_data(train_data, cols_merge = cols_merge , cols_eq
 x_test, _ = preprocess_data(test_data,is_train = False, cols_merge = cols_merge , cols_equi= cols_equi  , cols_drop = cols_drop)
 x_train.shape , y_train.shape , x_test.shape
 
+smote = SMOTE(random_state=66, k_neighbors=4)
+x_train, y_train = smote.fit_resample(x_train, y_train)
+
 cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 
 is_holdout = False
 n_splits = 5
 iterations = 3000
-patience = 200
+patience = 150
 
 cv = KFold(n_splits=n_splits, shuffle=True, random_state=SEED)
 
@@ -122,7 +126,7 @@ for tri, vai in cv.split(x_train):
     model = CatBoostClassifier(iterations=iterations,random_state=SEED,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
     model.fit(x_train.iloc[tri], y_train[tri], 
             eval_set=[(x_train.iloc[vai], y_train[vai])], 
-            early_stopping_rounds=50 ,
+            early_stopping_rounds=80 ,
             verbose = 100
         )
     
@@ -134,7 +138,7 @@ for tri, vai in cv.split(x_train):
 print(scores)
 print(np.mean(scores))
 
-threshold = 0.4
+threshold = 0.35
 
 pred_list = []
 scores = []

@@ -52,15 +52,15 @@ y_train = np.load('../save/_save/smote_y.npy')
 
 # import joblib
 # joblib.dump(model, path +"weight_save.dat")
-
+ 
 '''
 model.score :  0.9387
 accuracy score:  0.9387
 f1_score :  0.9354
 '''
-
+path = '..\save\_save'
 import joblib
-model = joblib.load('D:\Study\_Report\\weight_save.dat')
+model = joblib.load(path +"weight_save.dat")
 
 score = model.score(x_test, y_test)
 
