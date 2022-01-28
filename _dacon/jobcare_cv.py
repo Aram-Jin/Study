@@ -138,7 +138,7 @@ for tri, vai in cv.split(x_train):
 print(scores)
 print(np.mean(scores))
 
-threshold = 0.35
+threshold = 0.5
 
 pred_list = []
 scores = []
@@ -159,4 +159,12 @@ sample_submission = pd.read_csv(path + 'sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
 
-sample_submission.to_csv(SUBMIT_PATH + "prediction.csv", index=False)
+sample_submission.to_csv(SUBMIT_PATH + "prediction2.csv", index=False)
+
+# bestTest = 0.6790974705
+# bestIteration = 784
+# Shrink model to first 785 iterations.
+# [0.6815594925220745, 0.6826774709618788, 0.6782435784820023, 0.6767866019194738, 0.6790974705274239]
+# 0.6796729228825706
+# [0.7101563806021186, 0.7103759260813503, 0.7107932786244626, 0.71202682540415, 0.707087528455533]
+# 0.7100879878335229

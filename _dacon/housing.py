@@ -10,16 +10,63 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras.layers import Dense, Input, Dropout, LSTM
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from xgboost import XGBRegressor
+from ngboost.ngboost import NGBoost
+from ngboost.learners import default_tree_learner
+from ngboost.distns import Normal
+from ngboost.scores import MLE
 
 #1. 데이터
 path = "../_data/dacon/housing/"    
 
 train = pd.read_csv(path + 'train.csv')
 # print(train.shape)  # (1350, 15)
-test_file = pd.read_csv(path + 'test.csv')
-# print(test_file.shape)  # (1350, 14)
-submit_file = pd.read_csv(path + 'sample_submission.csv')
+# test_file = pd.read_csv(path + 'test.csv', dtype=float)
+# # print(test_file.shape)  # (1350, 14)
+# submit_file = pd.read_csv(path + 'sample_submission.csv', dtype=float)
 # print(submit_file.shape)  # (1350, 2)
+
+print(train.head(5))
+print(train['target'].describe())
+print(train.head())
+print(train.describe())   # pandas에서 볼수있는기능 (수치데이터에서 용이함)
+print(train.info())
+print(train.columns)
+# Index(['id', 'Overall Qual', 'Gr Liv Area', 'Exter Qual', 'Garage Cars',
+#        'Garage Area', 'Kitchen Qual', 'Total Bsmt SF', '1st Flr SF',
+#        'Bsmt Qual', 'Full Bath', 'Year Built', 'Year Remod/Add',
+#        'Garage Yr Blt', 'target'],
+#       dtype='object')
+# print(type(train))   # <class 'pandas.core.frame.DataFrame'>
+
+
+# x = train.drop(['id','target'], axis=1)
+# y = train['target']
+
+# test_file = test_file.drop(['id'], axis=1) 
+
+# print(x.shape)  # (1350, 13)
+# print(y.shape)  # (1350,)
+
+# # print(np.unique(y, return_counts=True))   
+
+# x_train, x_test, y_train, y_test = train_test_split(x, y,
+#                                                     train_size=0.8, shuffle=True, random_state=66)
+
+# scaler = StandardScaler()
+# x_train = scaler.fit(x_train)
+# x_train = scaler.transform(x_train)
+# x_test = scaler.transform(x_test)
+
+# #2. 모델
+# model = XGBRegressor(n_jobs=-1)
+
+# #3. 훈련
+# model.fit(x_train, y_train)
+
+# #4. 평가, 예측
+# score = model.score(x_test, y_test)
+# print('model.score : ', score)
 
 
 
