@@ -38,20 +38,43 @@ print(train.columns)
 #        'Garage Yr Blt', 'target'],
 #       dtype='object')
 # print(type(train))   # <class 'pandas.core.frame.DataFrame'>
-
+train.replace(['Ex'],5,inplace=True)
+train.replace(['Gd'],4,inplace=True)
+train.replace(['TA'],3,inplace=True)
+train.replace(['Fa'],2,inplace=True)
+train.replace(['Po'],1,inplace=True)
 
 x = train.drop(['id','target'], axis=1)
 y = train['target']
+
+
+
+print(train.head(3))
 
 test_file = test_file.drop(['id'], axis=1) 
 
 # print(x.shape)  # (1350, 13)
 # print(y.shape)  # (1350,)
 
-# # print(np.unique(y, return_counts=True))   
+# # # print(np.unique(y, return_counts=True))   
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
+
+# def cut_outlier(df2, columns):
+#     df=df2.copy()
+#     for column in columns:
+#         q1=df[column].quantile(.25)
+#         q3=df[column].quantile(.75)
+#         iqr=q3-q1
+#         low=q1-1.5*iqr
+#         high=q3+1.5*iqr
+#         df.loc[df[column]<low, column]=low
+#         df.loc[df[column]>high, column]=high
+#     return df
+
+# train_data_2=cut_outlier(train_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
+# test_data_2=cut_outlier(test_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
 
 scaler = StandardScaler()
 x_train = scaler.fit(x_train)
