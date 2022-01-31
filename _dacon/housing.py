@@ -44,12 +44,10 @@ train.replace(['TA'],3,inplace=True)
 train.replace(['Fa'],2,inplace=True)
 train.replace(['Po'],1,inplace=True)
 
+print(train.head(3))
+
 x = train.drop(['id','target'], axis=1)
 y = train['target']
-
-
-
-print(train.head(3))
 
 test_file = test_file.drop(['id'], axis=1) 
 
@@ -61,28 +59,27 @@ test_file = test_file.drop(['id'], axis=1)
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
 
-# def cut_outlier(df2, columns):
-#     df=df2.copy()
-#     for column in columns:
-#         q1=df[column].quantile(.25)
-#         q3=df[column].quantile(.75)
-#         iqr=q3-q1
-#         low=q1-1.5*iqr
-#         high=q3+1.5*iqr
-#         df.loc[df[column]<low, column]=low
-#         df.loc[df[column]>high, column]=high
-#     return df
+# # def cut_outlier(df2, columns):
+# #     df=df2.copy()
+# #     for column in columns:
+# #         q1=df[column].quantile(.25)
+# #         q3=df[column].quantile(.75)
+# #         iqr=q3-q1
+# #         low=q1-1.5*iqr
+# #         high=q3+1.5*iqr
+# #         df.loc[df[column]<low, column]=low
+# #         df.loc[df[column]>high, column]=high
+# #     return df
 
-# train_data_2=cut_outlier(train_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
-# test_data_2=cut_outlier(test_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
+# # train_data_2=cut_outlier(train_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
+# # test_data_2=cut_outlier(test_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
 
-scaler = StandardScaler()
-x_train = scaler.fit(x_train)
-x_train = scaler.transform(x_train)
+scaler = MinMaxScaler()
+x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
 #2. 모델
-model = NGBoost(n_jobs=-1)
+model = NGBoost()
 
 #3. 훈련
 model.fit(x_train, y_train)
@@ -92,6 +89,24 @@ score = model.score(x_test, y_test)
 print('model.score : ', score)
 
 
+def NMAE(true, pred):
+    mae = np.mean(np.abs(true-pred))
+    score = mae / np.mean(np.abs(true))
+    return score
+
+result['score_xgb']=NMAE(result['target'], result['prediction_xgb'])
+print('XGB 의 score :', np.mean(result['score_xgb']))
+
+
+
+score.to_csv('submission.csv', index=False)
+
+sample_submission = pd.read_csv(path + 'sample_submission.csv')
+sample_submission['target'] = pred
+sample_submission
+
+sample_submission.to_csv(SUBMIT_PATH + "prediction5.csv", index=False)
+ 
 
  
 
