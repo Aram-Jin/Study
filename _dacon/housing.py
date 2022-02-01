@@ -79,7 +79,8 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
 #2. 모델
-model = NGBoost()
+# model = NGBoost()
+model = XGBRegressor()
 
 #3. 훈련
 model.fit(x_train, y_train)
@@ -94,19 +95,19 @@ def NMAE(true, pred):
     score = mae / np.mean(np.abs(true))
     return score
 
-result['score_xgb']=NMAE(result['target'], result['prediction_xgb'])
-print('XGB 의 score :', np.mean(result['score_xgb']))
+# result['score_xgb']=NMAE(result['target'], result['prediction_xgb'])
+# print('XGB 의 score :', np.mean(result['score_xgb']))
 
 
 
-score.to_csv('submission.csv', index=False)
+# score.to_csv('submission.csv', index=False)
 
-sample_submission = pd.read_csv(path + 'sample_submission.csv')
-sample_submission['target'] = pred
-sample_submission
+# sample_submission = pd.read_csv(path + 'sample_submission.csv')
+# sample_submission['target'] = pred
+# sample_submission
 
-sample_submission.to_csv(SUBMIT_PATH + "prediction5.csv", index=False)
+# sample_submission.to_csv(PATH + "prediction5.csv", index=False)
  
 
  
-
+# model.score :  11.623987408689736
