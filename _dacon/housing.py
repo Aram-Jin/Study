@@ -15,6 +15,7 @@ from ngboost.ngboost import NGBoost
 from ngboost.learners import default_tree_learner
 from ngboost.distns import Normal
 from ngboost.scores import MLE
+from sklearn.decomposition import PCA
 
 #1. 데이터
 path = "../_data/dacon/housing/"    
@@ -56,6 +57,10 @@ test_file = test_file.drop(['id'], axis=1)
 
 # # # print(np.unique(y, return_counts=True))   
 
+pca = PCA(n_components=8)
+x = pca.fit_transform(x)
+print(x.shape)   # (1350, 8)
+
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8, shuffle=True, random_state=66)
 
@@ -90,10 +95,23 @@ score = model.score(x_test, y_test)
 print('model.score : ', score)
 
 
+
+
+from sklearn.metrics import r2_score
+y_predict = model.predict(x_test)
+r2 = r2_score(y_test, y_predict)
+
+print("r2_score : ", r2)
+
+print(model.feature_importances_)
+
+
 def NMAE(true, pred):
     mae = np.mean(np.abs(true-pred))
     score = mae / np.mean(np.abs(true))
     return score
+
+NMAE(true, y_predict)
 
 # result['score_xgb']=NMAE(result['target'], result['prediction_xgb'])
 # print('XGB 의 score :', np.mean(result['score_xgb']))
