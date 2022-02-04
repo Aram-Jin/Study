@@ -1,0 +1,13 @@
+
+=================================================================저장시간 : 0203_1800
+scaler : PowerTransformer()
+colsample_bytree : colsample_bytree
+learning_rate : learning_rate
+max_depth : max_depth
+min_child_weight : min_child_weight
+n_estimators : n_estimators
+reg_lambda : reg_lambda
+subsample : subsample
+걸린시간 : 197.0371
+evaluate : [ 9.8242 97.4812]
+NMAE : 0.9999
