@@ -44,7 +44,7 @@ for epochs in range(10001):
     
    
 #4. 예측
-predict =  x1*w1 + x2*w2 + x3*w3 + b   # predict = model.predict
+predict =  x1*w_val1 + x2*w_val2 + x3*w_val3 + b   # predict = model.predict
 
 y_predict = sess.run(predict, feed_dict={x1:x1_data, x2:x2_data, x3:x3_data, y:y_data})
 print("예측 : " , y_predict)
