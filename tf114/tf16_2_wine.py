@@ -10,20 +10,22 @@ x_data = datasets.data
 y_data = datasets.target
 print(x_data.shape, y_data.shape)   # (178, 13) (178,)
 
-y_data = y_data.reshape(178,1)
-print(y_data.shape)    # (178,1)
+from sklearn.preprocessing import OneHotEncoder
+ohe = OneHotEncoder(sparse=False)
+y_data = ohe.fit_transform(y_data.reshape(-1,1))
+print(y_data.shape)  # (178, 3)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data,
                                                     train_size=0.8, shuffle=True, random_state=66)
 
-print(x_train.shape, y_train.shape)   # (142, 13) (142, 1)
-print(x_test.shape, y_test.shape)     # (36, 13) (36, 1)
+print(x_train.shape, y_train.shape)   # (142, 13) (142, 3)
+print(x_test.shape, y_test.shape)     # (36, 13) (36, 3)
 
 x = tf.placeholder(tf.float32, shape=[None, 13])
-y = tf.placeholder(tf.float32, shape=[None, 1])
-w = tf.compat.v1.Variable(tf.random.normal([13,1]), name='weight')    # y = x * w  
-b = tf.compat.v1.Variable(tf.random.normal([1]), name='bias')   
+y = tf.placeholder(tf.float32, shape=[None, 3])
+w = tf.compat.v1.Variable(tf.random.normal([13,3]), name='weight')    # y = x * w  
+b = tf.compat.v1.Variable(tf.random.normal([1,3]), name='bias')   
 
 # hypothesis = x * w + b
 hypothesis = tf.nn.softmax(tf.matmul(x, w) + b)
@@ -60,4 +62,4 @@ with tf.Session() as sess:
     sess.close()
     
 # 예측결과 :  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
-# accuracy :  0.41666666
+# accuracy :  0.0
