@@ -9,8 +9,8 @@ y_train = [1, 2, 3]
 # w = tf.Variable(1, dtype=tf.float32)
 # b = tf.Variable(1, dtype=tf.float32)
 
-w = tf.Variable(tf.random_normal([1]), dtype=tf.float32)
-b = tf.Variable(tf.random_normal([1]), dtype=tf.float32)
+w = tf.Variable(tf.random.normal([1]), dtype=tf.float32)
+b = tf.Variable(tf.random.normal([1]), dtype=tf.float32)
 
 # sess = tf.compat.v1.Session()
 # sess.run(tf.compat.v1.global_variables_initializer())                                   

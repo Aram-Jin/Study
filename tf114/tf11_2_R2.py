@@ -12,7 +12,7 @@ y = tf.compat.v1.placeholder(tf.float32)
 x_test = tf.placeholder(tf.float32, shape=[None])  
 y_test = tf.placeholder(tf.float32, shape=[None])  
 
-w = tf.compat.v1.Variable(tf.random_normal([1]), name='weight')
+w = tf.compat.v1.Variable(tf.random.normal([1]), name='weight')
 
 hypothesis = x * w
 

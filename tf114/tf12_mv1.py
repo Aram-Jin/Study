@@ -1,5 +1,5 @@
 import tensorflow as tf
-tf.set_random_seed(66)
+tf.compat.v1.set_random_seed(66)
 
 #1. 데이터
          # 첫번 두번 세번 네번 다섯번
@@ -16,10 +16,10 @@ x2 = tf.placeholder(tf.float32)
 x3 = tf.placeholder(tf.float32)
 y = tf.placeholder(tf.float32)
 
-w1 = tf.compat.v1.Variable(tf.random_normal([1]), name = 'weight1')
-w2 = tf.compat.v1.Variable(tf.random_normal([1]), name = 'weight2')
-w3 = tf.compat.v1.Variable(tf.random_normal([1]), name = 'weight3')
-b = tf.compat.v1.Variable(tf.random_normal([1]), name = 'bias')
+w1 = tf.compat.v1.Variable(tf.random.normal([1]), name = 'weight1')
+w2 = tf.compat.v1.Variable(tf.random.normal([1]), name = 'weight2')
+w3 = tf.compat.v1.Variable(tf.random.normal([1]), name = 'weight3')
+b = tf.compat.v1.Variable(tf.random.normal([1]), name = 'bias')
 
 # sess = tf.compat.v1.Session()
 # sess.run(tf.compat.v1.global_variables_initializer())

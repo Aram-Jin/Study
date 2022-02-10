@@ -10,8 +10,8 @@ x_train = tf.placeholder(tf.float32, shape=[None])
 y_train = tf.placeholder(tf.float32, shape=[None])  
 x_test = tf.placeholder(tf.float32, shape=[None])  
 
-w = tf.Variable(tf.random_normal([1]), dtype=tf.float32)
-b = tf.Variable(tf.random_normal([1]), dtype=tf.float32)
+w = tf.Variable(tf.random.normal([1]), dtype=tf.float32)
+b = tf.Variable(tf.random.normal([1]), dtype=tf.float32)
 
 #2. 모델구성
 hypothesis = x_train * w + b      # y = wx + b

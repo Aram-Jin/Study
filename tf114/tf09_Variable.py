@@ -1,7 +1,7 @@
 import tensorflow as tf
 tf.compat.v1.set_random_seed(66)
                      # input_dim=1
-변수 = tf.Variable(tf.random_normal([1]), name='weight')
+변수 = tf.Variable(tf.random.normal([1]), name='weight')
 print(변수)   # <tf.Variable 'Variable:0' shape=(1,) dtype=float32_ref>
 
 #1. 

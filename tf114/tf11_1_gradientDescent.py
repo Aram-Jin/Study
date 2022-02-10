@@ -8,7 +8,7 @@ y_train = [1,2,3]
 x = tf.compat.v1.placeholder(tf.float32)
 y = tf.compat.v1.placeholder(tf.float32)
 
-w = tf.compat.v1.Variable(tf.random_normal([1]), name='weight')
+w = tf.compat.v1.Variable(tf.random.normal([1]), name='weight')
 
 hypothesis = x * w
 

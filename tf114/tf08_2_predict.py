@@ -15,12 +15,11 @@ x_train = tf.placeholder(tf.float32, shape=[None])
 y_train = tf.placeholder(tf.float32, shape=[None])  
 x_test = tf.placeholder(tf.float32, shape=[None])  
 
-w = tf.Variable(tf.random_normal([1]), dtype=tf.float32)
-b = tf.Variable(tf.random_normal([1]), dtype=tf.float32)
+w = tf.Variable(tf.random.normal([1]), dtype=tf.float32)
+b = tf.Variable(tf.random.normal([1]), dtype=tf.float32)
 
 #2. 모델구성
 hypothesis = x_train * w + b      # y = wx + b
-
 
 #3-1. 컴파일
 loss = tf.reduce_mean(tf.square(hypothesis - y_train))   # mse
@@ -30,7 +29,6 @@ train = optimizer.minimize(loss)       # optimizer='sgd'
 # model.compile(loss='mse', optimizer='sgd')
 
 #3-2. 훈련
-
 sess = tf.compat.v1.Session()
 sess.run(tf.compat.v1.global_variables_initializer())
 
@@ -42,14 +40,21 @@ for step in range(2001):
         # print(step, sess.run(loss), sess.run(w), sess.run(b))
         print(step, loss_val, w_val, b_val)
     
-# #4. 예측
-predict = x_test * w + b      
+#4. 예측
+predict = x_test * w_val + b_val      # predict = model.predict
 
-print(sess.run(predict, feed_dict={x_test:[4]}))
-print(sess.run(predict, feed_dict={x_test:[5,6]}))
-print(sess.run(predict, feed_dict={x_test:[6,7,8]}))
+print("[4] 예측 : " , sess.run(predict, feed_dict={x_test:[4]}))
+print("[5,6] 예측 : " , sess.run(predict, feed_dict={x_test:[5,6]}))
+print("[6,7,8] 예측 : " , sess.run(predict, feed_dict={x_test:[6,7,8]}))
+
+sess.close()
 
 
+'''
+[4] 예측 :  [3.9892442]
+[5,6] 예측 :  [4.9830155 5.976787 ]
+[6,7,8] 예측 :  [5.976787  6.970558  7.9643292]
+'''
 
 
 
