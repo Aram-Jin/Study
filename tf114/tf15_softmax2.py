@@ -1,5 +1,6 @@
 from unittest import result
 import numpy as np
+from sklearn.metrics import accuracy_score
 from sklearn.utils import resample
 import tensorflow as tf
 tf.set_random_seed(66)
@@ -40,7 +41,7 @@ loss = tf.reduce_mean(-tf.reduce_sum(y * tf.log(hypothesis), axis=1))    # categ
 
 # optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.04)
 # train = optimizer.minimize(loss)
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.04).minimize(loss)
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.004).minimize(loss)
 
 
 #3-2. 훈련
@@ -58,10 +59,8 @@ with tf.Session() as sess:
     y_predict = sess.run(hypothesis, feed_dict={x:x_predict})
     print("예측 : ", y_predict, sess.run(tf.math.argmax(y_predict, 1)))
     
-
     accuracy = tf.reduce_mean(tf.cast(tf.equal(results, y_predict), dtype=tf.float32))
-    pred, acc = sess.run([y_predict, accuracy], feed_dict={x:x_predict})
-
+    pred, acc = sess.run([tf.math.argmax(y_predict, 1), accuracy], feed_dict={x:x_data, y:y_data})
 
     print("예측결과 : ", pred)
     print("accuracy : ", acc)
