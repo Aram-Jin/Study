@@ -60,45 +60,62 @@ L_flat = tf.reshape(L4_maxpool, [-1, 2*2*32])
 print("플래튼 : ", L_flat)    # 플래튼 : Tensor("Reshape:0", shape=(?, 128), dtype=float32)
 
 # Layer5 DNN
-w5 = tf.compat.v1.Variable(tf.random.normal([128,64]), name='weight5')
-L5 = tf.nn.relu(tf.matmul(L_flat, w5))
-layers = tf.nn.dropout(L5, keep_prob=0.8)
-print(layers)   # Tensor("dropout/mul_1:0", shape=(?, 64), dtype=float32)
+w5 = tf.get_variable('w5', shape=[2*2*32, 64], initializer=tf.contrib.layers.xavier_initializer())
+b5 = tf.Variable(tf.random_normal([64]), name = 'b5')
+L5 = tf.matmul(L_flat, w5) + b5
+L5 = tf.nn.selu(L5)
+L5 = tf.nn.dropout(L5, keep_prob=0.7)
+print(L5)  # (?, 64)
 
-w6 = tf.compat.v1.Variable(tf.random.normal([64,10]), name='weight6')
-L6 = tf.nn.relu(tf.matmul(layers, w6))
-print(L6)   # Tensor("Relu_2:0", shape=(?, 10), dtype=float32)
-# print(w6)   # <tf.Variable 'weight6:0' shape=(64, 10) dtype=float32_ref>
+# Layer6 DNN
+w6 = tf.get_variable('w6', shape=[64, 32], initializer=tf.contrib.layers.xavier_initializer())
+b6 = tf.Variable(tf.random_normal([32]), name = 'b6')
+L6 = tf.matmul(L5, w6) + b6
+L6 = tf.nn.relu(L6)
+L6 = tf.nn.dropout(L6, keep_prob=0.7)
+print(L6)  # (?, 32)
 
-w7 = tf.compat.v1.Variable(tf.random.normal([10,10]), name='weight7')
-
-hypothesis = tf.nn.softmax(tf.matmul(L6, w7))
+# Layer7 DNN
+w7 = tf.get_variable('w7', shape=[32, 10])
+b7 = tf.Variable(tf.random_normal([10]), name = 'b7')
+L7 = tf.matmul(L6, w7) + b7
+hypothesis = tf.nn.softmax(L7)
+print(hypothesis)  # (?, 10)
 
 #3-1. 컴파일
-# loss = tf.reduce_mean(tf.square(hypothesis - y))    # mse
-# loss = -tf.reduce_mean(y*tf.log(hypothesis)+(1-y)*tf.log(1-hypothesis))   # binary_crossentropy
 loss = tf.reduce_mean(-tf.reduce_sum(y * tf.log(hypothesis), axis=1))    # categorical_crossentropy
+optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
 
-# optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.04)
-# train = optimizer.minimize(loss)
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.000000001).minimize(loss)
+sess = tf.compat.v1.Session()
+sess.run(tf.global_variables_initializer())
+
+####################################################################################
+training_epochs = 10
+batch_size = 100
+total_batch = int(len(x_train)/batch_size)
+print(total_batch)
+####################################################################################
 
 #3-2. 훈련
-with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer())
+for epoch in range(training_epochs):
+    avg_loss = 0
     
-    for step in range(2001):
-        _, loss_val = sess.run([optimizer,loss], feed_dict={x:x_train, y:y_train})
-        if step % 200 ==0:
-            print(step, loss_val)
-    
-    results = sess.run(hypothesis, feed_dict={x:x_test})
-    print(results, sess.run(tf.math.argmax(results, 1)))     #[[9.3190324e-01 6.8059169e-02 3.7637248e-05]] [0]
-    
-    accuracy = tf.reduce_mean(tf.cast(tf.equal(y_test, results), dtype=tf.float32))
-    pred, acc = sess.run([tf.math.argmax(results, 1), accuracy], feed_dict={x:x_test, y:y_test})
+    for i in range(total_batch):    # 몇번? 600번
+        start = i * batch_size      # 0
+        end = start + batch_size    # 100
+        batch_x, batch_y = x_train[start:end], y_train[start:end]   # 0~100
 
-    print("예측결과 : ", pred)
-    print("accuracy : ", acc)
+        feed_dict = {x:batch_x, y:batch_y}
 
-    sess.close()
+        batch_loss, _ = sess.run([loss, optimizer], feed_dict=feed_dict)
+        
+        avg_loss += batch_loss / total_batch
+        
+    print('Epoch : ', '%04d' %(epoch + 1), 'loss : {:.9f}'.format)
+
+print("훈련 끝~!!!")    
+
+prediction = tf.equal(tf.arg_max(hypothesis, 1), tf.argmax(y, 1))
+accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
+print('ACC : ', sess.run(accuracy, feed_dict={x:x_test, y:y_test}))
+
