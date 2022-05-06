@@ -136,5 +136,4 @@ for model in (model1,model2,voting_model):
     print(model.__class__.__name__," : ", accuracy_score(y_test,y_pred))
 
 # CatBoostClassifier  :  0.6666666666666666
-# VotingClassifier  :  0.3333333333333333
-
+# VotingClassifier  :  0.6666666666666666
