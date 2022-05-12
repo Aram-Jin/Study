@@ -15,7 +15,7 @@ x = np.array([1,2,3])
 y = np.array([1,2,3])
 
 x = torch.FloatTensor(x).unsqueeze(1).to(DEVICE)    # (3,) -> (3, 1) 
-y = torch.FloatTensor(y).unsqueeze(1).to(DEVICE)    # (3,) -> (3, 1)   => 데이터를 텐서형태로 만들고 reshape해주기(행렬형태로)
+y = torch.FloatTensor(y).to(DEVICE)    # (3,) -> (3, 1)   => 데이터를 텐서형태로 만들고 reshape해주기(행렬형태로)
 
 print(x,y)       # tensor([1., 2., 3.]) tensor([1., 2., 3.])
 print(x.shape, y.shape)   # torch.Size([3]) torch.Size([3])
