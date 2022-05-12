@@ -16,7 +16,7 @@ def outliers(data_out):
     return np.where((data_out>upper_bound) | (data_out<lower_bound))    
 
 #1. 데이터
-path = "../_data/dacon/housing/"    
+path = "./housing/"    
 
 train = pd.read_csv(path + 'train.csv')
 # print(train.shape)  # (1350, 15)
@@ -40,6 +40,12 @@ print(outliers_loc)
 print(train.loc[[255], 'Garage Yr Blt'])   # 2207
 train.drop(train[train['Garage Yr Blt']==2207].index, inplace=True)
 print(train.shape) 
+
+# train = train[train['Garage Yr Blt'] < 2050]
+
+# cat_cols = train.dtypes[train.dtypes == np.object].index
+# print(cat_cols)
+# # Index(['Exter Qual', 'Kitchen Qual', 'Bsmt Qual'], dtype='object')
 
 cat_cols = ['Exter Qual', 'Kitchen Qual', 'Bsmt Qual']
 
@@ -65,6 +71,7 @@ from catboost import CatBoostRegressor, Pool
 from ngboost import NGBRegressor
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import KFold
+from xgboost import XGBRegressor
 
 def NMAE(true, pred) -> float:
     mae = np.mean(np.abs(true - pred))
@@ -73,6 +80,7 @@ def NMAE(true, pred) -> float:
 
 nmae_score = make_scorer(NMAE, greater_is_better=False)
 kf = KFold(n_splits = 10, random_state = 42, shuffle = True)
+
 
 rf_pred = np.zeros(target.shape[0])
 rf_val = []
@@ -100,7 +108,7 @@ for n, (tr_idx, val_idx) in enumerate(kf.split(x, y)) :
     tr_x, tr_y = x.iloc[tr_idx], y.iloc[tr_idx]
     val_x, val_y = x.iloc[val_idx], np.expm1(y.iloc[val_idx])
     
-    gbr = GradientBoostingRegressor(random_state = 42, max_depth = 5, learning_rate = 0.0125, n_estimators = 5000)
+    gbr = XGBRegressor(random_state = 42, max_depth = 5, learning_rate = 0.01855, n_estimators = 8000)
     gbr.fit(tr_x, tr_y)
     
     val_pred = np.expm1(gbr.predict(val_x))
@@ -122,8 +130,8 @@ for n, (tr_idx, val_idx) in enumerate(kf.split(x, y)) :
     tr_data = Pool(data = tr_x, label = tr_y)
     val_data = Pool(data = val_x, label = val_y)
     
-    cb = CatBoostRegressor(depth = 5, random_state = 42, loss_function = 'MAE', n_estimators = 3000, learning_rate = 0.0125, verbose = 0)
-    cb.fit(tr_data, eval_set = val_data, early_stopping_rounds = 1000, verbose = 1000)
+    cb = CatBoostRegressor(depth = 4, random_state = 42, loss_function = 'MAE', n_estimators = 6000, learning_rate = 0.0215, verbose = 0)
+    cb.fit(tr_data, eval_set = val_data, early_stopping_rounds = 750, verbose = 1000)
     
     val_pred = np.expm1(cb.predict(val_x))
     val_nmae = NMAE(val_y, val_pred)
@@ -142,8 +150,8 @@ for n, (tr_idx, val_idx) in enumerate(kf.split(x, y)) :
     tr_x, tr_y = x.iloc[tr_idx], y.iloc[tr_idx]
     val_x, val_y = x.iloc[val_idx], np.expm1(y.iloc[val_idx])
     
-    ngb = NGBRegressor(random_state = 42, n_estimators = 1000, verbose = 0, learning_rate = 0.0195)
-    ngb.fit(tr_x, tr_y, val_x, val_y, early_stopping_rounds = 800)
+    ngb = NGBRegressor(random_state = 42, n_estimators = 6000, verbose = 0, learning_rate = 0.0215)
+    ngb.fit(tr_x, tr_y, val_x, val_y, early_stopping_rounds = 750)
     
     val_pred = np.expm1(ngb.predict(val_x))
     val_nmae = NMAE(val_y, val_pred)
@@ -159,11 +167,16 @@ print(f'10FOLD Mean of NMAE = {np.mean(ngb_val)} & std = {np.std(ngb_val)}')
 
 submission['target'] = np.expm1((ngb_pred + cb_pred + rf_pred + gbr_pred) / 4)
 
-submission.to_csv('friyayyy5.csv', index = False)
+submission.to_csv('final13.csv', index = False)
 
-
-# friyayyy :  10FOLD Mean of NMAE = 0.09452310748021185 & std = 0.009659925376578251
-# friyayyy2 : 10FOLD Mean of NMAE = 0.09479351407638706 & std = 0.00966512701540715
-# friyayyy3 : 10FOLD Mean of NMAE = 0.09477319078157966 & std = 0.00943795455931158
-# friyayyy4 : 10FOLD Mean of NMAE = 0.09488748134321437 & std = 0.009422091573048585
-# friyayyy5 : 10FOLD Mean of NMAE = 0.09496172585018026 & std = 0.00931932630998067
+# final3 : 10FOLD Mean of NMAE = 0.09514011171959022 & std = 0.009827818836972573
+# final4 : 10FOLD Mean of NMAE = 0.09488459045057565 & std = 0.009237313029344942
+# final5 : 10FOLD Mean of NMAE = 0.09503054483243782 & std = 0.009392146619015534
+# final6 : 10FOLD Mean of NMAE = 0.09507041683386622 & std = 0.009450277486941779
+# final7 : 10FOLD Mean of NMAE = 0.0950289114885935 & std = 0.009385066244711497
+# final8 : 10FOLD Mean of NMAE = 0.09493117715478769 & std = 0.009466013682820807
+# final9 : 10FOLD Mean of NMAE = 0.09468572850389949 & std = 0.00901473785673848  **
+# final10 : 10FOLD Mean of NMAE = 0.09496452258027831 & std = 0.009360689609836432
+# final11 : 10FOLD Mean of NMAE = 0.09495534834421646 & std = 0.009142361318684754
+# final12 : 10FOLD Mean of NMAE = 0.09485109375225506 & std = 0.009167514515949037
+# final13 : 10FOLD Mean of NMAE = 0.09481274389058796 & std = 0.00902713942718833
